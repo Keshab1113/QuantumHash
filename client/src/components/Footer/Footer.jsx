@@ -4,7 +4,7 @@ import { faSquare, faMapMarkerAlt, faEnvelope } from '@fortawesome/free-solid-sv
 
 const Footer = () => {
     return (
-        <section className=" lg:h-[80vh] h-full w-full bg-[#0d0125] footer relative overflow-hidden">
+        <section className="  h-full w-full bg-[#0d0125] footer relative overflow-hidden">
             <div className="container mx-auto px-4 mt-20  h-full flex md:flex-row flex-col ">
                 <img src="/footer-man.png" alt="" className=" h-[306px]" />
                 <div className=" h-full w-full  mt-16 border-t border-solid border-amber-50 grid md:grid-cols-1 lg:grid-cols-3 grid-col-1 pb-48 md:pb-[250px]">

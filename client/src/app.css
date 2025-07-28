@@ -28,3 +28,21 @@ body {
     vertical-align: middle;
     min-height: 150px;
 }
+
+/* In your global CSS or tailwind.css */
+@keyframes radialWave {
+  0% {
+    background-position: center 0%;
+  }
+  100% {
+    background-position: center 100%;
+  }
+}
+
+.radial-waves {
+  background: radial-gradient(circle at center, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+  background-repeat: repeat;
+  background-size: 300% 300%;
+  animation: radialWave 10s linear infinite;
+  opacity: 0.4;
+}
