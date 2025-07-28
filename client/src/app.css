@@ -1,0 +1,30 @@
+@import "tailwindcss";
+
+body {
+    font-family: 'Poppins', sans-serif;
+}
+
+.h1head1 {
+    font-weight: bold;
+    background: linear-gradient(90deg, #ff8d20, #6700ff 80%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.platform-title {
+    background-image: linear-gradient(90deg, #ff8d2050, #6700ff50 80%);
+    backdrop-filter: blur(4px);
+}
+
+.footer {
+    /* margin-top: 100px; */
+    background-image: linear-gradient(to top, rgba(255, 255, 255, .3), transparent 80%);
+    padding-top: 20px;
+}
+
+.footer-inner {
+    bottom: 0px;
+    background-image: linear-gradient(90deg, #000, #6700ff 80%, #000) !important;
+    vertical-align: middle;
+    min-height: 150px;
+}

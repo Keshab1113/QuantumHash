@@ -1,0 +1,66 @@
+const Intro = () => {
+    return (
+        <section className=" min-h-screen h-full w-full bg-[#000000e6]" style={{
+            backgroundImage: "url('/IntroBG.png')",
+            backgroundSize: 'cover'
+        }}>
+            <div className="container mx-auto px-4 py-8">
+                <h1 className=" text-center text-[28px] text-white">Why QuantumHash <span className="h1head1 text-[40px]">?</span></h1>
+                <div className=" mt-20 flex lg:flex-row flex-col">
+                    <div className=" w-full space-y-15 md:pl-10 md:pr-10 lg:pr-0">
+                        <div className=" border border-amber-400 border-solid flex justify-center items-center gap-3 p-4 text-white border-r-0"
+                            style={{
+                                borderImage: "linear-gradient(90deg, orange, blue) 30 stretch",
+                                borderWidth: "1px",
+                                borderStyle: "solid",
+                                borderRight: "0"
+                            }}
+                        >
+                            <img src="/AI-Images/image.png" alt="" className="h-18 w-18" />
+                            <h1>Applied, not abstract: AI systems built to solve real-world problems.</h1>
+                        </div>
+                        <div className=" border border-amber-400 border-solid flex justify-center items-center gap-3 p-4 text-white border-r-0"
+                        style={{
+                                borderImage: "linear-gradient(90deg, orange, blue) 30 stretch",
+                                borderWidth: "1px",
+                                borderStyle: "solid",
+                                borderRight: "0"
+                            }}
+                            >
+                            <img src="/AI-Images/image2.png" alt="" className="h-18 w-18" />
+                            <h1>Multimodal approach: From voice to video to 3D visual learning.</h1>
+                        </div>
+                    </div>
+                    <div className="  w-full">
+
+                    </div>
+                    <div className=" w-full space-y-15 md:pr-10 md:pl-10 lg:pl-0">
+                        <div className=" border border-amber-400 border-solid flex justify-center items-center gap-3 p-4 text-white border-l-0"
+                            style={{
+                                borderImage: "linear-gradient(90deg, orange, blue) 30 stretch",
+                                borderWidth: "1px",
+                                borderStyle: "solid",
+                                borderLeft: "0"
+                            }}
+                        >
+                            <h1 className=" text-right">Scalable & cloud-native: Built on open-source and modern architecture.</h1>
+                            <img src="/AI-Images/image3.png" alt="" className="h-18 w-18" />
+                        </div>
+                        <div className=" border border-amber-400 border-solid flex justify-center items-center gap-3 p-4 text-white border-l-0"
+                            style={{
+                                borderImage: "linear-gradient(90deg, orange, blue) 30 stretch",
+                                borderWidth: "1px",
+                                borderStyle: "solid",
+                                borderLeft: "0"
+                            }}
+                        >
+                            <h1 className=" text-right">Ethically grounded: Privacy-aware, inclusive, and user-centric design.</h1>
+                            <img src="/AI-Images/image4.png" alt="" className="h-18 w-18" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    )
+}
+export default Intro;
