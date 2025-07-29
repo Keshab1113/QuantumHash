@@ -1,32 +1,32 @@
 @import "tailwindcss";
 
 body {
-    font-family: 'Poppins', sans-serif;
+  font-family: 'Poppins', sans-serif;
 }
 
 .h1head1 {
-    font-weight: bold;
-    background: linear-gradient(90deg, #ff8d20, #6700ff 80%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+  font-weight: bold;
+  background: linear-gradient(90deg, #ff8d20, #6700ff 80%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .platform-title {
-    background-image: linear-gradient(90deg, #ff8d2050, #6700ff50 80%);
-    backdrop-filter: blur(4px);
+  background-image: linear-gradient(90deg, #ff8d2050, #6700ff50 80%);
+  backdrop-filter: blur(4px);
 }
 
 .footer {
-    /* margin-top: 100px; */
-    background-image: linear-gradient(to top, rgba(255, 255, 255, .3), transparent 80%);
-    padding-top: 20px;
+  /* margin-top: 100px; */
+  background-image: linear-gradient(to top, rgba(255, 255, 255, .3), transparent 80%);
+  padding-top: 20px;
 }
 
 .footer-inner {
-    bottom: 0px;
-    background-image: linear-gradient(90deg, #000, #6700ff 80%, #000) !important;
-    vertical-align: middle;
-    min-height: 150px;
+  bottom: 0px;
+  background-image: linear-gradient(90deg, #000, #6700ff 80%, #000) !important;
+  vertical-align: middle;
+  min-height: 150px;
 }
 
 /* In your global CSS or tailwind.css */
@@ -34,6 +34,7 @@ body {
   0% {
     background-position: center 0%;
   }
+
   100% {
     background-position: center 100%;
   }
@@ -45,4 +46,73 @@ body {
   background-size: 300% 300%;
   animation: radialWave 10s linear infinite;
   opacity: 0.4;
+}
+
+@theme inline {
+  --animate-meteor: meteor 5s linear infinite;
+
+  @keyframes meteor {
+    0% {
+      transform: rotate(var(--angle)) translateX(0);
+      opacity: 1;
+    }
+
+    70% {
+      opacity: 1;
+    }
+
+    100% {
+      transform: rotate(var(--angle)) translateX(-500px);
+      opacity: 0;
+    }
+  }
+}
+
+@theme inline {
+  --animate-orbit: orbit calc(var(--duration) * 1s) linear infinite;
+
+  @keyframes orbit {
+    0% {
+      transform: rotate(calc(var(--angle) * 1deg)) translateY(calc(var(--radius) * 1px)) rotate(calc(var(--angle) * -1deg));
+    }
+
+    100% {
+      transform: rotate(calc(var(--angle) * 1deg + 360deg)) translateY(calc(var(--radius) * 1px)) rotate(calc((var(--angle) * -1deg) - 360deg));
+    }
+  }
+}
+
+.about-box {
+  background-image: linear-gradient(to left, rgba(255, 0, 255, .2), transparent);
+  backdrop-filter: blur(2px);
+  border-radius: 25px;
+}
+.about-box2 {
+  background-image: linear-gradient(to right, rgba(255, 0, 255, .2), transparent);
+    backdrop-filter: blur(2px);
+    border-radius: 25px;
+}
+
+
+@keyframes headTurn {
+  0% {
+    transform: rotateY(-20deg); /* Starts turned left */
+  }
+  50% {
+    transform: rotateY(20deg); /* Turns to the right */
+  }
+  100% {
+    transform: rotateY(-20deg); /* Returns to left */
+  }
+}
+
+.bot-head {
+  animation: headTurn 3s ease-in-out infinite;
+  transform-origin: center;
+  display: inline-block;
+  perspective: 500px; /* Optional: Adds 3D depth */
+}
+
+.platform-box{
+  border-image: linear-gradient(90deg, orange, indigo, violet, orange) 30 stretch;
 }

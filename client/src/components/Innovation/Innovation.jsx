@@ -2,6 +2,7 @@ import Banner from "./Banner";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSquare } from '@fortawesome/free-solid-svg-icons';
 import { Link } from "react-router-dom";
+import CardSwap, { Card } from "../../../ReactBits/CardSwap/CardSwap"
 
 const Innovation = () => {
     return (
@@ -45,11 +46,72 @@ const Innovation = () => {
                     </div>
                 </div>
                 <Banner />
-                <section className=" flex flex-col md:flex-row">
-                    <div className=" md:w-[40%] w-full">
+                <section className=" flex flex-col lg:flex-row lg:h-screen h-full">
+                    <div className=" lg:w-[40%] w-full">
                         <img src="/image2.png" alt="" />
                     </div>
-                    <div className="md:w-[60%] w-full"></div>
+                    <div className="lg:w-[60%] w-full  h-full relative overflow-hidden md:py-20 lg:py-0">
+                        <CardSwap height={450}>
+                            <Card>
+                                <div className="text-white text-center p-4">
+                                    <div className=" md:h-[20vh] h-[20vh] lg:w-[34vw] w-full rounded-2xl bg-white mb-4 overflow-hidden">
+                                        <img src="/Projects/image.png" alt="" className=" w-full h-full"/>
+                                    </div>
+                                    <h2 className="text-xl font-bold mb-4">
+                                        Conversational Intelligence Engine
+                                    </h2>
+                                    <p>
+                                        A custom-built AI assistant framework designed to power domain-specific chatbots and smart agents. QuantumAI is the intelligence core behind all our platforms, capable of understanding context, voice input, and domain-specific tasks — from safety compliance to student tutoring.
+                                        </p>
+                                        <h1 className=" text-center h1head1 mt-2 text-xl font-bold">QuantumAI</h1>
+                                </div>
+                            </Card>
+                            <Card>
+                                <div className="text-white text-center p-4">
+                                    <div className=" h-[20vh] lg:w-[34vw] w-full rounded-2xl bg-white mb-4 overflow-hidden">
+                                        <img src="/Projects/image2.png" alt="" className=" w-full h-full"/>
+                                    </div>
+                                    <h2 className="text-xl font-bold mb-4">
+                                        Industrial AI for Predictive Safety & Operations
+                                    </h2>
+                                    <p>
+                                        Built for high-risk sectors, ASES analyzes historical incident data to predict future risks, visualize scenarios in 3D, and guide proactive decision-making. Trusted by HSE leaders for safety awareness, audits, and operational excellence.
+                                    </p>
+                                    <h1 className=" text-center h1head1 mt-2 text-xl font-bold">ASES (Advanced Safety & Efficiency System)</h1>
+                                </div>
+                            </Card>
+                            <Card>
+                                <div className="text-white text-center p-4">
+                                    <div className=" h-[20vh] lg:w-[34vw] w-full rounded-2xl bg-white mb-4 overflow-hidden">
+                                        <img src="/Projects/image3.png" alt="" className=" w-full h-full"/>
+                                    </div>
+                                    <h2 className="text-xl font-bold mb-4">
+                                        Voice & Multimodal AI Innovation Lab
+                                    </h2>
+                                    <p>
+                                        The R&D engine behind QhashAi natural interaction capabilities. Artlabss develops voicebots, gesture recognition, facial expression readers, and multilingual speech tech. It powers our voice-driven interfaces and real-time facial feedback systems.
+                                    </p>
+                                    <h1 className=" text-center h1head1 mt-2 text-xl font-bold">Artlabss</h1>
+                                </div>
+                            </Card>
+                            <Card>
+                                <div className="text-white text-center p-4">
+                                    <div className=" h-[20vh] lg:w-[34vw] w-full rounded-2xl bg-white mb-4 overflow-hidden">
+                                        <img src="/Projects/image4.png" alt="" className=" w-full h-full"/>
+                                    </div>
+                                    <h2 className="text-xl font-bold mb-4">
+                                        AI Tutoring Platform for Grades 4–12
+                                    </h2>
+                                    <p>
+                                        An AI-based learning system designed for Indian school students. It offers real-time, face-to-face learning using voice, emotion, and attention analysis. The platform adapts to each student’s learning speed, focus, and subject preferences to make education deeply personal.
+                                    </p>
+                                    <h1 className=" text-center h1head1 mt-2 text-xl font-bold">QuantumEdu</h1>
+                                </div>
+                            </Card>
+                            
+
+                        </CardSwap>
+                    </div>
                 </section>
             </div>
         </section>

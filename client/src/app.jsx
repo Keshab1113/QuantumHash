@@ -1,20 +1,25 @@
 import { useState } from 'preact/hooks'
 import './app.css'
-import Header from './components/Header/Header'
-import Landing from './components/Landing/Landing'
-import Innovation from './components/Innovation/Innovation'
-import Intro from './components/Intro/Intro'
-import Footer from './components/Footer/Footer'
+import {
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
+import Home from './pages/Home/Home';
+import Layout from './layout';
+import NoPage from './pages/NoPage/NoPage';
+import About from './pages/About/About';
+import OurPlatform from './pages/OurPlatform/OurPlatform';
 
 export function App() {
-
   return (
-    <>
-    <Header/>
-    <Landing/>
-    <Innovation/>
-    <Intro/>
-    <Footer/>
-    </>
-  )
+    <Routes>
+      <Route path="/" element={<Layout />}>
+        <Route index element={<Home />} />
+        <Route path='/about' element={<About />} />
+        <Route path='/platforms' element={<OurPlatform />} />
+      </Route>
+      <Route path="*" element={<NoPage />} />
+    </Routes>
+  );
 }

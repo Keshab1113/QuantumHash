@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { NavLink, Link } from 'react-router-dom';
 
 const Header = () => {
     const [menuOpen, setMenuOpen] = useState(false);
+    const [scrolled, setScrolled] = useState(false);
 
     const toggleMenu = () => {
         setMenuOpen(!menuOpen);
@@ -17,8 +18,20 @@ const Header = () => {
         { name: 'Connect', path: '/connect' },
     ];
 
+    useEffect(() => {
+        const handleScroll = () => {
+            setScrolled(window.scrollY > 50);
+        };
+
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
+
     return (
-        <header className="bg-[linear-gradient(90deg,_#000,_#6700ff_80%,_#000)] fixed w-full z-50 rounded-b-4xl">
+        <header
+            className={`fixed w-full z-50 rounded-b-4xl transition-all duration-100 ${scrolled ? 'bg-[linear-gradient(90deg,_#000,_#6700ff_80%,_#000)]' : ''
+                }`}
+        >
             <div className="container mx-auto px-4 py-4 flex justify-between items-center text-white lg:h-[13vh]">
                 <div className="text-2xl font-bold flex flex-col">
                     <img src="/logo.png" alt="logo" width="160px" />
