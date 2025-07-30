@@ -1,9 +1,11 @@
 import AboutBanner from "../../components/About/AboutBanner";
 import { Timeline } from "../../components/ui/timeline"
+import { Helmet } from "react-helmet";
 
 const careerJourney = [
     {
         title: "DECEMBER 2024",
+        link: "https://asesystem.com/",
         heading: "ASES – AI-Powered Industrial Health, Safety & Environment System (Industrial AI)",
         description: `ASES is a next-generation, AI-powered HSE intelligence platform developed by Quantumhash Corporation, purpose-built to revolutionize safety and environmental performance across the Oil & Gas sector. Harnessing the power of real-time data analytics, predictive modelling, and intelligent alert systems, ASES proactively identifies risks, strengthens compliance, and empowers informed decision-making at every level of industrial operations. By integrating advanced technologies such as deep learning, natural language processing, and incident trend analysis, ASES provides actionable insights that help prevent incidents before they happen. Seamlessly embedded into operational workflows, the platform not only improves on-site safety and environmental oversight but also drives a culture of continuous improvement.
 
@@ -25,6 +27,7 @@ Key Features:
     },
     {
         title: "MAY 2025",
+        link: "https://qhashai.com/",
         heading: "QhashAi Assistance",
         description: `QhashAi is an advanced autonomous digital intelligence system designed to act as a personal digital twin. It learns from user behaviour, automates tasks, and adapts dynamically to emotions and needs. With features like real-time emotion detection, AI-powered memory recall, and multimodal input/output processing, it revolutionizes human-AI interaction. Its neural mind map and autonomous thinking capabilities enable continuous learning and proactive insights, making it a powerful tool for productivity and decision-making.
 
@@ -43,6 +46,7 @@ Key Features:
     },
     {
         title: "AUGUST 2025",
+        link: "https://quantumedu.in/",
         heading: "QuantumEdu – AI-Powered Learning Platform for Class 4 to 12",
         description: `QuantumEdu is an innovative, AI-powered educational platform designed to provide high-quality learning to students globally, with a primary focus on Indian students from Class 4 to Class 12. By leveraging cutting-edge technology, QuantumEdu aims to bridge the education gap and democratize access to world-class tutoring.
 
@@ -58,6 +62,7 @@ Key Features:
     },
     {
         title: "JANUARY 2025",
+        link: "/",
         heading: "QuantumHash Data Center – AI-First Infrastructure for Scalable, Secure Growth",
         description:
             "As Quantumhash Corporation expands its AI-driven platforms—including ASES (industrial safety), QhashAi (conversational AI), QuantumEdu (adaptive education), and ArtLabss (voice tech)—the demand for secure, real-time, and high-performance infrastructure has become critical. Building a dedicated data centre gives Quantumhash full control over its AI ecosystem, ensuring performance, privacy, and profitability.\n\n" +
@@ -85,23 +90,30 @@ Key Features:
 
 const OurPlatform = () => {
     return (
-        <section className="min-h-screen h-full w-full bg-[#0d0125] ">
-            <AboutBanner title={"Our Platforms & Roadmap"} />
-            <div className="container mx-auto px-4 py-6">
-                <div className=" flex gap-4 flex-col border border-solid platform-box p-4 my-10">
-                    <h1 className=" text-white text-2xl font-medium">
-                        We are building a unified AI ecosystem that redefines how people work, learn, and stay safe. By integrating intelligent assistance, natural voice interaction, personalized education, and industrial safety, our platform delivers real-time insights, adaptive learning, and proactive risk management. It simplifies complexity, enhances productivity, and empowers smarter decision-making across every domain.
-                    </h1>
-                    <h2 className=" text-white text-2xl font-semibold">
-                        Below is our roadmap that outlines this transformative journey.
-                    </h2>
-                </div>
+        <>
+            <Helmet>
+                <meta charSet="utf-8" />
+                <title>Our Platform |  QuantumHash</title>
+                <link rel="canonical" href="http://mysite.com/example" />
+            </Helmet>
+            <section className="min-h-screen h-full w-full bg-[#0d0125] ">
+                <AboutBanner title={"Our Platforms & Roadmap"} />
+                <div className="container mx-auto px-4 py-6">
+                    <div className=" flex gap-4 flex-col border border-solid platform-box p-4 my-10">
+                        <h1 className=" text-white text-2xl font-medium">
+                            We are building a unified AI ecosystem that redefines how people work, learn, and stay safe. By integrating intelligent assistance, natural voice interaction, personalized education, and industrial safety, our platform delivers real-time insights, adaptive learning, and proactive risk management. It simplifies complexity, enhances productivity, and empowers smarter decision-making across every domain.
+                        </h1>
+                        <h2 className=" text-white text-2xl font-semibold">
+                            Below is our roadmap that outlines this transformative journey.
+                        </h2>
+                    </div>
 
-                <section className="min-h-screen h-full w-full bg-[#0d0125] ">
-                    <Timeline data={careerJourney} />
-                </section>
-            </div>
-        </section>
+                    <section className="min-h-screen h-full w-full bg-[#0d0125] ">
+                        <Timeline data={careerJourney} />
+                    </section>
+                </div>
+            </section>
+        </>
     )
 }
 export default OurPlatform;

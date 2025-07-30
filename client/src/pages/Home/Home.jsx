@@ -8,7 +8,7 @@ const Home = () => {
         <>
             <Helmet>
                 <meta charSet="utf-8" />
-                <title>Home Page |  All Your systems |</title>
+                <title>QuantumHash Corporation</title>
                 <link rel="canonical" href="http://mysite.com/example" />
             </Helmet>
             <Landing />

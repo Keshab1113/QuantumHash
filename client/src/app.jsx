@@ -10,6 +10,7 @@ import Layout from './layout';
 import NoPage from './pages/NoPage/NoPage';
 import About from './pages/About/About';
 import OurPlatform from './pages/OurPlatform/OurPlatform';
+import Investor from './pages/Investor/Investor';
 
 export function App() {
   return (
@@ -18,6 +19,7 @@ export function App() {
         <Route index element={<Home />} />
         <Route path='/about' element={<About />} />
         <Route path='/platforms' element={<OurPlatform />} />
+        <Route path='/investor' element={<Investor />} />
       </Route>
       <Route path="*" element={<NoPage />} />
     </Routes>

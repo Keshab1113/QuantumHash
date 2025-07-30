@@ -72,14 +72,14 @@ export const Timeline = ({ data }: { data: TimelineEntry[] }) => {
               <p className="italic text-neutral-500 dark:text-neutral-400">
                 {item?.subDescription}
               </p>
-              <Link to={""}>
-            <button className=" flex justify-center items-center cursor-pointer mt-6 border border-solid border-white py-2 px-4 text-white rounded-full">
-              Visit
-              <FaArrowRight className=" ml-2"/>
-            </button>
-            </Link>
+              <Link to={item.link}>
+                <button className=" flex justify-center items-center cursor-pointer mt-6 border border-solid border-white py-2 px-4 text-white rounded-full">
+                  Visit
+                  <FaArrowRight className=" ml-2" />
+                </button>
+              </Link>
             </div>
-            
+
           </div>
         ))}
 
