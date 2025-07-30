@@ -61,7 +61,7 @@ Key Features:
         backgroundImage: "",
     },
     {
-        title: "JANUARY 2025",
+        title: "DECEMBER 2026",
         link: "/",
         heading: "QuantumHash Data Center – AI-First Infrastructure for Scalable, Secure Growth",
         description:

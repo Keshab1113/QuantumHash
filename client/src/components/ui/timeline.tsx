@@ -66,10 +66,10 @@ export const Timeline = ({ data }: { data: TimelineEntry[] }) => {
               <h4 className="text-2xl md:text-3xl font-semibold h1head1 mb-4">
                 {item?.heading}
               </h4>
-              <p className="text-neutral-700 dark:text-neutral-300 whitespace-pre-line mb-4">
+              <p className="text-neutral-700 dark:text-white whitespace-pre-line mb-4">
                 {item?.description}
               </p>
-              <p className="italic text-neutral-500 dark:text-neutral-400">
+              <p className="italic text-neutral-500 dark:text-neutral-200">
                 {item?.subDescription}
               </p>
               <Link to={item.link}>
