@@ -6,6 +6,7 @@ function Layout() {
 
     return (
         <div className=' overflow-x-hidden'>
+            
             <Header/>
             <Outlet />
             <Footer/>

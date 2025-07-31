@@ -2,7 +2,8 @@ import { useState, useEffect } from 'react';
 import Calendar from 'react-calendar';
 import Select from 'react-select';
 import 'react-calendar/dist/Calendar.css';
-import emailjs from 'emailjs-com';
+import axios from "axios";
+import { useToast } from "../ToastContext";
 
 const customStyles = {
     control: (provided, state) => ({
@@ -52,6 +53,7 @@ const Meeting = () => {
     const [timezone, setTimezone] = useState(Intl.DateTimeFormat().resolvedOptions().timeZone);
     const [timeSlots, setTimeSlots] = useState([]);
     const [selectedTime, setSelectedTime] = useState(null);
+    const { addToast } = useToast();
 
     const [formData, setFormData] = useState({
         fullName: '',
@@ -96,39 +98,14 @@ const Meeting = () => {
 
         setTimeSlots(slots);
     };
-
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-
-        const templateParams = {
-            full_name: formData.fullName,
-            email: formData.email,
-            query: formData.query,
-            meeting_date: value.toDateString(),
-            meeting_time: selectedTime,
-            duration: duration,
-            timezone: timezone
-        };
-
-        const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID;
-        const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
-        const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
-
-        emailjs.send(
-            serviceId,
-            templateId,
-            templateParams,
-            publicKey
-        )
-            .then((response) => {
-                alert("Meeting request submitted!");
-                setFormData({ fullName: '', email: '', query: '' });
-                setSelectedTime(null);
-            })
-            .catch((err) => {
-                console.error('Email failed:', err);
-                alert("There was an error sending your request.");
-            });
+        try {
+            await axios.post(`${process.env.VITE_BACKEND_URL}/api/send-email`, formData);
+            addToast("success", "Meeting will be schedule soon.");
+        } catch (err) {
+            addToast("error", "Failed to schedule the meeting.");
+        }
     };
 
     return (
