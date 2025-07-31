@@ -5,35 +5,27 @@ import Meeting from "../../components/Contact/Meeting";
 import { BiLogoGmail } from "react-icons/bi";
 import { FaXTwitter } from "react-icons/fa6";
 import { FaGlobe } from "react-icons/fa";
-import emailjs from 'emailjs-com';
+import { useToast } from "../../components/ToastContext";
+import axios from "axios";
 
 const Contact = () => {
     const form = useRef(null);
+    const { addToast } = useToast();
 
-    const sendEmail = (e) => {
+    const sendEmail = async (e) => {
         e.preventDefault();
 
-        const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID;
-        const templateId = import.meta.env.VITE_EMAILJS_CONTACT_TEMPLATE_ID;
-        const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
+        const formData = new FormData(form.current);
+        const data = Object.fromEntries(formData.entries());
 
-        emailjs
-            .sendForm(
-                serviceId,
-                templateId,
-                form.current,
-                publicKey
-            )
-            .then(
-                () => {
-                    alert("Message sent successfully!");
-                    form.current.reset();
-                },
-                (error) => {
-                    alert("Failed to send message.");
-                    console.error(error);
-                }
-            );
+        try {
+            await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/send-email`, data);
+            addToast("success", "We Will Contact You soon.");
+            form.current.reset();
+        } catch (err) {
+            addToast("error", "Failed to send Contact Form.");
+            console.error(err);
+        }
     };
 
     return (
@@ -95,7 +87,6 @@ const Contact = () => {
                         </div>
                         <div className="stbox p-6 rounded-lg w-full md:w-[60%] max-w-md">
                             <form ref={form} onSubmit={sendEmail} className="space-y-4 text-white">
-                                <input type="hidden" name="to_email" value="admin@quantumhash.me" />
 
                                 <div>
                                     <label className="block mb-1 text-sm">Full Name</label>
