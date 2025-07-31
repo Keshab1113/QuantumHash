@@ -181,8 +181,11 @@ const Slide = ({ slide, index, current, handleSlideClick }: SlideProps) => {
         <DrawerContent>
           {(onClose) => (
             <>
-              <DrawerBody className="">
-                <div className="stbox p-6 rounded-lg w-full max-w-md relative mx-auto mt-20">
+              <DrawerBody className=" bg-[#0d0125] h-screen min-h-screen max-h-screen" style={{
+            backgroundImage: "url('/careerBG.png')",
+            backgroundSize: "cover",
+        }}>
+                <div className="stbox p-6 rounded-lg w-full max-w-md relative mx-auto">
                   <h2 className="text-2xl text-white font-semibold mb-4 text-center">Apply Now</h2>
                   <form className="space-y-4 text-white">
                     <div>

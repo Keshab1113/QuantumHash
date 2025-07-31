@@ -16,19 +16,9 @@ const product = [
         link: "https://asesystem.com/",
     },
     {
-        name: "Artlabss",
-        image: "/Projects/image3.png",
-        link: "/",
-    },
-    {
         name: "QuantumEdu",
         image: "/Projects/image4.png",
         link: "https://quantumedu.in/",
-    },
-    {
-        name: "ASES",
-        image: "/Projects/image2.png",
-        link: "https://asesystem.com/",
     },
     {
         name: "QuantumAI",
@@ -36,9 +26,24 @@ const product = [
         link: "https://qhashai.com/",
     },
     {
-        name: "Artlabss",
-        image: "/Projects/image3.png",
-        link: "/",
+        name: "ASES",
+        image: "/Projects/image2.png",
+        link: "https://asesystem.com/",
+    },
+    {
+        name: "QuantumEdu",
+        image: "/Projects/image4.png",
+        link: "https://quantumedu.in/",
+    },
+    {
+        name: "QuantumAI",
+        image: "/Projects/image.png",
+        link: "https://qhashai.com/",
+    },
+    {
+        name: "ASES",
+        image: "/Projects/image2.png",
+        link: "https://asesystem.com/",
     },
     {
         name: "QuantumEdu",

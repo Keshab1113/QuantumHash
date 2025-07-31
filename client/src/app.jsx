@@ -12,6 +12,7 @@ import About from './pages/About/About';
 import OurPlatform from './pages/OurPlatform/OurPlatform';
 import Investor from './pages/Investor/Investor';
 import Career from './pages/Career/Career';
+import Contact from './pages/Contact/Contact';
 
 export function App() {
   return (
@@ -22,6 +23,7 @@ export function App() {
         <Route path='/platforms' element={<OurPlatform />} />
         <Route path='/investor' element={<Investor />} />
         <Route path='/career' element={<Career />} />
+        <Route path='/connect' element={<Contact />} />
       </Route>
       <Route path="*" element={<NoPage />} />
     </Routes>

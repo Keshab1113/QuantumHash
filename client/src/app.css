@@ -120,9 +120,20 @@ body {
 
 .stbox {
   background: linear-gradient(to right, rgba(255, 141, 32, 0.2), rgba(103, 0, 255, 0.2));
-  backdrop-filter: blur(60px);
-  -webkit-backdrop-filter: blur(60px);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 1rem; /* Optional: rounded corners */
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+}
+
+
+::-webkit-scrollbar {
+    display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+body{
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
 }

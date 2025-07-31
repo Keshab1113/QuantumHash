@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import Aurora from "../../../ReactBits/Aurora/Aurora";
 import SplashCursor from "../../../ReactBits/SplashCursor/SplashCursor";
 import { Meteors } from "../magicui/meteors"
@@ -23,8 +24,12 @@ const Landing = () => {
 
                 </h2>
                 <div className=" flex gap-[30px] md:flex-row flex-col">
+                    <Link to={"platforms"}>
                     <button className=" text-white border-white border-solid border cursor-pointer py-4 px-6 rounded-full">Explore Our Platforms</button>
+                    </Link>
+                    <Link to={"investor"}>
                     <button className=" text-white border-white border-solid border cursor-pointer py-4 px-6 rounded-full">Investor Relations</button>
+                    </Link>
                 </div>
             </div>
             <SplashCursor/>
