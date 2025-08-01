@@ -10,6 +10,8 @@ import {
   Button,
   useDisclosure,
 } from "@heroui/react";
+import axios from "axios"
+import { useToast } from "../../components/ToastContext";
 
 interface SlideData {
   title: string;
@@ -21,7 +23,15 @@ interface SlideData {
   overview: string;
   type: string;
 }
-
+interface ApplicationFormData {
+  name: string;
+  email: string;
+  phone: string;
+  country: string;
+  city: string;
+  resume: File | null;
+  jobTitle: string;
+}
 interface SlideProps {
   slide: SlideData;
   index: number;
@@ -33,6 +43,7 @@ const Slide = ({ slide, index, current, handleSlideClick }: SlideProps) => {
   const slideRef = useRef<HTMLLIElement>(null);
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [placement, setPlacement] = useState("left");
+  const { addToast } = useToast();
 
   const handleOpen = (placement) => {
     setPlacement(placement);
@@ -86,6 +97,31 @@ const Slide = ({ slide, index, current, handleSlideClick }: SlideProps) => {
     const file = e.target.files?.[0];
     console.log("Uploaded file:", file);
   };
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const form = e.currentTarget;
+    const formData = new FormData(form);
+
+
+    try {
+      const response = await axios.post('https://fuzzy-winner-45v5rjj5r4jh9wg-5000.app.github.dev/api/apply', {
+        name: formData.get('name'),
+        email: formData.get('email'),
+        phone: formData.get('phone'),
+        country: formData.get('country'),
+        city: formData.get('city'),
+        jobTitle: formData.get('jobTitle'),
+        resumeLink: formData.get('resume') ? (formData.get('resume') as File).name : 'No resume attached',
+      });
+      addToast("success", "Application submitted successfully!");
+    } catch (error) {
+      console.error('Error:', error);
+      addToast("error", "Failed to submit application. Please try again.");
+    }
+  };
+
 
   const { src, button, title, type, overview, responsibilities, eligibility, benefits } = slide;
 
@@ -182,15 +218,17 @@ const Slide = ({ slide, index, current, handleSlideClick }: SlideProps) => {
           {(onClose) => (
             <>
               <DrawerBody className=" bg-[#0d0125] h-screen min-h-screen max-h-screen" style={{
-            backgroundImage: "url('/careerBG.png')",
-            backgroundSize: "cover",
-        }}>
+                backgroundImage: "url('/careerBG.png')",
+                backgroundSize: "cover",
+              }}>
                 <div className="stbox p-6 rounded-lg w-full max-w-md relative mx-auto">
                   <h2 className="text-2xl text-white font-semibold mb-4 text-center">Apply Now</h2>
-                  <form className="space-y-4 text-white">
+                  <form className="space-y-4 text-white" onSubmit={handleSubmit}>
+                    <input type="hidden" name="jobTitle" value={title} />
                     <div>
                       <label className="block mb-1 text-sm">Full Name</label>
                       <input
+                        name="name"
                         type="text"
                         placeholder="Enter your full name"
                         className="w-full px-4 py-2 border border-gray-300 rounded-md bg-transparent text-white placeholder-gray-300 focus:outline-none focus:ring focus:ring-indigo-300"
@@ -200,6 +238,7 @@ const Slide = ({ slide, index, current, handleSlideClick }: SlideProps) => {
                     <div>
                       <label className="block mb-1 text-sm">Email</label>
                       <input
+                        name="email"
                         type="email"
                         placeholder="Enter your email"
                         className="w-full px-4 py-2 border border-gray-300 rounded-md bg-transparent text-white placeholder-gray-300 focus:outline-none focus:ring focus:ring-indigo-300"
@@ -209,6 +248,7 @@ const Slide = ({ slide, index, current, handleSlideClick }: SlideProps) => {
                     <div>
                       <label className="block mb-1 text-sm">Phone Number</label>
                       <input
+                        name="phone"
                         type="tel"
                         placeholder="Enter your phone number"
                         className="w-full px-4 py-2 border border-gray-300 rounded-md bg-transparent text-white placeholder-gray-300 focus:outline-none focus:ring focus:ring-indigo-300"
@@ -218,6 +258,7 @@ const Slide = ({ slide, index, current, handleSlideClick }: SlideProps) => {
                     <div>
                       <label className="block mb-1 text-sm">Country</label>
                       <input
+                        name="country"
                         type="text"
                         placeholder="Enter your country"
                         className="w-full px-4 py-2 border border-gray-300 rounded-md bg-transparent text-white placeholder-gray-300 focus:outline-none focus:ring focus:ring-indigo-300"
@@ -228,6 +269,7 @@ const Slide = ({ slide, index, current, handleSlideClick }: SlideProps) => {
                       <label className="block mb-1 text-sm">City</label>
                       <input
                         type="text"
+                        name="city"
                         placeholder="Enter your city"
                         className="w-full px-4 py-2 border border-gray-300 rounded-md bg-transparent text-white placeholder-gray-300 focus:outline-none focus:ring focus:ring-indigo-300"
                       />
@@ -237,6 +279,7 @@ const Slide = ({ slide, index, current, handleSlideClick }: SlideProps) => {
                       <label className="block mb-1 text-sm">Upload CV <span className="text-xs text-gray-300">(PDF or DOC)</span></label>
                       <input
                         type="file"
+                        name="resume"
                         accept=".pdf,.doc,.docx"
                         onChange={handleFileChange}
                         className="block w-full text-sm text-gray-300 file:mr-4 file:py-2 file:px-4
@@ -251,7 +294,7 @@ const Slide = ({ slide, index, current, handleSlideClick }: SlideProps) => {
                       <Button onPress={onClose} className=" border border-solid border-white rounded-full px-6 py-2 text-white">
                         Close
                       </Button>
-                      <Button onPress={onClose} className=" border border-solid border-white rounded-full px-6 py-2 text-white">
+                      <Button type="submit" className=" border border-solid border-white rounded-full px-6 py-2 text-white">
                         Submit
                       </Button>
                     </div>
