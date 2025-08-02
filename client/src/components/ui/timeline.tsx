@@ -40,7 +40,7 @@ export const Timeline = ({ data }: { data: TimelineEntry[] }) => {
       ref={containerRef}
     >
       <div className="max-w-7xl mx-auto py-6 px-4 md:px-8 lg:px-10">
-        <h1 className=" text-[50px] text-white font-bold">Our <span className="h1head1">Journey</span></h1>
+        <h1 className=" md:text-[38px] text-[28px] text-white font-bold">Our <span className="h1head1">Journey</span></h1>
 
       </div>
 
@@ -54,7 +54,7 @@ export const Timeline = ({ data }: { data: TimelineEntry[] }) => {
               <div className="h-10 absolute left-3 md:left-3 w-10 rounded-full bg-white dark:bg-black flex items-center justify-center">
                 <div className="h-4 w-4 rounded-full bg-neutral-200 dark:bg-neutral-800 border border-zinc-200 border-neutral-300 dark:border-neutral-700 p-2 dark:border-zinc-800" />
               </div>
-              <h3 className="h1head1 hidden md:block text-xl md:pl-20 md:text-5xl font-bold text-neutral-500 dark:text-neutral-500">
+              <h3 className="h1head1 w-fit hidden md:block text-xl md:pl-20 md:text-[38px] text-[28px] font-bold text-neutral-500 dark:text-neutral-500">
                 {item.title}
               </h3>
             </div>
@@ -63,7 +63,7 @@ export const Timeline = ({ data }: { data: TimelineEntry[] }) => {
               <h3 className="md:hidden block text-2xl mb-4 text-left font-bold text-neutral-500 dark:text-neutral-500">
                 {item?.title}
               </h3>
-              <h4 className="text-2xl md:text-3xl font-semibold h1head1 mb-4">
+              <h4 className="text-2xl md:text-3xl font-semibold h1head1 mb-4 w-fit">
                 {item?.heading}
               </h4>
               <p className="text-white whitespace-pre-line mb-4">
@@ -73,11 +73,12 @@ export const Timeline = ({ data }: { data: TimelineEntry[] }) => {
                 {item?.subDescription}
               </p>
               <Link to={item.link}>
-                <button className=" flex justify-center items-center cursor-pointer mt-6 border border-solid border-white py-2 px-4 text-white rounded-full">
+                <button className="flex justify-center items-center cursor-pointer mt-6 border border-solid border-white py-2 px-4 text-white rounded-full transition-all duration-300 ease-in-out hover:bg-white hover:text-black group">
                   Visit
-                  <FaArrowRight className=" ml-2" />
+                  <FaArrowRight className="ml-2 transform transition-transform duration-300 ease-in-out group-hover:translate-x-1" />
                 </button>
               </Link>
+
             </div>
 
           </div>

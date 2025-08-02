@@ -88,7 +88,7 @@ const Opening = () => {
             backgroundImage: "url('/careerBG.png')",
             backgroundSize: "cover",
         }}>
-            <h1 className=" h1head1 text-4xl font-bold w-fit mb-10">Opening Positions</h1>
+            <h1 className=" h1head1 md:text-[38px] text-[28px] font-bold w-fit mb-10">Opening Positions</h1>
             <Carousel slides={Openings} />
             <h3 className=" text-white text-sm mt-20">Build the Future of AI With Us - We value creativity, ownership, and curiosity. Whether you’re a self-taught coder, a graduate with AI dreams, or someone passionate about reshaping the world with intelligent systems — if you believe in building the future, let’s do it together.</h3>
         </section>

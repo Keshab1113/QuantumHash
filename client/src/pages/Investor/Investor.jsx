@@ -75,16 +75,17 @@ const Investor = () => {
                         <h1 className=" text-white text-[20px] lg:max-w-[80%] md:max-w-[50%]">QuantumHash Technologies is a deep-tech startup driving innovation in voice AI, safety intelligence, and personalized learning. Our ecosystem includes four cutting-edge platforms, each targeting a vital sector with scalable AI solutions.</h1>
                     </section>
                     <section className=" h-full w-full bg-[#0d0125] mt-10 flex flex-col justify-center items-center">
-                        <h1 className=" h1head1 text-4xl font-bold  text-center">Products List</h1>
+                        <h1 className=" h1head1 md:text-[38px] text-[28px] font-bold  text-center">Products List</h1>
                         <RollingGallery images={product} autoplay={true} pauseOnHover={true} />
                         <InvestorModal />
-                        <h1 className=" h1head1 text-4xl font-bold  text-center mt-10">Why Invest in QuantumHash ?</h1>
+                        <h1 className=" h1head1 md:text-[38px] text-[28px] font-bold  text-center mt-10">Why Invest in QuantumHash ?</h1>
                         <div className=" w-full text-white mt-10">
                             <Accordion selectionMode="multiple">
                                 <AccordionItem
                                     key="1"
                                     aria-label="AI-First Platform Strategy"
                                     title="1. Diverse AI-Driven Product Strategy"
+                                    // className=" text-blue-500"
                                 >
                                     We’ve developed 4 AI-first platforms that cater to high-demand areas: AI conversational assistance, adaptive learning in education, predictive analytics for industrial safety, and intelligent voice-based interfaces. These platforms are not just concepts — they are active, evolving, and designed to meet real-world enterprise needs.
                                 </AccordionItem>

@@ -27,7 +27,7 @@ const Teams = () => {
   return (
     <section className="h-full w-full">
       <div className="container mx-auto px-4 pt-16 pb-6">
-        <h1 className="text-center text-[34px] font-bold h1head1 w-fit mb-2">
+        <h1 className="text-center md:text-[38px] text-[28px] font-bold h1head1 w-fit mb-2">
           Meet Our Team
         </h1>
         <p className="text-white md:max-w-[60%]">

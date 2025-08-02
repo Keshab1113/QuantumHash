@@ -8,7 +8,7 @@ const Intro = () => {
             backgroundSize: 'cover'
         }}>
             <div className="container mx-auto px-4 py-8">
-                <h1 className=" text-center text-[28px] text-white">Why QuantumHash <span className="h1head1 text-[40px]">?</span></h1>
+                <h1 className=" text-center font-bold md:text-[38px] text-[28px] text-white h1head1 w-fit mx-auto">Why QuantumHash <span className="h1head1 text-[40px]">?</span></h1>
                 <div className=" my-20 flex lg:flex-row flex-col md:gap-0 gap-10">
                     <div className=" w-full space-y-15 md:pl-10 md:pr-10 lg:pr-0">
                         <div className=" border border-amber-400 border-solid flex justify-center items-center gap-3 p-4 text-white border-r-0"

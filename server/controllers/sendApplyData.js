@@ -11,6 +11,7 @@ const sendApplyData = async (req, res) => {
         },
     });
 
+    // Email to Admin
     const mailOptions = {
         from: process.env.MAIL_USER,
         to: process.env.MAIL_USER,
@@ -40,9 +41,7 @@ const sendApplyData = async (req, res) => {
         
         <div class="content">
             <p>Hello Team,</p>
-            
             <p>A new application has been submitted for the position: <strong>${jobTitle}</strong>.</p>
-            
             <div class="details-box">
                 <p><span class="label">Applicant Name:</span> ${name}</p>
                 <p><span class="label">Email:</span> <a href="mailto:${email}">${email}</a></p>
@@ -50,13 +49,9 @@ const sendApplyData = async (req, res) => {
                 <p><span class="label">Location:</span> ${city}, ${country}</p>
                 ${resumeLink ? `<p><span class="label">Resume:</span> <a href="${resumeLink}" target="_blank">View Resume</a></p>` : ''}
             </div>
-            
             <p>Please review this application and follow up with the candidate as appropriate.</p>
-            
-            <p>Best regards,<br>
-            <strong>QuantumHash Careers Team</strong></p>
+            <p>Best regards,<br><strong>QuantumHash Careers Team</strong></p>
         </div>
-        
         <div class="footer">
             QuantumHash Corporation<br>
             <a href="https://www.quantumhash.me">www.quantumhash.me</a>
@@ -67,8 +62,50 @@ const sendApplyData = async (req, res) => {
         `,
     };
 
+    // Auto-reply to Applicant
+    const autoReply = {
+        from: process.env.MAIL_USER,
+        to: email,
+        subject: `Application Received for ${jobTitle} – QuantumHash`,
+        html: `
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #333; }
+    .container { max-width: 600px; margin: 0 auto; border: 1px solid #e1e1e1; border-radius: 8px; overflow: hidden; box-shadow: 0 0 20px rgba(0,0,0,0.1); }
+    .header { background-color: #5c2d91; padding: 25px; text-align: center; color: white; }
+    .header h1 { margin: 0; font-size: 22px; font-weight: 600; }
+    .content { padding: 30px; background-color: #ffffff; }
+    .footer { background-color: #f5f5f5; text-align: center; padding: 15px; font-size: 12px; color: #777; }
+    .highlight { color: #5c2d91; font-weight: 600; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>Thank You for Applying</h1>
+    </div>
+    <div class="content">
+      <p>Dear <strong>${name}</strong>,</p>
+      <p>Thank you for applying for the <span class="highlight">${jobTitle}</span> role at <strong>QuantumHash</strong>. We appreciate your interest in joining our team.</p>
+      <p>Our recruitment team is currently reviewing your application. If your profile aligns with our requirements, we’ll contact you shortly with next steps.</p>
+      <p>In the meantime, feel free to explore more about us at <a href="https://www.quantumhash.me" target="_blank">quantumhash.me</a>.</p>
+      <p>Warm regards,<br><strong>QuantumHash HR Team</strong></p>
+    </div>
+    <div class="footer">
+      QuantumHash Corporation<br>
+      <a href="https://www.quantumhash.me">www.quantumhash.me</a>
+    </div>
+  </div>
+</body>
+</html>
+        `,
+    };
+
     try {
-        await transporter.sendMail(mailOptions);
+        await transporter.sendMail(mailOptions);   // Admin
+        await transporter.sendMail(autoReply);     // Applicant
         res.status(200).json({ message: "Application submitted successfully" });
     } catch (error) {
         console.error("Email sending error:", error);

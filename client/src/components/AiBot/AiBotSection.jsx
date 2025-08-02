@@ -28,7 +28,7 @@ const AiBotSection = ({ headText }) => {
         </div>
 
         <div className="mt-5 bg-black/20 p-4 w-full md:w-1/2 text-center">
-          <h1 className="text-white text-2xl md:text-3xl font-semibold">{headText}</h1>
+          <h1 className="text-white md:text-[38px] text-[28px] font-semibold">{headText}</h1>
         </div>
       </div>
     </section>

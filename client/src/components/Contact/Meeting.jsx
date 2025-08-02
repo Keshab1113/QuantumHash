@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Calendar from 'react-calendar';
 import Select from 'react-select';
 import 'react-calendar/dist/Calendar.css';
@@ -54,12 +54,22 @@ const Meeting = () => {
     const [timeSlots, setTimeSlots] = useState([]);
     const [selectedTime, setSelectedTime] = useState(null);
     const { addToast } = useToast();
+    const form = useRef(null);
 
-    const [formData, setFormData] = useState({
+    const [formValues, setFormValues] = useState({
         fullName: '',
         email: '',
         query: '',
     });
+    const [isFormValid, setIsFormValid] = useState(false);
+
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setFormValues((prev) => ({
+            ...prev,
+            [name]: value,
+        }));
+    };
 
     const timezones = Intl.supportedValuesOf('timeZone').map((tz) => ({
         value: tz,
@@ -69,6 +79,8 @@ const Meeting = () => {
     useEffect(() => {
         generateTimeSlots(value);
     }, [value, timezone]);
+
+
 
     const generateTimeSlots = (selectedDate) => {
         const slots = [];
@@ -98,29 +110,50 @@ const Meeting = () => {
 
         setTimeSlots(slots);
     };
+
+
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        const formData = new FormData(form.current);
+        const data = {
+            ...Object.fromEntries(formData.entries()),
+            date: value.toDateString(),
+            time: selectedTime,
+            duration,
+            timezone,
+        };
+
         try {
-            await axios.post(`${process.env.VITE_BACKEND_URL}/api/send-email`, formData);
-            addToast("success", "Meeting will be schedule soon.");
+            await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/meeting`, data);
+            addToast("success", "Meeting will be scheduled soon.");
+            form.current.reset();
+            setFormValues({ fullName: '', email: '', query: '' });
+            setSelectedTime(null);
         } catch (err) {
             addToast("error", "Failed to schedule the meeting.");
         }
     };
 
+    useEffect(() => {
+        const { fullName, email, query } = formValues;
+        const allFilled = fullName && email && query;
+        setIsFormValid(!!allFilled);
+    }, [formValues]);
+
     return (
         <section className='w-full'>
-            <h1 className="text-4xl font-bold h1head1 mt-10 text-center">Schedule A Meeting</h1>
+            <h1 className="md:text-[38px] text-[28px] font-bold h1head1 mt-10 text-center w-fit mx-auto">Schedule A Meeting</h1>
             <h2 className="text-base font-normal text-white mt-1 text-center">Meet With Our Quantumhash Team</h2>
 
-            <div className='flex md:flex-row flex-col gap-10 mt-16 w-full flex-wrap'>
-                <div className={`bg-white md:px-10 px-4 md:py-10 py-8 rounded-2xl w-full lg:w-fit md:w-[50%] mx-auto ${selectedTime && "hidden"}`}>
+            <div className='flex md:flex-row flex-col gap-6 mt-16 w-full flex-wrap'>
+                <div className={`bg-white md:px-10 px-4 md:py-10 py-8 rounded-2xl w-full lg:w-[40%] flex flex-col justify-start items-center md:w-[70%] mx-auto ${selectedTime && "hidden"}`}>
                     <h1 className='h1head1 capitalize text-2xl mb-10 font-bold text-center'>Choose the date from here</h1>
-                    <Calendar onChange={onChange} value={value} className={" font-bold p-4 rounded-2xl"} minDate={new Date()}/>
+                    <Calendar onChange={onChange} value={value} className={" font-bold p-4 rounded-2xl"} minDate={new Date()} />
                 </div>
 
                 {selectedTime ? (
-                    <form onSubmit={handleSubmit} className=' lg:w-[85%] md:w-[100%] mx-auto w-full space-y-4 border border-white border-solid p-6 rounded-2xl text-white'>
+                    <form ref={form} onSubmit={handleSubmit} className=' lg:w-[85%] md:w-[100%] mx-auto w-full space-y-4 border border-white border-solid p-6 rounded-2xl text-white'>
                         <div>
                             <h3 className="text-lg font-bold capitalize">Your information</h3>
                             <h4 className="text-[12px] ">Quantumhash Digital Conference</h4>
@@ -132,8 +165,9 @@ const Meeting = () => {
                             <label className='block text-sm mb-1'>Full Name</label>
                             <input
                                 type='text'
-                                value={formData.fullName}
-                                onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
+                                name="fullName"
+                                value={formValues.fullName}
+                                onChange={handleInputChange}
                                 required
                                 className='w-full p-2 rounded text-white bg-white/20 outline-0'
                             />
@@ -143,8 +177,9 @@ const Meeting = () => {
                             <label className='block text-sm mb-1'>Email</label>
                             <input
                                 type='email'
-                                value={formData.email}
-                                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                                name="email"
+                                value={formValues.email}
+                                onChange={handleInputChange}
                                 required
                                 className='w-full p-2 rounded text-white bg-white/20 outline-0'
                             />
@@ -153,8 +188,9 @@ const Meeting = () => {
                         <div>
                             <label className='block text-sm mb-1'>Your Query</label>
                             <textarea
-                                value={formData.query}
-                                onChange={(e) => setFormData({ ...formData, query: e.target.value })}
+                                name="query"
+                                value={formValues.query}
+                                onChange={handleInputChange}
                                 rows={3}
                                 className='w-full p-2 rounded text-white bg-white/20 outline-0'
                             />
@@ -165,7 +201,7 @@ const Meeting = () => {
                         <button onClick={() => setSelectedTime(null)} className='bg-white mr-3 cursor-pointer text-black px-4 py-2 rounded hover:bg-gray-200'>
                             Back
                         </button>
-                        <button type='submit' className='bg-white cursor-pointer text-black px-4 py-2 rounded hover:bg-gray-200'>
+                        <button type='submit' className='bg-white disabled:opacity-50 cursor-pointer text-black px-4 py-2 rounded hover:bg-gray-200' disabled={!isFormValid}>
                             Submit
                         </button>
                     </form>

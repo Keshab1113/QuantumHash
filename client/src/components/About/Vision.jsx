@@ -12,7 +12,7 @@ const Vision = () => {
                     </div>
                 </div>
                 <div className="about-box2 py-10 flex md:flex-row-reverse flex-col-reverse">
-                    <div className=" md:w-[40%] w-full">
+                    <div className=" md:w-[40%] w-full  flex justify-end items-center">
                         <img src="/vision2.webp" alt="" className=" h-[250px] w-[250px]" loading="lazy"/>
                     </div>
                     <div className=" md:w-[60%] w-full px-6">

@@ -7,10 +7,10 @@ import CardSwap, { Card } from "../../../ReactBits/CardSwap/CardSwap"
 const Innovation = () => {
     return (
         <section className=" min-h-screen h-full w-full bg-[#0d0125]">
-            <div className="container mx-auto px-4 py-6">
-                <h1 className=" text-[38px] font-bold text-white max-w-[90%]">AI Innovation <span className="h1head1">Empowering</span> Industries, Educators, and Individuals</h1>
+            <div className="container mx-auto px-4 pt-16 pb-6">
+                <h1 className=" md:text-[38px] text-[28px] font-bold text-white max-w-[90%] mb-10">AI Innovation <span className="h1head1">Empowering</span> Industries, Educators, and Individuals</h1>
                 <div className=" w-full flex md:flex-row flex-col-reverse">
-                    <div className=" md:w-[59%] w-full text-white mt-5 pt-5 pb-20" style={{
+                    <div className=" md:w-[60%] w-full text-white mt-5 pt-5 pb-20" style={{
                         backgroundImage: "url('/InnovationBG.png')",
                         backgroundSize: 'cover'
                     }}>
@@ -41,7 +41,7 @@ const Innovation = () => {
                             </button>
                         </Link>
                     </div>
-                    <div className=" pb-20">
+                    <div className=" pb-20  w-full md:w-[40%] flex justify-center items-center">
                         <img src="/image.webp" alt="" className="w-[400px] h-[400px]" loading="lazy"/>
                     </div>
                 </div>
@@ -53,9 +53,9 @@ const Innovation = () => {
                     <div className="lg:w-[60%] w-full  h-full relative overflow-hidden md:py-20 lg:py-0">
                         <CardSwap height={450}>
                             <Card>
-                                <div className="text-white text-center p-4">
-                                    <div className=" md:h-[20vh] h-[20vh] lg:w-[34vw] w-full rounded-2xl bg-white mb-4 overflow-hidden">
-                                        <img src="/Projects/image.webp" alt="" className=" w-full h-full" loading="lazy"/>
+                                <div className="text-white text-center p-4 h-full w-full">
+                                    <div className=" md:h-[20vh] h-[20vh] lg:w-[34vw] max-w-[100%] w-full rounded-2xl bg-red-500 mb-4 overflow-hidden">
+                                        <img src="/Projects/image.webp" alt="" className=" w-full h-full  object-fill" loading="lazy"/>
                                     </div>
                                     <h2 className="text-xl font-bold mb-4">
                                         Conversational Intelligence Engine
@@ -68,8 +68,8 @@ const Innovation = () => {
                             </Card>
                             <Card>
                                 <div className="text-white text-center p-4">
-                                    <div className=" h-[20vh] lg:w-[34vw] w-full rounded-2xl bg-white mb-4 overflow-hidden">
-                                        <img src="/Projects/image2.webp" alt="" className=" w-full h-full" loading="lazy"/>
+                                    <div className=" h-[20vh] lg:w-[34vw] w-full max-w-[100%] rounded-2xl bg-white mb-4 overflow-hidden">
+                                        <img src="/Projects/image2.webp" alt="" className=" w-full h-full object-fill" loading="lazy"/>
                                     </div>
                                     <h2 className="text-xl font-bold mb-4">
                                         Industrial AI for Predictive Safety & Operations
@@ -80,24 +80,10 @@ const Innovation = () => {
                                     <h1 className=" text-center h1head1 mt-2 text-xl font-bold">ASES (Advanced Safety & Efficiency System)</h1>
                                 </div>
                             </Card>
-                            {/* <Card>
-                                <div className="text-white text-center p-4">
-                                    <div className=" h-[20vh] lg:w-[34vw] w-full rounded-2xl bg-white mb-4 overflow-hidden">
-                                        <img src="/Projects/image3.png" alt="" className=" w-full h-full"/>
-                                    </div>
-                                    <h2 className="text-xl font-bold mb-4">
-                                        Voice & Multimodal AI Innovation Lab
-                                    </h2>
-                                    <p>
-                                        The R&D engine behind QhashAi natural interaction capabilities. Artlabss develops voicebots, gesture recognition, facial expression readers, and multilingual speech tech. It powers our voice-driven interfaces and real-time facial feedback systems.
-                                    </p>
-                                    <h1 className=" text-center h1head1 mt-2 text-xl font-bold">Artlabss</h1>
-                                </div>
-                            </Card> */}
                             <Card>
                                 <div className="text-white text-center p-4">
-                                    <div className=" h-[20vh] lg:w-[34vw] w-full rounded-2xl bg-white mb-4 overflow-hidden">
-                                        <img src="/Projects/image4.webp" alt="" className=" w-full h-full" loading="lazy"/>
+                                    <div className=" h-[20vh] lg:w-[34vw] w-full max-w-[100%] rounded-2xl bg-white mb-4 overflow-hidden">
+                                        <img src="/Projects/image4.webp" alt="" className=" w-full h-full object-fill" loading="lazy"/>
                                     </div>
                                     <h2 className="text-xl font-bold mb-4">
                                         AI Tutoring Platform for Grades 4–12

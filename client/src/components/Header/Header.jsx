@@ -32,7 +32,7 @@ const Header = () => {
             className={`fixed w-full z-50 rounded-b-4xl transition-all duration-100 ${scrolled ? 'bg-[linear-gradient(90deg,_#000,_#6700ff_80%,_#000)]' : ''
                 }`}
         >
-            <div className="container mx-auto px-4 py-4 flex justify-between items-center text-white lg:h-[13vh]">
+            <div className="container mx-auto px-4 py-4 flex justify-between items-center text-white lg:h-[5rem]">
                 <Link to={"/"} className="text-2xl font-bold flex flex-col">
                     <img src="/logo.webp" alt="logo" width="150px" loading="lazy"/>
                     <span className="text-base font-normal tracking-[.18rem]">CORPORATION</span>
@@ -75,15 +75,15 @@ const Header = () => {
 
             {/* Mobile Menu */}
             {menuOpen && (
-                <div className="lg:hidden bg-white w-[100%] text-black flex flex-col items-center gap-6 py-6 transition-all duration-300 container mx-auto rounded-b-4xl">
+                <div className="lg:hidden bg-white w-[100%] text-black flex flex-col items-center transition-all duration-300 container mx-auto rounded-b-4xl">
                     {navItems.map(({ name, path }) => (
                         <NavLink
                             key={path}
                             to={path}
                             onClick={() => setMenuOpen(false)}
                             className={({ isActive }) =>
-                                `font-medium text-lg ${isActive
-                                    ? "underline text-black"
+                                `font-medium text-lg border-b border-solid px-4 py-6 w-full h-full border-black/20 ${isActive
+                                    ? "bg-black/20 text-black"
                                     : "text-black hover:text-blue-500"
                                 }`
                             }

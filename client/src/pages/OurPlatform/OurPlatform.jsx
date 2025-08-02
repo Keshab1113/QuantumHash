@@ -101,10 +101,10 @@ const OurPlatform = () => {
                 <AiBotSection headText="Our Platforms & Roadmap" />
                 <div className="container mx-auto px-4 py-6">
                     <div className=" flex gap-4 flex-col border border-solid platform-box p-4 my-10">
-                        <h1 className=" text-white text-2xl font-medium">
+                        <h1 className=" text-white md:text-[20px] text-[16px] font-medium">
                             We are building a unified AI ecosystem that redefines how people work, learn, and stay safe. By integrating intelligent assistance, natural voice interaction, personalized education, and industrial safety, our platform delivers real-time insights, adaptive learning, and proactive risk management. It simplifies complexity, enhances productivity, and empowers smarter decision-making across every domain.
                         </h1>
-                        <h2 className=" text-white text-2xl font-semibold">
+                        <h2 className=" text-white md:text-[20px] text-[16px] font-semibold">
                             Below is our roadmap that outlines this transformative journey.
                         </h2>
                     </div>

@@ -66,7 +66,7 @@ const Landing = () => {
           QuantumHash <span className="text-3xl md:text-4xl block md:inline">CORPORATION</span>
         </h1> */}
         
-        <p className="max-w-4xl mx-auto text-xl md:text-3xl font-bold mb-8 mt-6">
+        <p className="max-w-4xl 2xl:max-w-6xl mx-auto text-xl md:text-3xl 2xl:text-5xl font-bold mb-8 mt-6">
             From safety intelligence to next-gen education and voice technologies – we pioneer AI-driven transformation, turning raw data into actionable intelligence that empowers industries, educators, and innovators worldwide.
         </p>
         
