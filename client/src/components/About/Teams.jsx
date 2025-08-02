@@ -18,7 +18,7 @@ const teamData = [
   },
   {
     name: "Keshab",
-    description: "Full Stack Developer.",
+    description: "MERN Stack Developer, skilled in building responsive websites, user-friendly interfaces, and real-time applications. Leads development of intuitive web experiences for education, analytics, and tracking systems, ensuring speed, accessibility, and performance.",
     imageURL: "/Teams/mypicture.jpg"
   },
 ];

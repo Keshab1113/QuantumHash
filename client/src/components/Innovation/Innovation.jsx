@@ -35,7 +35,7 @@ const Innovation = () => {
                             </li>
                         </ul>
 
-                        <Link to={"/pages/about"} >
+                        <Link to={"about"} >
                             <button className=" text-white border-white border-solid border cursor-pointer py-2 px-4 rounded-full mt-10">
                                 Explore More
                             </button>

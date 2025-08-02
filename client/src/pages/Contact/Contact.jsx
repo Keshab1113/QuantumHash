@@ -1,5 +1,4 @@
 import { Helmet } from "react-helmet";
-import AboutBanner from "../../components/About/AboutBanner";
 import React, { useRef } from "react";
 import Meeting from "../../components/Contact/Meeting";
 import { BiLogoGmail } from "react-icons/bi";
@@ -7,6 +6,7 @@ import { FaXTwitter } from "react-icons/fa6";
 import { FaGlobe } from "react-icons/fa";
 import { useToast } from "../../components/ToastContext";
 import axios from "axios";
+import AiBotSection from "../../components/AiBot/AiBotSection";
 
 const Contact = () => {
     const form = useRef(null);
@@ -37,7 +37,7 @@ const Contact = () => {
             </Helmet>
 
             <section className=" h-full w-full bg-[#0d0125] ">
-                <AboutBanner title={"Connect"} />
+                <AiBotSection headText="Connect" />
                 <div className="container mx-auto px-4 py-6 flex flex-col justify-center items-center">
                     <h1 className=" text-4xl font-bold h1head1 w-fit mt-10">Contact Form</h1>
                     <div className=" flex md:flex-row flex-col w-full gap-12 mt-10">

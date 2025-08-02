@@ -3,6 +3,7 @@ const cors = require("cors");
 const dotenv = require("dotenv");
 const sendEmail = require("./controllers/sendEmail");
 const sendApplyData = require("./controllers/sendApplyData");
+const sendInvestor = require("./controllers/sendInvestor");
 
 dotenv.config();
 const app = express();
@@ -14,5 +15,6 @@ const PORT = process.env.PORT || 5000;
 
 app.post("/api/send-email", sendEmail);
 app.post("/api/apply", sendApplyData);
+app.post("/api/investor", sendInvestor);
 
 app.listen(PORT, () => console.log(`Server running on PORT ${PORT}`));

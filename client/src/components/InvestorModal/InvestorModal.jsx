@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
     Modal,
     ModalBody,
@@ -7,59 +7,108 @@ import {
     ModalTrigger,
 } from "../ui/animated-modal";
 import Select from "react-select";
+import { useToast } from "../ToastContext";
 
+
+const customStyles = {
+    control: (provided, state) => ({
+        ...provided,
+        backgroundColor: "rgba(255, 255, 255, 0.2)", // bg-white/20
+        borderColor: state.isFocused ? "rgba(255, 255, 255, 0.2)" : "rgba(255, 255, 255, 0.2)", // Tailwind purple-500
+        boxShadow: state.isFocused ? "0 0 0 1px #a855f7" : "none",
+        "&:hover": {
+            borderColor: "#a855f7",
+        },
+        borderRedius: "10px",
+        color: "rgba(255,255,255,0.4)", // text-white/40
+        fontSize: state.selectProps.myFontSize,
+    }),
+    singleValue: (provided, state) => ({
+        ...provided,
+        color: "rgba(255,255,255,0.4)",
+        fontSize: state.selectProps.myFontSize,
+    }),
+    menu: (provided) => ({
+        ...provided,
+        backgroundColor: "black", // bg-white/20
+        // glass effect (optional)
+        zIndex: 99,
+    }),
+    option: (provided, state) => ({
+        ...provided,
+        fontWeight: state.isSelected ? "bold" : "normal",
+        backgroundColor: state.isFocused
+            ? "rgba(255,255,255,0.3)"
+            : "rgba(255, 255, 255, 0.2)",
+        color: "rgba(255,255,255,0.8)",
+        fontSize: state.selectProps.myFontSize,
+        cursor: "pointer",
+    }),
+    input: (provided) => ({
+        ...provided,
+        color: "rgba(255,255,255,0.4)",
+    }),
+    placeholder: (provided) => ({
+        ...provided,
+        color: "rgba(255,255,255,0.4)",
+    }),
+};
 
 
 const InvestorModal = () => {
+    const { addToast } = useToast();
+    const [formValues, setFormValues] = useState({
+        name: '',
+        email: '',
+        companyName: '',
+        investmentInterest: '',
+        Message: '',
+    });
+    const [isFormValid, setIsFormValid] = useState(false);
     const [interest, setInterest] = useState("");
     const options = [
         { value: "Seed", label: "Seed", color: "white" },
         { value: "Angel", label: "Angel", color: "white" },
     ];
 
-    const customStyles = {
-        control: (provided, state) => ({
-            ...provided,
-            backgroundColor: "rgba(255, 255, 255, 0.2)", // bg-white/20
-            borderColor: state.isFocused ? "rgba(255, 255, 255, 0.2)" : "rgba(255, 255, 255, 0.2)", // Tailwind purple-500
-            boxShadow: state.isFocused ? "0 0 0 1px #a855f7" : "none",
-            "&:hover": {
-                borderColor: "#a855f7",
-            },
-            borderRedius:"10px",
-            color: "rgba(255,255,255,0.4)", // text-white/40
-            fontSize: state.selectProps.myFontSize,
-        }),
-        singleValue: (provided, state) => ({
-            ...provided,
-            color: "rgba(255,255,255,0.4)",
-            fontSize: state.selectProps.myFontSize,
-        }),
-        menu: (provided) => ({
-            ...provided,
-            backgroundColor: "black", // bg-white/20
-             // glass effect (optional)
-            zIndex: 99,
-        }),
-        option: (provided, state) => ({
-            ...provided,
-            fontWeight: state.isSelected ? "bold" : "normal",
-            backgroundColor: state.isFocused
-                ? "rgba(255,255,255,0.3)"
-                : "rgba(255, 255, 255, 0.2)",
-            color: "rgba(255,255,255,0.8)",
-            fontSize: state.selectProps.myFontSize,
-            cursor: "pointer",
-        }),
-        input: (provided) => ({
-            ...provided,
-            color: "rgba(255,255,255,0.4)",
-        }),
-        placeholder: (provided) => ({
-            ...provided,
-            color: "rgba(255,255,255,0.4)",
-        }),
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setFormValues((prev) => ({
+            ...prev,
+            [name]: value,
+        }));
     };
+
+    const formRef = useRef(null);
+    const handleSubmit = async (e, onClose) => {
+        e.preventDefault();
+
+        const form = e.currentTarget;
+        const formData = new FormData(form);
+
+
+        try {
+            const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/investor`, {
+                name: formData.get('name'),
+                email: formData.get('email'),
+                companyName: formData.get('companyName'),
+                investmentInterest: formData.get('investmentInterest'),
+                message: formData.get('message'),
+            });
+            formRef.current?.reset();
+            onClose();
+            addToast("success", "Form submitted successfully!");
+        } catch (error) {
+            console.error('Error:', error);
+            addToast("error", "Failed to submit form. Please try again.");
+        }
+    };
+
+    useEffect(() => {
+        const { name, email, companyName, investmentInterest, message } = formValues;
+        const allFilled = name && email && companyName && investmentInterest && message;
+        setIsFormValid(!!allFilled);
+    }, [formValues]);
 
     return (
         <section className="pb-10  flex items-center justify-center">
@@ -79,22 +128,30 @@ const InvestorModal = () => {
                         </h4>
                         <div className="flex justify-center items-center h-full ">
                             <form
+                                ref={formRef}
                                 className="w-full text-white"
+                                onSubmit={(e) => handleSubmit(e, onClose)}
                             >
                                 <div className="mb-4">
                                     <label className="block mb-1 font-medium">Name</label>
                                     <input
                                         type="text"
+                                        name="name"
                                         placeholder="Enter your name"
                                         className="w-full px-4 py-2 rounded-lg bg-white/20 placeholder-white/40 text-white/40 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                                        onChange={handleInputChange}
+                                        required
                                     />
                                 </div>
                                 <div className="mb-4">
                                     <label className="block mb-1 font-medium">Email</label>
                                     <input
                                         type="email"
+                                        name="email"
                                         placeholder="Enter your email"
                                         className="w-full px-4 py-2 rounded-lg bg-white/20 placeholder-white/40 text-white/40 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                                        onChange={handleInputChange}
+                                        required
                                     />
                                 </div>
 
@@ -102,14 +159,17 @@ const InvestorModal = () => {
                                     <label className="block mb-1 font-medium">Company Name</label>
                                     <input
                                         type="text"
+                                        name="companyName"
                                         placeholder="Enter your company name"
+                                        onChange={handleInputChange}
                                         className="w-full px-4 py-2 rounded-lg bg-white/20 placeholder-white/40 text-white/40 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                                        required
                                     />
                                 </div>
 
                                 <div className="mb-4">
                                     <label className="block mb-1 font-medium">Investment Interest</label>
-                                    <Select myFontSize="15px" options={options} styles={customStyles} />
+                                    <Select myFontSize="15px" name="investmentInterest" options={options} styles={customStyles} onChange={handleInputChange} required />
                                 </div>
 
 
@@ -118,8 +178,11 @@ const InvestorModal = () => {
                                     <label className="block mb-1 font-medium">Message</label>
                                     <textarea
                                         rows="1"
+                                        name="message"
+                                        onChange={handleInputChange}
                                         placeholder="Write your message here..."
                                         className="w-full px-4 py-2 rounded-lg bg-white/20 placeholder-white/40 text-white/40 resize-none focus:outline-none focus:ring-2 focus:ring-purple-500"
+                                        required
                                     ></textarea>
                                 </div>
                             </form>
@@ -129,7 +192,7 @@ const InvestorModal = () => {
                         {/* <button className="px-2 py-1 text-white  border border-gray-300 rounded-full cursor-pointer text-sm w-28">
                             Cancel
                         </button> */}
-                        <button className="cursor-pointer text-white  text-sm px-2 py-1 rounded-full border border-gray-300 w-28">
+                        <button type="submit" className="cursor-pointer text-white  text-sm px-2 py-1 rounded-full border border-gray-300 w-28 disabled:opacity-50" disabled={!isFormValid}>
                             Send
                         </button>
                     </ModalFooter>

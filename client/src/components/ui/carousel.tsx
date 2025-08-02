@@ -44,6 +44,17 @@ const Slide = ({ slide, index, current, handleSlideClick }: SlideProps) => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [placement, setPlacement] = useState("left");
   const { addToast } = useToast();
+  const [formValues, setFormValues] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    country: '',
+    city: '',
+    resume: null as File | null,
+  });
+  const [isFormValid, setIsFormValid] = useState(false);
+
+
 
   const handleOpen = (placement) => {
     setPlacement(placement);
@@ -90,15 +101,23 @@ const Slide = ({ slide, index, current, handleSlideClick }: SlideProps) => {
     yRef.current = 0;
   };
 
-  const imageLoaded = (event: React.SyntheticEvent<HTMLImageElement>) => {
-    event.currentTarget.style.opacity = "1";
-  };
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    console.log("Uploaded file:", file);
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormValues((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0] || null;
+    setFormValues((prev) => ({
+      ...prev,
+      resume: file,
+    }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>, onClose: () => void) => {
     e.preventDefault();
 
     const form = e.currentTarget;
@@ -115,6 +134,8 @@ const Slide = ({ slide, index, current, handleSlideClick }: SlideProps) => {
         jobTitle: formData.get('jobTitle'),
         resumeLink: formData.get('resume') ? (formData.get('resume') as File).name : 'No resume attached',
       });
+      formRef.current?.reset();
+      onClose();
       addToast("success", "Application submitted successfully!");
     } catch (error) {
       console.error('Error:', error);
@@ -124,6 +145,14 @@ const Slide = ({ slide, index, current, handleSlideClick }: SlideProps) => {
 
 
   const { src, button, title, type, overview, responsibilities, eligibility, benefits } = slide;
+  const formRef = useRef<HTMLFormElement>(null);
+
+  useEffect(() => {
+    const { name, email, phone, country, city, resume } = formValues;
+    const allFilled = name && email && phone && country && city && resume;
+    setIsFormValid(!!allFilled);
+  }, [formValues]);
+
 
   return (
     <div className="[perspective:1200px] [transform-style:preserve-3d]">
@@ -223,7 +252,7 @@ const Slide = ({ slide, index, current, handleSlideClick }: SlideProps) => {
               }}>
                 <div className="stbox p-6 rounded-lg w-full max-w-md relative mx-auto">
                   <h2 className="text-2xl text-white font-semibold mb-4 text-center">Apply Now</h2>
-                  <form className="space-y-4 text-white" onSubmit={handleSubmit}>
+                  <form ref={formRef} className="space-y-4 text-white" onSubmit={(e) => handleSubmit(e, onClose)}>
                     <input type="hidden" name="jobTitle" value={title} />
                     <div>
                       <label className="block mb-1 text-sm">Full Name</label>
@@ -232,6 +261,8 @@ const Slide = ({ slide, index, current, handleSlideClick }: SlideProps) => {
                         type="text"
                         placeholder="Enter your full name"
                         className="w-full px-4 py-2 border border-gray-300 rounded-md bg-transparent text-white placeholder-gray-300 focus:outline-none focus:ring focus:ring-indigo-300"
+                        onChange={handleInputChange}
+                        required
                       />
                     </div>
 
@@ -241,7 +272,9 @@ const Slide = ({ slide, index, current, handleSlideClick }: SlideProps) => {
                         name="email"
                         type="email"
                         placeholder="Enter your email"
+                        onChange={handleInputChange}
                         className="w-full px-4 py-2 border border-gray-300 rounded-md bg-transparent text-white placeholder-gray-300 focus:outline-none focus:ring focus:ring-indigo-300"
+                        required
                       />
                     </div>
 
@@ -251,7 +284,9 @@ const Slide = ({ slide, index, current, handleSlideClick }: SlideProps) => {
                         name="phone"
                         type="tel"
                         placeholder="Enter your phone number"
+                        onChange={handleInputChange}
                         className="w-full px-4 py-2 border border-gray-300 rounded-md bg-transparent text-white placeholder-gray-300 focus:outline-none focus:ring focus:ring-indigo-300"
+                        required
                       />
                     </div>
 
@@ -261,7 +296,9 @@ const Slide = ({ slide, index, current, handleSlideClick }: SlideProps) => {
                         name="country"
                         type="text"
                         placeholder="Enter your country"
+                        onChange={handleInputChange}
                         className="w-full px-4 py-2 border border-gray-300 rounded-md bg-transparent text-white placeholder-gray-300 focus:outline-none focus:ring focus:ring-indigo-300"
+                        required
                       />
                     </div>
 
@@ -271,7 +308,9 @@ const Slide = ({ slide, index, current, handleSlideClick }: SlideProps) => {
                         type="text"
                         name="city"
                         placeholder="Enter your city"
+                        onChange={handleInputChange}
                         className="w-full px-4 py-2 border border-gray-300 rounded-md bg-transparent text-white placeholder-gray-300 focus:outline-none focus:ring focus:ring-indigo-300"
+                        required
                       />
                     </div>
 
@@ -287,6 +326,7 @@ const Slide = ({ slide, index, current, handleSlideClick }: SlideProps) => {
           file:text-sm file:font-semibold
           file:bg-indigo-600 file:text-white
           hover:file:bg-indigo-700"
+                        required
                       />
                     </div>
 
@@ -294,7 +334,7 @@ const Slide = ({ slide, index, current, handleSlideClick }: SlideProps) => {
                       <Button onPress={onClose} className=" border border-solid border-white rounded-full px-6 py-2 text-white">
                         Close
                       </Button>
-                      <Button type="submit" className=" border border-solid border-white rounded-full px-6 py-2 text-white">
+                      <Button type="submit" className=" border border-solid border-white rounded-full px-6 py-2 text-white disabled:opacity-50" disabled={!isFormValid}>
                         Submit
                       </Button>
                     </div>

@@ -1,8 +1,8 @@
 import { Helmet } from "react-helmet";
-import AboutBanner from "../../components/About/AboutBanner";
 import RollingGallery from "../../../ReactBits/RollingGallery/RollingGallery";
 import InvestorModal from "../../components/InvestorModal/InvestorModal";
 import { Accordion, AccordionItem } from "@heroui/react";
+import AiBotSection from "../../components/AiBot/AiBotSection";
 
 const product = [
     {
@@ -61,7 +61,7 @@ const Investor = () => {
                 <link rel="canonical" href="http://mysite.com/example" />
             </Helmet>
             <section className=" h-full w-full bg-[#0d0125] ">
-                <AboutBanner title={"Investor Relations"} />
+                <AiBotSection headText="Investor Relations" />
                 <div className="container mx-auto px-4 py-6">
                     <section className="md:h-[50vh] h-full w-full bg-[#0d0125] flex md:flex-row flex-col gap-10 justify-center items-center" style={{
                         backgroundImage: "url('/investorBG.png')",

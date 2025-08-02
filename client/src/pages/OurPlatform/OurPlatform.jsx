@@ -1,4 +1,5 @@
-import AboutBanner from "../../components/About/AboutBanner";
+
+import AiBotSection from "../../components/AiBot/AiBotSection";
 import { Timeline } from "../../components/ui/timeline"
 import { Helmet } from "react-helmet";
 
@@ -97,7 +98,7 @@ const OurPlatform = () => {
                 <link rel="canonical" href="http://mysite.com/example" />
             </Helmet>
             <section className="min-h-screen h-full w-full bg-[#0d0125] ">
-                <AboutBanner title={"Our Platforms & Roadmap"} />
+                <AiBotSection headText="Our Platforms & Roadmap" />
                 <div className="container mx-auto px-4 py-6">
                     <div className=" flex gap-4 flex-col border border-solid platform-box p-4 my-10">
                         <h1 className=" text-white text-2xl font-medium">
