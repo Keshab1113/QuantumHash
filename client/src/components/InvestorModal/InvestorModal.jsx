@@ -61,7 +61,6 @@ const InvestorModal = () => {
         name: '',
         email: '',
         companyName: '',
-        investmentInterest: '',
         Message: '',
     });
     const [isFormValid, setIsFormValid] = useState(false);
@@ -105,8 +104,8 @@ const InvestorModal = () => {
     };
 
     useEffect(() => {
-        const { name, email, companyName, investmentInterest, message } = formValues;
-        const allFilled = name && email && companyName && investmentInterest && message;
+        const { name, email, companyName, message } = formValues;
+        const allFilled = name && email && companyName && message;
         setIsFormValid(!!allFilled);
     }, [formValues]);
 
@@ -169,7 +168,7 @@ const InvestorModal = () => {
 
                                 <div className="mb-4">
                                     <label className="block mb-1 font-medium">Investment Interest</label>
-                                    <Select myFontSize="15px" name="investmentInterest" options={options} styles={customStyles} onChange={handleInputChange} required />
+                                    <Select myFontSize="15px" name="investmentInterest" options={options} styles={customStyles}/>
                                 </div>
 
 
