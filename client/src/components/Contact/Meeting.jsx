@@ -114,13 +114,13 @@ const Meeting = () => {
             <h2 className="text-base font-normal text-white mt-1 text-center">Meet With Our Quantumhash Team</h2>
 
             <div className='flex md:flex-row flex-col gap-10 mt-16 w-full flex-wrap'>
-                <div className={`bg-white md:px-10 px-4 md:py-10 py-8 rounded-2xl ${selectedTime && "hidden"}`}>
+                <div className={`bg-white md:px-10 px-4 md:py-10 py-8 rounded-2xl w-full lg:w-fit md:w-[50%] mx-auto ${selectedTime && "hidden"}`}>
                     <h1 className='h1head1 capitalize text-2xl mb-10 font-bold text-center'>Choose the date from here</h1>
-                    <Calendar onChange={onChange} value={value} className={" font-bold p-4 rounded-2xl"} />
+                    <Calendar onChange={onChange} value={value} className={" font-bold p-4 rounded-2xl"} minDate={new Date()}/>
                 </div>
 
                 {selectedTime ? (
-                    <form onSubmit={handleSubmit} className=' md:w-[85%] mx-auto w-full space-y-4 border border-white border-solid p-6 rounded-2xl text-white'>
+                    <form onSubmit={handleSubmit} className=' lg:w-[85%] md:w-[100%] mx-auto w-full space-y-4 border border-white border-solid p-6 rounded-2xl text-white'>
                         <div>
                             <h3 className="text-lg font-bold capitalize">Your information</h3>
                             <h4 className="text-[12px] ">Quantumhash Digital Conference</h4>
@@ -170,7 +170,7 @@ const Meeting = () => {
                         </button>
                     </form>
                 ) :
-                    <div className='border border-white border-solid rounded-2xl md:w-[55%] w-full p-6 text-white'>
+                    <div className='border border-white border-solid rounded-2xl lg:w-[55%] w-full p-6 text-white'>
                         {/* Meeting Duration */}
                         <div className='mb-4'>
                             <label className='block mb-1 font-semibold'>Meeting Duration (in minutes)</label>

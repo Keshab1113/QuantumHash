@@ -7,47 +7,47 @@ import AiBotSection from "../../components/AiBot/AiBotSection";
 const product = [
     {
         name: "QuantumAI",
-        image: "/Projects/image.png",
+        image: "/Projects/image.webp",
         link: "https://qhashai.com/",
     },
     {
         name: "ASES",
-        image: "/Projects/image2.png",
+        image: "/Projects/image2.webp",
         link: "https://asesystem.com/",
     },
     {
         name: "QuantumEdu",
-        image: "/Projects/image4.png",
+        image: "/Projects/image4.webp",
         link: "https://quantumedu.in/",
     },
     {
         name: "QuantumAI",
-        image: "/Projects/image.png",
+        image: "/Projects/image.webp",
         link: "https://qhashai.com/",
     },
     {
         name: "ASES",
-        image: "/Projects/image2.png",
+        image: "/Projects/image2.webp",
         link: "https://asesystem.com/",
     },
     {
         name: "QuantumEdu",
-        image: "/Projects/image4.png",
+        image: "/Projects/image4.webp",
         link: "https://quantumedu.in/",
     },
     {
         name: "QuantumAI",
-        image: "/Projects/image.png",
+        image: "/Projects/image.webp",
         link: "https://qhashai.com/",
     },
     {
         name: "ASES",
-        image: "/Projects/image2.png",
+        image: "/Projects/image2.webp",
         link: "https://asesystem.com/",
     },
     {
         name: "QuantumEdu",
-        image: "/Projects/image4.png",
+        image: "/Projects/image4.webp",
         link: "https://quantumedu.in/",
     },
 ]
@@ -70,7 +70,7 @@ const Investor = () => {
                         backgroundRepeat: "no-repeat",
                     }}>
                         <div className=" w-[216px] h-[216px] rounded-full p-6 border border-white border-solid">
-                            <img src="/investor.png" alt="" className=" h-full w-full" />
+                            <img src="/investor.webp" alt="" className=" h-full w-full" loading="lazy"/>
                         </div>
                         <h1 className=" text-white text-[20px] lg:max-w-[80%] md:max-w-[50%]">QuantumHash Technologies is a deep-tech startup driving innovation in voice AI, safety intelligence, and personalized learning. Our ecosystem includes four cutting-edge platforms, each targeting a vital sector with scalable AI solutions.</h1>
                     </section>

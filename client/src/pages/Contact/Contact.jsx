@@ -1,5 +1,5 @@
 import { Helmet } from "react-helmet";
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import Meeting from "../../components/Contact/Meeting";
 import { BiLogoGmail } from "react-icons/bi";
 import { FaXTwitter } from "react-icons/fa6";
@@ -28,6 +28,16 @@ const Contact = () => {
         }
     };
 
+    useEffect(() => {
+        const hash = window.location.hash;
+        if (hash) {
+            const section = document.querySelector(hash);
+            if (section) {
+                section.scrollIntoView({ behavior: "smooth" });
+            }
+        }
+    }, []);
+
     return (
         <>
             <Helmet>
@@ -38,7 +48,7 @@ const Contact = () => {
 
             <section className=" h-full w-full bg-[#0d0125] ">
                 <AiBotSection headText="Connect" />
-                <div className="container mx-auto px-4 py-6 flex flex-col justify-center items-center">
+                <section className="container mx-auto px-4 py-6 flex flex-col justify-center items-center" id="contact">
                     <h1 className=" text-4xl font-bold h1head1 w-fit mt-10">Contact Form</h1>
                     <div className=" flex md:flex-row flex-col w-full gap-12 mt-10">
                         <div className=" flex w-full gap-10 flex-col md:w-[20%]">
@@ -155,12 +165,15 @@ const Contact = () => {
 
                         </div>
                         <div className=" md:w-[40%] w-full">
-                            <img src="/contactTree.png" alt="" />
+                            <img src="/contactTree.webp" alt="" loading="lazy"/>
                         </div>
                     </div>
                     <img src="/gap.png" alt="" className=" h-10 w-full mt-16" />
+                    
+                </section>
+                <section id="meeting" className="container mx-auto px-4 py-6">
                     <Meeting />
-                </div>
+                </section>
             </section>
         </>
     )

@@ -4,17 +4,17 @@ const teamData = [
   {
     name: "Dr. Noorjahan - CEO",
     description: "A doctor with 10+ years of experience in healthcare and safety. Actively developing AI-powered safety systems, focusing on contextual design, risk reduction, and enhancing workplace health through intelligent technologies.",
-    imageURL: "/Teams/image.png"
+    imageURL: "/Teams/image.webp"
   },
   {
     name: "Bapan",
     description: "Expert in NLP and model fine-tuning, leads AI training and ensures accurate language understanding for personalized education and safety interactions.",
-    imageURL: "/Teams/bapan.png"
+    imageURL: "/Teams/bapan.webp"
   },
   {
     name: "Akash",
     description: "Voice tech specialist and full stack developer, responsible for speech recognition, voice interface development, and end-to-end system implementation to enable natural, real-time human-AI communication.",
-    imageURL: "/Teams/aakash.png"
+    imageURL: "/Teams/aakash.webp"
   },
   {
     name: "Keshab",
@@ -50,6 +50,7 @@ const Teams = () => {
                     src={member.imageURL}
                     alt={member.name}
                     className="w-full h-[85%] object-cover"
+                    loading="lazy"
                   />
                   <p className="h1head1 text-center font-bold h-[15%] flex justify-center items-center">
                     {member.name}

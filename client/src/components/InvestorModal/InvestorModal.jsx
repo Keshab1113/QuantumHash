@@ -1,11 +1,14 @@
 import { useEffect, useRef, useState } from "react";
+import axios from "axios"
 import {
-    Modal,
-    ModalBody,
-    ModalContent,
-    ModalFooter,
-    ModalTrigger,
-} from "../ui/animated-modal";
+    Drawer,
+    DrawerContent,
+    DrawerHeader,
+    DrawerBody,
+    DrawerFooter,
+    Button,
+    useDisclosure,
+} from "@heroui/react";
 import Select from "react-select";
 import { useToast } from "../ToastContext";
 
@@ -57,6 +60,7 @@ const customStyles = {
 
 const InvestorModal = () => {
     const { addToast } = useToast();
+    const [placement, setPlacement] = useState("left");
     const [formValues, setFormValues] = useState({
         name: '',
         email: '',
@@ -70,6 +74,18 @@ const InvestorModal = () => {
         { value: "Angel", label: "Angel", color: "white" },
     ];
 
+    const [isOpen, setIsOpen] = useState(false);
+
+    const handleOpen = (placement) => {
+        setPlacement(placement);
+        setIsOpen(true);  // directly open the drawer
+    };
+
+    const handleClose = () => {
+        setIsOpen(false);
+    };
+
+
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setFormValues((prev) => ({
@@ -79,7 +95,7 @@ const InvestorModal = () => {
     };
 
     const formRef = useRef(null);
-    const handleSubmit = async (e, onClose) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
         const form = e.currentTarget;
@@ -95,7 +111,7 @@ const InvestorModal = () => {
                 message: formData.get('message'),
             });
             formRef.current?.reset();
-            onClose();
+            handleClose();
             addToast("success", "Form submitted successfully!");
         } catch (error) {
             console.error('Error:', error);
@@ -111,92 +127,106 @@ const InvestorModal = () => {
 
     return (
         <section className="pb-10  flex items-center justify-center">
-            <Modal>
-                <ModalTrigger className=" border border-solid border-white rounded-full py-4 px-10 shadow-xl shadow-white text-white flex justify-center group/modal-btn cursor-pointer">
-                    <h1 className="group-hover/modal-btn:translate-x-58 text-center transition duration-500">
-                        Join our Investor Circle
-                    </h1>
-                    <div className="-translate-x-58 group-hover/modal-btn:translate-x-0 flex items-center justify-center absolute inset-0 transition duration-500 text-white z-20">
-                        Let's Connect
-                    </div>
-                </ModalTrigger>
-                <ModalBody>
-                    <ModalContent className=" h-[50vh] ">
-                        <h4 className="text-lg md:text-2xl text-neutral-600 dark:text-neutral-100 font-bold text-center mb-4">
-                            Join Our Investor Circle
-                        </h4>
-                        <div className="flex justify-center items-center h-full ">
-                            <form
-                                ref={formRef}
-                                className="w-full text-white"
-                                onSubmit={(e) => handleSubmit(e, onClose)}
-                            >
-                                <div className="mb-4">
-                                    <label className="block mb-1 font-medium">Name</label>
-                                    <input
-                                        type="text"
-                                        name="name"
-                                        placeholder="Enter your name"
-                                        className="w-full px-4 py-2 rounded-lg bg-white/20 placeholder-white/40 text-white/40 focus:outline-none focus:ring-2 focus:ring-purple-500"
-                                        onChange={handleInputChange}
-                                        required
-                                    />
-                                </div>
-                                <div className="mb-4">
-                                    <label className="block mb-1 font-medium">Email</label>
-                                    <input
-                                        type="email"
-                                        name="email"
-                                        placeholder="Enter your email"
-                                        className="w-full px-4 py-2 rounded-lg bg-white/20 placeholder-white/40 text-white/40 focus:outline-none focus:ring-2 focus:ring-purple-500"
-                                        onChange={handleInputChange}
-                                        required
-                                    />
-                                </div>
+            <button
+                onClick={() =>
+                    handleOpen("bottom")}
+                className="relative cursor-pointer overflow-hidden border border-white rounded-full py-4 px-10 shadow-xl shadow-white text-white w-[350px] h-[56px] group font-medium"
+            >
+                <h1
+                    className="absolute w-full left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transition-transform duration-500 group-hover:translate-x-full"
+                >
+                    Join our Investor Circle
+                </h1>
 
-                                <div className="mb-4">
-                                    <label className="block mb-1 font-medium">Company Name</label>
-                                    <input
-                                        type="text"
-                                        name="companyName"
-                                        placeholder="Enter your company name"
-                                        onChange={handleInputChange}
-                                        className="w-full px-4 py-2 rounded-lg bg-white/20 placeholder-white/40 text-white/40 focus:outline-none focus:ring-2 focus:ring-purple-500"
-                                        required
-                                    />
-                                </div>
-
-                                <div className="mb-4">
-                                    <label className="block mb-1 font-medium">Investment Interest</label>
-                                    <Select myFontSize="15px" name="investmentInterest" options={options} styles={customStyles}/>
-                                </div>
+                <div
+                    className="absolute left-1/2 top-1/2 -translate-x-[400%] -translate-y-1/2 transition-transform duration-500 group-hover:translate-x-[-50%]"
+                >
+                    Let's Connect
+                </div>
+            </button>
 
 
 
-                                <div className="mb-6">
-                                    <label className="block mb-1 font-medium">Message</label>
-                                    <textarea
-                                        rows="1"
-                                        name="message"
-                                        onChange={handleInputChange}
-                                        placeholder="Write your message here..."
-                                        className="w-full px-4 py-2 rounded-lg bg-white/20 placeholder-white/40 text-white/40 resize-none focus:outline-none focus:ring-2 focus:ring-purple-500"
-                                        required
-                                    ></textarea>
+            <Drawer isOpen={isOpen} placement={placement} onOpenChange={setIsOpen}>
+                <DrawerContent>
+                    {(onClose) => (
+                        <>
+                            <DrawerBody className=" bg-[#0d0125] h-screen min-h-screen max-h-screen flex justify-center items-center" style={{
+                                backgroundImage: "url('/careerBG.png')",
+                                backgroundSize: "cover",
+                            }}>
+                                <div className="stbox p-6 rounded-lg w-full max-w-md relative mx-auto">
+                                    <h2 className="text-2xl text-white font-semibold mb-4 text-center">Join Our Investor Circle</h2>
+                                    <form ref={formRef} className="space-y-4 text-white" onSubmit={(e) => handleSubmit(e)}>
+                                        <div>
+                                            <label className="block mb-1 text-sm">Full Name</label>
+                                            <input
+                                                name="name"
+                                                type="text"
+                                                placeholder="Enter your full name"
+                                                className="w-full px-4 py-2 border border-gray-300 rounded-md bg-transparent text-white placeholder-gray-300 focus:outline-none focus:ring focus:ring-indigo-300"
+                                                onChange={handleInputChange}
+                                                required
+                                            />
+                                        </div>
+
+                                        <div>
+                                            <label className="block mb-1 text-sm">Email</label>
+                                            <input
+                                                name="email"
+                                                type="email"
+                                                placeholder="Enter your email"
+                                                onChange={handleInputChange}
+                                                className="w-full px-4 py-2 border border-gray-300 rounded-md bg-transparent text-white placeholder-gray-300 focus:outline-none focus:ring focus:ring-indigo-300"
+                                                required
+                                            />
+                                        </div>
+
+                                        <div>
+                                            <label className="block mb-1 text-sm">Company Name</label>
+                                            <input
+                                                name="companyName"
+                                                type="text"
+                                                placeholder="Enter your Company Name"
+                                                onChange={handleInputChange}
+                                                className="w-full px-4 py-2 border border-gray-300 rounded-md bg-transparent text-white placeholder-gray-300 focus:outline-none focus:ring focus:ring-indigo-300"
+                                                required
+                                            />
+                                        </div>
+
+                                        <div>
+                                            <label className="block mb-1 text-sm">Investment Interest</label>
+                                            <Select myFontSize="15px" name="investmentInterest" options={options} styles={customStyles} />
+                                        </div>
+
+                                        <div>
+                                            <label className="block mb-1 text-sm">Message</label>
+                                            <input
+                                                type="text"
+                                                name="message"
+                                                placeholder="Enter your Message"
+                                                onChange={handleInputChange}
+                                                className="w-full px-4 py-2 border border-gray-300 rounded-md bg-transparent text-white placeholder-gray-300 focus:outline-none focus:ring focus:ring-indigo-300"
+                                                required
+                                            />
+                                        </div>
+                                        <div className="flex justify-end gap-4">
+                                            <Button onPress={handleClose} className=" border border-solid border-white rounded-full px-6 py-2 text-white">
+                                                Close
+                                            </Button>
+                                            <Button type="submit" className=" border border-solid border-white rounded-full px-6 py-2 text-white disabled:opacity-50" disabled={!isFormValid}>
+                                                Submit
+                                            </Button>
+                                        </div>
+                                    </form>
                                 </div>
-                            </form>
-                        </div>
-                    </ModalContent>
-                    <ModalFooter className="gap-4">
-                        {/* <button className="px-2 py-1 text-white  border border-gray-300 rounded-full cursor-pointer text-sm w-28">
-                            Cancel
-                        </button> */}
-                        <button type="submit" className="cursor-pointer text-white  text-sm px-2 py-1 rounded-full border border-gray-300 w-28 disabled:opacity-50" disabled={!isFormValid}>
-                            Send
-                        </button>
-                    </ModalFooter>
-                </ModalBody>
-            </Modal>
+
+                            </DrawerBody>
+
+                        </>
+                    )}
+                </DrawerContent>
+            </Drawer>
         </section>
     )
 }

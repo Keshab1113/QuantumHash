@@ -42,20 +42,20 @@ const Innovation = () => {
                         </Link>
                     </div>
                     <div className=" pb-20">
-                        <img src="/image.png" alt="" className="w-[400px] h-[400px]" />
+                        <img src="/image.webp" alt="" className="w-[400px] h-[400px]" loading="lazy"/>
                     </div>
                 </div>
                 <Banner />
                 <section className=" flex flex-col lg:flex-row lg:h-screen h-full">
                     <div className=" lg:w-[40%] w-full">
-                        <img src="/image2.png" alt="" />
+                        <img src="/image2.webp" alt="" loading="lazy"/>
                     </div>
                     <div className="lg:w-[60%] w-full  h-full relative overflow-hidden md:py-20 lg:py-0">
                         <CardSwap height={450}>
                             <Card>
                                 <div className="text-white text-center p-4">
                                     <div className=" md:h-[20vh] h-[20vh] lg:w-[34vw] w-full rounded-2xl bg-white mb-4 overflow-hidden">
-                                        <img src="/Projects/image.png" alt="" className=" w-full h-full"/>
+                                        <img src="/Projects/image.webp" alt="" className=" w-full h-full" loading="lazy"/>
                                     </div>
                                     <h2 className="text-xl font-bold mb-4">
                                         Conversational Intelligence Engine
@@ -69,7 +69,7 @@ const Innovation = () => {
                             <Card>
                                 <div className="text-white text-center p-4">
                                     <div className=" h-[20vh] lg:w-[34vw] w-full rounded-2xl bg-white mb-4 overflow-hidden">
-                                        <img src="/Projects/image2.png" alt="" className=" w-full h-full"/>
+                                        <img src="/Projects/image2.webp" alt="" className=" w-full h-full" loading="lazy"/>
                                     </div>
                                     <h2 className="text-xl font-bold mb-4">
                                         Industrial AI for Predictive Safety & Operations
@@ -80,7 +80,7 @@ const Innovation = () => {
                                     <h1 className=" text-center h1head1 mt-2 text-xl font-bold">ASES (Advanced Safety & Efficiency System)</h1>
                                 </div>
                             </Card>
-                            <Card>
+                            {/* <Card>
                                 <div className="text-white text-center p-4">
                                     <div className=" h-[20vh] lg:w-[34vw] w-full rounded-2xl bg-white mb-4 overflow-hidden">
                                         <img src="/Projects/image3.png" alt="" className=" w-full h-full"/>
@@ -93,11 +93,11 @@ const Innovation = () => {
                                     </p>
                                     <h1 className=" text-center h1head1 mt-2 text-xl font-bold">Artlabss</h1>
                                 </div>
-                            </Card>
+                            </Card> */}
                             <Card>
                                 <div className="text-white text-center p-4">
                                     <div className=" h-[20vh] lg:w-[34vw] w-full rounded-2xl bg-white mb-4 overflow-hidden">
-                                        <img src="/Projects/image4.png" alt="" className=" w-full h-full"/>
+                                        <img src="/Projects/image4.webp" alt="" className=" w-full h-full" loading="lazy"/>
                                     </div>
                                     <h2 className="text-xl font-bold mb-4">
                                         AI Tutoring Platform for Grades 4–12

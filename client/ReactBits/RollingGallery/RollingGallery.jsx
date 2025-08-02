@@ -155,6 +155,7 @@ const RollingGallery = ({
                 className="pointer-events-none md:h-[200px] md:w-[300px] rounded-[15px] border-[3px] border-white object-cover
                            transition-transform duration-300 ease-out group-hover:scale-105
                            h-[100px] w-[220px]"
+                loading="lazy"
               />
               {url.name &&
                 <h1 className="text-white">{url.name}</h1>

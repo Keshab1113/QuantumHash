@@ -13,9 +13,12 @@ import OurPlatform from './pages/OurPlatform/OurPlatform';
 import Investor from './pages/Investor/Investor';
 import Career from './pages/Career/Career';
 import Contact from './pages/Contact/Contact';
+import ScrollToTop from './components/ScrollToTop/ScrollToTop';
 
 export function App() {
   return (
+    <>
+    <ScrollToTop />
     <Routes>
       <Route path="/" element={<Layout />}>
         <Route index element={<Home />} />
@@ -27,5 +30,6 @@ export function App() {
       </Route>
       <Route path="*" element={<NoPage />} />
     </Routes>
+    </>
   );
 }

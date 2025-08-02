@@ -246,7 +246,7 @@ const Slide = ({ slide, index, current, handleSlideClick }: SlideProps) => {
         <DrawerContent>
           {(onClose) => (
             <>
-              <DrawerBody className=" bg-[#0d0125] h-screen min-h-screen max-h-screen" style={{
+              <DrawerBody className=" bg-[#0d0125] h-screen min-h-screen max-h-screen flex justify-center items-center" style={{
                 backgroundImage: "url('/careerBG.png')",
                 backgroundSize: "cover",
               }}>

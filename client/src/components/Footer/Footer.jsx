@@ -6,24 +6,35 @@ const Footer = () => {
     return (
         <section className="  h-full w-full bg-[#0d0125] footer relative overflow-hidden">
             <div className="container mx-auto px-4 mt-20  h-full flex md:flex-row flex-col ">
-                <img src="/footer-man.png" alt="" className=" h-[306px]" />
+                <img src="/footer-man.webp" alt="" className=" h-[306px]" loading="lazy"/>
                 <div className=" h-full w-full  mt-16 border-t border-solid border-amber-50 grid md:grid-cols-1 lg:grid-cols-3 grid-col-1 pb-48 md:pb-[250px]">
                     <div className=" pt-10 px-4">
-                        <img src="/logo.png" alt="" className=" w-40 mb-4" />
+                        <img src="/logo.webp" alt="" className=" w-40 mb-4" loading="lazy"/>
                         <ol className="space-y-1">
                             <li>
-                                <Link to="/" className="text-[#580dec] hover:text-[#8c74f7f3] flex items-start gap-2" >
+                                <a
+                                    href="https://www.google.com/maps?q=800+N+King+Street,+Suite+304,+Wilmington,+DE+19801,+USA"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="text-[#580dec] hover:text-[#8c74f7f3] flex items-start gap-2"
+                                >
                                     <i className="fa fa-map-marker h1head1 mt-1" aria-hidden="true"></i>
                                     800 N King Street, Suite 304, Wilmington, DE 19801, USA
-                                </Link>
+                                </a>
                             </li>
-                            
+
+
                             <li>
-                                <Link to="/" className="text-[#580dec] hover:text-[#8c74f7f3] flex items-center gap-2">
+                                <a
+                                    href="mailto:admin@quantumhash.me?subject=Inquiry&body=Hello Quantumhash team,"
+
+                                    className="text-[#580dec] hover:text-[#8c74f7f3] flex items-center gap-2"
+                                >
                                     <i className="fa fa-envelope h1head1 mt-1" aria-hidden="true"></i>
                                     admin@quantumhash.me
-                                </Link>
+                                </a>
                             </li>
+
                         </ol>
 
                     </div>
@@ -31,25 +42,25 @@ const Footer = () => {
                         <h1 className=" text-white text-[20px] font-semibold mb-4">Invite visitors to</h1>
                         <ol className=" space-y-1">
                             <li>
-                                <Link to={"https://quantumhash.me/pages/contact#contactcontact"} className="text-[#580dec] hover:text-[#8c74f7f3]">
+                                <Link to={"connect#contact"} className="text-[#580dec] hover:text-[#8c74f7f3]">
                                     <FontAwesomeIcon icon={faSquare} className=" bg-[linear-gradient(90deg,_#ff8d20,_#6700ff_80%)] rotate-45 mr-4 text-transparent max-h-3 max-w-3 overflow-hidden rounded-[1px]" />
-                                    Partner with you
+                                    Partner with us
                                 </Link>
                             </li>
                             <li>
-                                <Link to={"https://quantumhash.me/pages/contact#meeting-wrapper"} className="text-[#580dec] hover:text-[#8c74f7f3]">
+                                <Link to={"connect#meeting"} className="text-[#580dec] hover:text-[#8c74f7f3]">
                                     <FontAwesomeIcon icon={faSquare} className=" bg-[linear-gradient(90deg,_#ff8d20,_#6700ff_80%)] rotate-45 mr-4 text-transparent max-h-3 max-w-3 overflow-hidden rounded-[1px]" />
                                     Book a demo
                                 </Link>
                             </li>
                             <li>
-                                <Link to={"https://quantumhash.me/pages/contact#contactcontact"} className="text-[#580dec] hover:text-[#8c74f7f3]">
+                                <Link to={"connect#contact"} className="text-[#580dec] hover:text-[#8c74f7f3]">
                                     <FontAwesomeIcon icon={faSquare} className=" bg-[linear-gradient(90deg,_#ff8d20,_#6700ff_80%)] rotate-45 mr-4 text-transparent max-h-3 max-w-3 overflow-hidden rounded-[1px]" />
                                     Join as beta testers
                                 </Link>
                             </li>
                             <li>
-                                <Link to={"https://quantumhash.me/pages/contact#meeting-wrapper"} className="text-[#580dec] hover:text-[#8c74f7f3]">
+                                <Link to={"connect#meeting"} className="text-[#580dec] hover:text-[#8c74f7f3]">
                                     <FontAwesomeIcon icon={faSquare} className=" bg-[linear-gradient(90deg,_#ff8d20,_#6700ff_80%)] rotate-45 mr-4 text-transparent max-h-3 max-w-3 overflow-hidden rounded-[1px]" />
                                     Explore custom AI solutions
                                 </Link>
@@ -63,12 +74,6 @@ const Footer = () => {
                                 <Link to={"https://qhashai.com/"} className="text-[#580dec] hover:text-[#8c74f7f3]">
                                     <FontAwesomeIcon icon={faSquare} className=" bg-[linear-gradient(90deg,_#ff8d20,_#6700ff_80%)] rotate-45 mr-4 text-transparent max-h-3 max-w-3 overflow-hidden rounded-[1px]" />
                                     QhashAi
-                                </Link>
-                            </li>
-                            <li>
-                                <Link to={"https://artlabss.com/"} className="text-[#580dec] hover:text-[#8c74f7f3]">
-                                    <FontAwesomeIcon icon={faSquare} className=" bg-[linear-gradient(90deg,_#ff8d20,_#6700ff_80%)] rotate-45 mr-4 text-transparent max-h-3 max-w-3 overflow-hidden rounded-[1px]" />
-                                    Artlabss
                                 </Link>
                             </li>
                             <li>

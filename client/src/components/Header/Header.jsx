@@ -33,10 +33,10 @@ const Header = () => {
                 }`}
         >
             <div className="container mx-auto px-4 py-4 flex justify-between items-center text-white lg:h-[13vh]">
-                <div className="text-2xl font-bold flex flex-col">
-                    <img src="/logo.png" alt="logo" width="160px" />
-                    <span className="text-xl font-normal tracking-[.18rem]">CORPORATION</span>
-                </div>
+                <Link to={"/"} className="text-2xl font-bold flex flex-col">
+                    <img src="/logo.webp" alt="logo" width="150px" loading="lazy"/>
+                    <span className="text-base font-normal tracking-[.18rem]">CORPORATION</span>
+                </Link>
 
                 {/* Desktop Nav */}
                 <nav className="hidden lg:flex space-x-8">
