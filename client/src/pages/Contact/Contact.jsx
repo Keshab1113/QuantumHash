@@ -11,6 +11,8 @@ import AiBotSection from "../../components/AiBot/AiBotSection";
 const Contact = () => {
     const form = useRef(null);
     const { addToast } = useToast();
+    const [isSubmitting, setIsSubmitting] = useState(false);
+
     const [formValues, setFormValues] = useState({
         name: '',
         email: '',
@@ -30,7 +32,7 @@ const Contact = () => {
 
     const sendEmail = async (e) => {
         e.preventDefault();
-
+        setIsSubmitting(true);
         const formData = new FormData(form.current);
         const data = Object.fromEntries(formData.entries());
 
@@ -41,6 +43,8 @@ const Contact = () => {
         } catch (err) {
             addToast("error", "Failed to send Contact Form.");
             console.error(err);
+        } finally {
+            setIsSubmitting(false);
         }
     };
 
@@ -186,7 +190,7 @@ const Contact = () => {
                                         className="border border-solid border-white rounded-full px-6 py-2 disabled:opacity-50 text-white cursor-pointer"
                                         disabled={!isFormValid}
                                     >
-                                        Submit
+                                        {isSubmitting ? "Submitting..." : "Submit"}
                                     </button>
                                 </div>
                             </form>

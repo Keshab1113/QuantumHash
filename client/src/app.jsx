@@ -14,6 +14,7 @@ import Investor from './pages/Investor/Investor';
 import Career from './pages/Career/Career';
 import Contact from './pages/Contact/Contact';
 import ScrollToTop from './components/ScrollToTop/ScrollToTop';
+import Meeting from './pages/Meeting/Meeting';
 
 export function App() {
   return (
@@ -27,6 +28,7 @@ export function App() {
         <Route path='/investor' element={<Investor />} />
         <Route path='/career' element={<Career />} />
         <Route path='/connect' element={<Contact />} />
+        <Route path='/meeting' element={<Meeting />} />
       </Route>
       <Route path="*" element={<NoPage />} />
     </Routes>

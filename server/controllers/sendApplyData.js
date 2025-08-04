@@ -18,8 +18,8 @@ const sendApplyData = async (req, res) => {
 
     // Email to Admin
     const mailOptions = {
-        from: `"QuantumHash Careers" <${process.env.MAIL_USER}>`,
-        to: process.env.MAIL_USER, // admin@quantumhash.me
+        from: `"QuantumHash Corporation" <${process.env.MAIL_USER}>`,
+        to: process.env.MAIL_USER,
         subject: `New Job Application: ${jobTitle}`,
         html: `
 <!DOCTYPE html>
@@ -55,7 +55,7 @@ const sendApplyData = async (req, res) => {
                 ${resumeLink ? `<p><span class="label">Resume:</span> <a href="${resumeLink}" target="_blank">View Resume</a></p>` : ''}
             </div>
             <p>Please review this application and follow up with the candidate as appropriate.</p>
-            <p>Best regards,<br><strong>QuantumHash Careers Team</strong></p>
+            <p>Best regards,<br><strong>QuantumHash Corporation Team</strong></p>
         </div>
         <div class="footer">
             QuantumHash Corporation<br>
@@ -69,7 +69,7 @@ const sendApplyData = async (req, res) => {
 
     // Auto-reply to Applicant
     const autoReply = {
-        from: `"QuantumHash HR" <${process.env.MAIL_USER}>`,
+        from: `"QuantumHash Corporation" <${process.env.MAIL_USER}>`,
         to: email,
         subject: `Application Received for ${jobTitle} – QuantumHash`,
         html: `
@@ -96,7 +96,7 @@ const sendApplyData = async (req, res) => {
       <p>Thank you for applying for the <span class="highlight">${jobTitle}</span> role at <strong>QuantumHash</strong>. We appreciate your interest in joining our team.</p>
       <p>Our recruitment team is currently reviewing your application. If your profile aligns with our requirements, we'll contact you shortly with next steps.</p>
       <p>In the meantime, feel free to explore more about us at <a href="https://www.quantumhash.me" target="_blank">quantumhash.me</a>.</p>
-      <p>Warm regards,<br><strong>QuantumHash HR Team</strong></p>
+      <p>Warm regards,<br><strong>QuantumHash Corporation Team</strong></p>
     </div>
     <div class="footer">
       QuantumHash Corporation<br>

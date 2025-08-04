@@ -43,6 +43,8 @@ const Slide = ({ slide, index, current, handleSlideClick }: SlideProps) => {
   const slideRef = useRef<HTMLLIElement>(null);
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [placement, setPlacement] = useState("left");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const { addToast } = useToast();
   const [formValues, setFormValues] = useState({
     name: '',
@@ -119,7 +121,7 @@ const Slide = ({ slide, index, current, handleSlideClick }: SlideProps) => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>, onClose: () => void) => {
     e.preventDefault();
-
+    setIsSubmitting(true);
     const form = e.currentTarget;
     const formData = new FormData(form);
 
@@ -140,6 +142,8 @@ const Slide = ({ slide, index, current, handleSlideClick }: SlideProps) => {
     } catch (error) {
       console.error('Error:', error);
       addToast("error", "Failed to submit application. Please try again.");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -335,7 +339,7 @@ const Slide = ({ slide, index, current, handleSlideClick }: SlideProps) => {
                         Close
                       </Button>
                       <Button type="submit" className=" border border-solid border-white rounded-full px-6 py-2 text-white disabled:opacity-50" disabled={!isFormValid}>
-                        Submit
+                        {isSubmitting ? "Submitting..." : "Submit"}
                       </Button>
                     </div>
                   </form>

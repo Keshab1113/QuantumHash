@@ -17,7 +17,7 @@ const sendInvestor = async (req, res) => {
   });
   // Admin notification
   const adminMailOptions = {
-    from: `"QuantumHash Careers" <${process.env.MAIL_USER}>`,
+    from: `"QuantumHash Corporation" <${process.env.MAIL_USER}>`,
     to: process.env.MAIL_USER,
     subject: `New Investor Inquiry from ${name}`,
     html: `
@@ -68,7 +68,7 @@ const sendInvestor = async (req, res) => {
 
   // Auto-reply to investor
   const userAutoReply = {
-    from: `"QuantumHash HR" <${process.env.MAIL_USER}>`,
+    from: `"QuantumHash Corporation" <${process.env.MAIL_USER}>`,
     to: email,
     subject: "Thank You for Your Interest in QuantumHash",
     html: `

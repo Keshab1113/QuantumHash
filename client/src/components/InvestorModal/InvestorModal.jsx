@@ -67,6 +67,8 @@ const InvestorModal = () => {
         companyName: '',
         Message: '',
     });
+    const [isSubmitting, setIsSubmitting] = useState(false);
+
     const [isFormValid, setIsFormValid] = useState(false);
     const [interest, setInterest] = useState("");
     const options = [
@@ -97,7 +99,7 @@ const InvestorModal = () => {
     const formRef = useRef(null);
     const handleSubmit = async (e) => {
         e.preventDefault();
-
+        setIsSubmitting(true);
         const form = e.currentTarget;
         const formData = new FormData(form);
 
@@ -116,6 +118,8 @@ const InvestorModal = () => {
         } catch (error) {
             console.error('Error:', error);
             addToast("error", "Failed to submit form. Please try again.");
+        } finally {
+            setIsSubmitting(false);
         }
     };
 
@@ -215,7 +219,7 @@ const InvestorModal = () => {
                                                 Close
                                             </Button>
                                             <Button type="submit" className=" border border-solid border-white rounded-full px-6 py-2 text-white disabled:opacity-50" disabled={!isFormValid}>
-                                                Submit
+                                                {isSubmitting ? "Submitting..." : "Submit"}
                                             </Button>
                                         </div>
                                     </form>

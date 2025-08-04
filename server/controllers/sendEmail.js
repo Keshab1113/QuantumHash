@@ -18,7 +18,7 @@ const sendEmail = async (req, res) => {
 
   // Admin notification email
   const mailOptions = {
-    from: `"QuantumHash Careers" <${process.env.MAIL_USER}>`,
+    from: `"QuantumHash Corporation" <${process.env.MAIL_USER}>`,
     to: process.env.MAIL_USER,
     subject: `New Contact Form Submission: ${subject}`,
     html: `
@@ -49,7 +49,7 @@ const sendEmail = async (req, res) => {
 
   // Auto-reply email to the user
   const userReplyOptions = {
-    from: `"QuantumHash HR" <${process.env.MAIL_USER}>`,
+    from: `"QuantumHash Corporation" <${process.env.MAIL_USER}>`,
     to: email,
     subject: "We've received your message – QuantumHash",
     html: `

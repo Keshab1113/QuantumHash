@@ -6,10 +6,10 @@ const Footer = () => {
     return (
         <section className="  h-full w-full bg-[#0d0125] footer relative overflow-hidden">
             <div className="container mx-auto px-4 mt-20  h-full flex md:flex-row flex-col ">
-                <img src="/footer-man.webp" alt="" className=" h-[306px]" loading="lazy"/>
+                <img src="/footer-man.webp" alt="" className=" h-[306px]" loading="lazy" />
                 <div className=" h-full w-full  mt-16 border-t border-solid border-amber-50 grid md:grid-cols-1 lg:grid-cols-3 grid-col-1 pb-48 md:pb-[250px]">
                     <div className=" pt-10 px-4">
-                        <img src="/logo.webp" alt="" className=" w-40 mb-4" loading="lazy"/>
+                        <img src="/logo.webp" alt="" className=" w-40 mb-4" loading="lazy" />
                         <ol className="space-y-1">
                             <li>
                                 <a
@@ -34,33 +34,71 @@ const Footer = () => {
                                     admin@quantumhash.me
                                 </a>
                             </li>
-
                         </ol>
-
                     </div>
                     <div className=" pt-10 px-4">
                         <h1 className=" text-white text-[20px] font-semibold mb-4">Invite visitors to</h1>
                         <ol className=" space-y-1">
                             <li>
-                                <Link to={"connect#contact"} className="text-[#580dec] hover:text-[#8c74f7f3]">
+                                <Link to={"connect#contact"} className="text-[#580dec] hover:text-[#8c74f7f3]"
+                                    onClick={(e) => {
+                                        if (window.location.pathname === '/connect') {
+                                            e.preventDefault();
+                                            const contactSection = document.getElementById('contact');
+                                            if (contactSection) {
+                                                contactSection.scrollIntoView({ behavior: 'smooth' });
+                                                window.history.pushState(null, '', '#contact');
+                                            }
+                                        }
+                                    }}>
                                     <FontAwesomeIcon icon={faSquare} className=" bg-[linear-gradient(90deg,_#ff8d20,_#6700ff_80%)] rotate-45 mr-4 text-transparent max-h-3 max-w-3 overflow-hidden rounded-[1px]" />
                                     Partner with us
                                 </Link>
                             </li>
                             <li>
-                                <Link to={"connect#meeting"} className="text-[#580dec] hover:text-[#8c74f7f3]">
+                                <Link to={"connect#meeting"} className="text-[#580dec] hover:text-[#8c74f7f3]"
+                                    onClick={(e) => {
+                                        if (window.location.pathname === '/connect') {
+                                            e.preventDefault();
+                                            const contactSection = document.getElementById('meeting');
+                                            if (contactSection) {
+                                                contactSection.scrollIntoView({ behavior: 'smooth' });
+                                                window.history.pushState(null, '', '#meeting');
+                                            }
+                                        }
+                                    }}>
                                     <FontAwesomeIcon icon={faSquare} className=" bg-[linear-gradient(90deg,_#ff8d20,_#6700ff_80%)] rotate-45 mr-4 text-transparent max-h-3 max-w-3 overflow-hidden rounded-[1px]" />
                                     Book a demo
                                 </Link>
                             </li>
                             <li>
-                                <Link to={"connect#contact"} className="text-[#580dec] hover:text-[#8c74f7f3]">
+                                <Link to={"connect#contact"} className="text-[#580dec] hover:text-[#8c74f7f3]"
+                                    onClick={(e) => {
+                                        if (window.location.pathname === '/connect') {
+                                            e.preventDefault();
+                                            const contactSection = document.getElementById('contact');
+                                            if (contactSection) {
+                                                contactSection.scrollIntoView({ behavior: 'smooth' });
+                                                window.history.pushState(null, '', '#contact');
+                                            }
+                                        }
+                                    }}>
                                     <FontAwesomeIcon icon={faSquare} className=" bg-[linear-gradient(90deg,_#ff8d20,_#6700ff_80%)] rotate-45 mr-4 text-transparent max-h-3 max-w-3 overflow-hidden rounded-[1px]" />
                                     Join as beta testers
                                 </Link>
                             </li>
                             <li>
-                                <Link to={"connect#meeting"} className="text-[#580dec] hover:text-[#8c74f7f3]">
+                                <Link to={"connect#meeting"} className="text-[#580dec] hover:text-[#8c74f7f3]"
+                                    onClick={(e) => {
+                                        if (window.location.pathname === '/connect') {
+                                            e.preventDefault();
+                                            const contactSection = document.getElementById('meeting');
+                                            if (contactSection) {
+                                                contactSection.scrollIntoView({ behavior: 'smooth' });
+                                                window.history.pushState(null, '', '#meeting');
+                                            }
+                                        }
+                                    }}>
                                     <FontAwesomeIcon icon={faSquare} className=" bg-[linear-gradient(90deg,_#ff8d20,_#6700ff_80%)] rotate-45 mr-4 text-transparent max-h-3 max-w-3 overflow-hidden rounded-[1px]" />
                                     Explore custom AI solutions
                                 </Link>
@@ -71,19 +109,28 @@ const Footer = () => {
                         <h1 className=" text-white text-[20px] font-semibold mb-4">Organization</h1>
                         <ol className=" space-y-1">
                             <li>
-                                <Link to={"https://qhashai.com/"} className="text-[#580dec] hover:text-[#8c74f7f3]">
+                                <Link to={"https://qhashai.com/"}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="text-[#580dec] hover:text-[#8c74f7f3]">
                                     <FontAwesomeIcon icon={faSquare} className=" bg-[linear-gradient(90deg,_#ff8d20,_#6700ff_80%)] rotate-45 mr-4 text-transparent max-h-3 max-w-3 overflow-hidden rounded-[1px]" />
                                     QhashAi
                                 </Link>
                             </li>
                             <li>
-                                <Link to={"https://quantumedu.in/"} className="text-[#580dec] hover:text-[#8c74f7f3]">
+                                <Link to={"https://quantumedu.in/"}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="text-[#580dec] hover:text-[#8c74f7f3]">
                                     <FontAwesomeIcon icon={faSquare} className=" bg-[linear-gradient(90deg,_#ff8d20,_#6700ff_80%)] rotate-45 mr-4 text-transparent max-h-3 max-w-3 overflow-hidden rounded-[1px]" />
                                     QuantumEdu
                                 </Link>
                             </li>
                             <li>
-                                <Link to={"https://asesystem.com/"} className="text-[#580dec] hover:text-[#8c74f7f3]">
+                                <Link to={"https://asesystem.com/"}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="text-[#580dec] hover:text-[#8c74f7f3]">
                                     <FontAwesomeIcon icon={faSquare} className=" bg-[linear-gradient(90deg,_#ff8d20,_#6700ff_80%)] rotate-45 mr-4 text-transparent max-h-3 max-w-3 overflow-hidden rounded-[1px]" />
                                     ASESystem
                                 </Link>

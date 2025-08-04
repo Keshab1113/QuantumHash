@@ -18,7 +18,7 @@ const sendMeeting = async (req, res) => {
 
   // --- Email to Admin ---
   const adminMailOptions = {
-    from: `"QuantumHash Careers" <${process.env.MAIL_USER}>`,
+    from: `"QuantumHash Corporation" <${process.env.MAIL_USER}>`,
     to: process.env.MAIL_USER,
     subject: 'New Meeting Form Submission',
     html: `
@@ -64,7 +64,7 @@ const sendMeeting = async (req, res) => {
 
   // --- Auto-Reply to User ---
   const userMailOptions = {
-    from: `"QuantumHash HR" <${process.env.MAIL_USER}>`,
+    from: `"QuantumHash Corporation" <${process.env.MAIL_USER}>`,
     to: email,
     subject: 'Meeting Confirmation – QuantumHash',
     html: `

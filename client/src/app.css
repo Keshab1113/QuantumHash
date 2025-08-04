@@ -128,15 +128,28 @@ body {
 }
 
 
+/* Chrome, Safari, and Edge */
 ::-webkit-scrollbar {
-    display: none;
+  width: 6px;
+  height: 6px;
 }
 
-/* Hide scrollbar for IE, Edge and Firefox */
-body{
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;  /* Firefox */
+::-webkit-scrollbar-track {
+  background: transparent; 
 }
+
+::-webkit-scrollbar-thumb {
+  background-color: #007BFF;  /* Blue color */
+  border-radius: 10px;
+  border: 1px solid transparent;
+}
+
+/* Firefox */
+body {
+  scrollbar-width: thin;
+  scrollbar-color: #007BFF transparent;
+}
+
 
 @keyframes aura-glow {
   0% { background-position: 0 100%; }
