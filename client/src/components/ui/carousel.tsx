@@ -125,7 +125,7 @@ const Slide = ({ slide, index, current, handleSlideClick }: SlideProps) => {
 
 
     try {
-      const response = await axios.post('https://fuzzy-winner-45v5rjj5r4jh9wg-5000.app.github.dev/api/apply', {
+      const response = await axios.post('https://quantumhash.onrender.com/api/apply', {
         name: formData.get('name'),
         email: formData.get('email'),
         phone: formData.get('phone'),
