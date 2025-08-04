@@ -1,22 +1,27 @@
 const nodemailer = require("nodemailer");
 
 const sendEmail = async (req, res) => {
-    const { name, email, phone, subject, message } = req.body;
+  const { name, email, phone, subject, message } = req.body;
 
-    const transporter = nodemailer.createTransport({
-        service: "gmail",
-        auth: {
-            user: process.env.MAIL_USER,
-            pass: process.env.MAIL_PASS,
-        },
-    });
+  const transporter = nodemailer.createTransport({
+    host: "smtp.hostinger.com",
+    port: 465, // Use 465 for SSL (recommended) or 587 for TLS
+    secure: true, // true for 465, false for 587
+    auth: {
+      user: process.env.MAIL_USER,
+      pass: 'S9867867878$#@4delta',
+    },
+    tls: {
+      rejectUnauthorized: false // Only if you get TLS errors (not ideal for production)
+    }
+  });
 
-    // Admin notification email
-    const mailOptions = {
-        from: process.env.MAIL_USER,
-        to: process.env.MAIL_USER,
-        subject: `New Contact Form Submission: ${subject}`,
-        html: `
+  // Admin notification email
+  const mailOptions = {
+    from: `"QuantumHash Careers" <${process.env.MAIL_USER}>`,
+    to: process.env.MAIL_USER,
+    subject: `New Contact Form Submission: ${subject}`,
+    html: `
             <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #ddd; border-radius: 8px; overflow: hidden;">
               <div style="background-color: #5c2d91; padding: 20px; text-align: center; color: white; font-weight: bold; font-size: 18px;">
                 QuantumHash Corporation
@@ -40,14 +45,14 @@ const sendEmail = async (req, res) => {
               </div>
             </div>
         `,
-    };
+  };
 
-    // Auto-reply email to the user
-    const userReplyOptions = {
-        from: process.env.MAIL_USER,
-        to: email,
-        subject: "We've received your message – QuantumHash",
-        html: `
+  // Auto-reply email to the user
+  const userReplyOptions = {
+    from: `"QuantumHash HR" <${process.env.MAIL_USER}>`,
+    to: email,
+    subject: "We've received your message – QuantumHash",
+    html: `
             <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #ddd; border-radius: 8px; overflow: hidden;">
               <div style="background-color: #5c2d91; padding: 20px; text-align: center; color: white; font-weight: bold; font-size: 18px;">
                 QuantumHash Corporation
@@ -75,17 +80,17 @@ const sendEmail = async (req, res) => {
               </div>
             </div>
         `,
-    };
+  };
 
-    try {
-        await transporter.sendMail(mailOptions);       // To Admin
-        await transporter.sendMail(userReplyOptions);  // Auto-reply to User
+  try {
+    await transporter.sendMail(mailOptions);       // To Admin
+    await transporter.sendMail(userReplyOptions);  // Auto-reply to User
 
-        res.status(200).json({ message: "Email sent successfully" });
-    } catch (error) {
-        console.error("Email sending error:", error);
-        res.status(500).json({ message: "Email failed to send", error });
-    }
+    res.status(200).json({ message: "Email sent successfully" });
+  } catch (error) {
+    console.error("Email sending error:", error);
+    res.status(500).json({ message: "Email failed to send", error });
+  }
 };
 
 module.exports = sendEmail;

@@ -1,22 +1,26 @@
 const nodemailer = require("nodemailer");
 
 const sendInvestor = async (req, res) => {
-    const { name, email, companyName, investmentInterest, message } = req.body;
+  const { name, email, companyName, investmentInterest, message } = req.body;
 
-    const transporter = nodemailer.createTransport({
-        service: "gmail",
-        auth: {
-            user: process.env.MAIL_USER,
-            pass: process.env.MAIL_PASS,
-        },
-    });
-
-    // Admin notification
-    const adminMailOptions = {
-        from: process.env.MAIL_USER,
-        to: process.env.MAIL_USER,
-        subject: `New Investor Inquiry from ${name}`,
-        html: `
+  const transporter = nodemailer.createTransport({
+    host: "smtp.hostinger.com",
+    port: 465, // Use 465 for SSL (recommended) or 587 for TLS
+    secure: true, // true for 465, false for 587
+    auth: {
+      user: process.env.MAIL_USER,
+      pass: 'S9867867878$#@4delta',
+    },
+    tls: {
+      rejectUnauthorized: false // Only if you get TLS errors (not ideal for production)
+    }
+  });
+  // Admin notification
+  const adminMailOptions = {
+    from: `"QuantumHash Careers" <${process.env.MAIL_USER}>`,
+    to: process.env.MAIL_USER,
+    subject: `New Investor Inquiry from ${name}`,
+    html: `
 <!DOCTYPE html>
 <html>
 <head>
@@ -60,14 +64,14 @@ const sendInvestor = async (req, res) => {
 </body>
 </html>
         `,
-    };
+  };
 
-    // Auto-reply to investor
-    const userAutoReply = {
-        from: process.env.MAIL_USER,
-        to: email,
-        subject: "Thank You for Your Interest in QuantumHash",
-        html: `
+  // Auto-reply to investor
+  const userAutoReply = {
+    from: `"QuantumHash HR" <${process.env.MAIL_USER}>`,
+    to: email,
+    subject: "Thank You for Your Interest in QuantumHash",
+    html: `
 <!DOCTYPE html>
 <html>
 <head>
@@ -111,16 +115,16 @@ const sendInvestor = async (req, res) => {
 </body>
 </html>
         `,
-    };
+  };
 
-    try {
-        await transporter.sendMail(adminMailOptions);  // To Admin
-        await transporter.sendMail(userAutoReply);     // Auto-reply to user
-        res.status(200).json({ message: "Inquiry submitted successfully" });
-    } catch (error) {
-        console.error("Email sending error:", error);
-        res.status(500).json({ message: "Failed to submit inquiry", error });
-    }
+  try {
+    await transporter.sendMail(adminMailOptions);  // To Admin
+    await transporter.sendMail(userAutoReply);     // Auto-reply to user
+    res.status(200).json({ message: "Inquiry submitted successfully" });
+  } catch (error) {
+    console.error("Email sending error:", error);
+    res.status(500).json({ message: "Failed to submit inquiry", error });
+  }
 };
 
 module.exports = sendInvestor;

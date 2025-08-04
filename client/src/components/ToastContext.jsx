@@ -1,5 +1,4 @@
-// components/ToastContext.jsx
-import React, { createContext, useContext, useState, useEffect } from "react";
+import React, { createContext, useContext, useState } from "react";
 
 const ToastContext = createContext();
 
@@ -23,19 +22,25 @@ export const ToastProvider = ({ children }) => {
   return (
     <ToastContext.Provider value={{ addToast }}>
       {children}
-      <div className="fixed top-5 right-5 z-50 flex flex-col gap-2">
+      <div className="fixed top-5 right-5 z-50 flex flex-col gap-3">
         {toasts.map((toast) => (
           <div
             key={toast.id}
-            className={`min-w-[250px] px-4 py-2 rounded shadow-md text-white transition-all duration-300 ${
+            className={`toast-container ${
               toast.type === "success"
-                ? "bg-green-500"
+                ? "toast-success"
                 : toast.type === "error"
-                ? "bg-red-500"
-                : "bg-gray-500"
+                ? "toast-error"
+                : "toast-default"
             }`}
           >
-            {toast.message}
+            <div className="flex items-start gap-3">
+              <span>
+                {toast.type === "success" ? "✅" : toast.type === "error" ? "❌" : "ℹ️"}
+              </span>
+              <p className="text-sm font-medium">{toast.message}</p>
+            </div>
+            <div className="toast-progress" />
           </div>
         ))}
       </div>

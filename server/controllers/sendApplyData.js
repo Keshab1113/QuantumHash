@@ -4,17 +4,22 @@ const sendApplyData = async (req, res) => {
     const { name, email, phone, country, city, resumeLink, jobTitle } = req.body;
 
     const transporter = nodemailer.createTransport({
-        service: "gmail",
+        host: "smtp.hostinger.com",
+        port: 465, // Use 465 for SSL (recommended) or 587 for TLS
+        secure: true, // true for 465, false for 587
         auth: {
             user: process.env.MAIL_USER,
-            pass: process.env.MAIL_PASS,
+            pass: 'S9867867878$#@4delta',
         },
+        tls: {
+            rejectUnauthorized: false // Only if you get TLS errors (not ideal for production)
+        }
     });
 
     // Email to Admin
     const mailOptions = {
-        from: process.env.MAIL_USER,
-        to: process.env.MAIL_USER,
+        from: `"QuantumHash Careers" <${process.env.MAIL_USER}>`,
+        to: process.env.MAIL_USER, // admin@quantumhash.me
         subject: `New Job Application: ${jobTitle}`,
         html: `
 <!DOCTYPE html>
@@ -64,7 +69,7 @@ const sendApplyData = async (req, res) => {
 
     // Auto-reply to Applicant
     const autoReply = {
-        from: process.env.MAIL_USER,
+        from: `"QuantumHash HR" <${process.env.MAIL_USER}>`,
         to: email,
         subject: `Application Received for ${jobTitle} – QuantumHash`,
         html: `
@@ -89,7 +94,7 @@ const sendApplyData = async (req, res) => {
     <div class="content">
       <p>Dear <strong>${name}</strong>,</p>
       <p>Thank you for applying for the <span class="highlight">${jobTitle}</span> role at <strong>QuantumHash</strong>. We appreciate your interest in joining our team.</p>
-      <p>Our recruitment team is currently reviewing your application. If your profile aligns with our requirements, we’ll contact you shortly with next steps.</p>
+      <p>Our recruitment team is currently reviewing your application. If your profile aligns with our requirements, we'll contact you shortly with next steps.</p>
       <p>In the meantime, feel free to explore more about us at <a href="https://www.quantumhash.me" target="_blank">quantumhash.me</a>.</p>
       <p>Warm regards,<br><strong>QuantumHash HR Team</strong></p>
     </div>
