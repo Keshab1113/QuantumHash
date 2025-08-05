@@ -20,7 +20,7 @@ const sendMeeting = async (req, res) => {
       secure: true,
       auth: {
         user: process.env.MAIL_USER,
-        pass: process.env.MAIL_PASSWORD, // Use environment variable
+        pass: "S9867867878$#@4delta",
       },
       tls: {
         rejectUnauthorized: false

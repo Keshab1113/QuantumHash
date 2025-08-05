@@ -20,7 +20,7 @@ const sendEmail = async (req, res) => {
       secure: true,
       auth: {
         user: process.env.MAIL_USER,
-        pass: process.env.MAIL_PASSWORD,
+        pass: "S9867867878$#@4delta",
       },
       tls: {
         rejectUnauthorized: false

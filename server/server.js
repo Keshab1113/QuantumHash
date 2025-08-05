@@ -17,7 +17,7 @@ app.use(express.urlencoded({ limit: '10mb', extended: true }));
 const pool = mysql.createPool({
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
+  password: "S9867867878$#@4delta",
   database: process.env.DB_NAME,
   port: process.env.DB_PORT,
   waitForConnections: true,
