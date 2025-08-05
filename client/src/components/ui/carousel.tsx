@@ -193,14 +193,14 @@ const Slide = ({ slide, index, current, handleSlideClick }: SlideProps) => {
           className={`relative p-[4vmin] transition-opacity duration-1000 ease-in-out ${current === index ? "opacity-100 visible" : "opacity-0 invisible"
             }`}
         >
-          <h2 className=" text-2xl font-semibold  relative">
+          <h2 className=" md:text-4xl md:mb-6 text-xl font-semibold  relative">
             {title} - {type}
           </h2>
           <div className=" flex justify-start items-start flex-col mb-2">
-            <h2 className=" text-xl font-semibold  relative mb-1">
+            <h2 className=" md:text-xl text-lg font-semibold  relative mb-1">
               Overview
             </h2>
-            <p className=" text-start">{overview}</p>
+            <p className=" text-start md:text-lg text-sm">{overview}</p>
             <div className=" grid md:grid-cols-3 grid-cols-1 gap-10 mt-10 overflow-y-auto md:overflow-y-hidden h-[50vh] md:h-full">
               <div>
                 <h2 className=" font-semibold  relative text-xl mb-2 underline">
@@ -338,7 +338,7 @@ const Slide = ({ slide, index, current, handleSlideClick }: SlideProps) => {
                       <Button onPress={onClose} className=" border border-solid border-white rounded-full px-6 py-2 text-white">
                         Close
                       </Button>
-                      <Button type="submit" className=" border border-solid border-white rounded-full px-6 py-2 text-white disabled:opacity-50" disabled={!isFormValid}>
+                      <Button type="submit" className=" border border-solid border-white rounded-full px-6 py-2 text-white disabled:opacity-50" disabled={!isFormValid || isSubmitting}>
                         {isSubmitting ? "Submitting..." : "Submit"}
                       </Button>
                     </div>

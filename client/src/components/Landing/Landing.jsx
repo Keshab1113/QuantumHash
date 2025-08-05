@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const Landing = () => {
   const canvasRef = useRef(null);
@@ -20,7 +20,7 @@ const Landing = () => {
     const drawGrid = () => {
       const width = canvas.width = canvas.offsetWidth;
       const height = canvas.height = canvas.offsetHeight;
-      
+
       ctx.clearRect(0, 0, width, height);
       ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
       ctx.lineWidth = lineWidth;
@@ -53,10 +53,10 @@ const Landing = () => {
   }, []);
 
   return (
-    <div className="relative h-screen w-full overflow-hidden bg-[#17042b]">
+    <div className="relative md:hidden h-screen w-full overflow-hidden bg-[#17042b]">
       {/* Moving Grid Background */}
-      <canvas 
-        ref={gridCanvasRef} 
+      <canvas
+        ref={gridCanvasRef}
         className="absolute inset-0 w-full h-full z-0 opacity-50"
       />
 
@@ -65,25 +65,25 @@ const Landing = () => {
         {/* <h1 className="text-5xl md:text-7xl font-bold mb-2">
           QuantumHash <span className="text-3xl md:text-4xl block md:inline">CORPORATION</span>
         </h1> */}
-        
+
         <p className="max-w-4xl 2xl:max-w-6xl mx-auto text-xl md:text-3xl 2xl:text-5xl font-bold mb-8 mt-6">
-            From safety intelligence to next-gen education and voice technologies – we pioneer AI-driven transformation, turning raw data into actionable intelligence that empowers industries, educators, and innovators worldwide.
+          From safety intelligence to next-gen education and voice technologies – we pioneer AI-driven transformation, turning raw data into actionable intelligence that empowers industries, educators, and innovators worldwide.
         </p>
-        
+
         <p className="max-w-2xl mx-auto text-lg md:text-2xl mb-12">
           Driving transformation across industries by empowering educators, innovators, and frontline teams with cutting-edge, applied AI solutions.
         </p>
-        
+
         <div className="flex flex-col sm:flex-row gap-4">
-            <Link to={"platforms"}>
-          <button className="px-8 cursor-pointer py-3 bg-purple-600 hover:bg-purple-700 rounded-lg font-semibold transition-colors">
-            Explore Our Platforms
-          </button>
+          <Link to={"platforms"}>
+            <button className="px-8 cursor-pointer py-3  rounded-full border-white border text-sm w-full">
+              Explore Our Platforms
+            </button>
           </Link>
           <Link to={"investor"}>
-          <button className="px-8 py-3 cursor-pointer border-2 border-white hover:bg-white hover:text-purple-900 rounded-lg font-semibold transition-colors">
-            Investor Relations
-          </button>
+            <button className="px-8 py-3 cursor-pointer border border-white rounded-full text-sm w-full">
+              Investor Relations
+            </button>
           </Link>
         </div>
       </div>

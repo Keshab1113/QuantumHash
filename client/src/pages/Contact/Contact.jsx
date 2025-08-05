@@ -188,7 +188,7 @@ const Contact = () => {
                                     <button
                                         type="submit"
                                         className="border border-solid border-white rounded-full px-6 py-2 disabled:opacity-50 text-white cursor-pointer"
-                                        disabled={!isFormValid}
+                                        disabled={!isFormValid || isSubmitting}
                                     >
                                         {isSubmitting ? "Submitting..." : "Submit"}
                                     </button>

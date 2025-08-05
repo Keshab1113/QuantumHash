@@ -5,6 +5,7 @@ const AHoleEffect = () => {
     const canvasRef = useRef(null);
     const containerRef = useRef(null);
     const animationRef = useRef(null);
+    const auraRef = useRef(null);
 
     useEffect(() => {
         const container = containerRef.current;
@@ -50,7 +51,7 @@ const AHoleEffect = () => {
             const dx = ex - sx;
             const vx = 0.1 + Math.random() * 0.5;
             const y = start ? state.particleArea.h * Math.random() : state.particleArea.h;
-            const r = 0.5 + Math.random() * 4;
+            const r = 0.5 + Math.random() * (window.innerWidth < 768 ? 2 : 4); // Smaller particles on mobile
             const vy = 0.5 + Math.random();
 
             return {
@@ -75,27 +76,49 @@ const AHoleEffect = () => {
             };
             canvas.width = state.render.width * state.render.dpi;
             canvas.height = state.render.height * state.render.dpi;
+            
+            // Adjust aura size for mobile
+            if (window.innerWidth < 768) {
+                auraRef.current.style.width = '80%';
+                auraRef.current.style.top = '-30%';
+                auraRef.current.style.filter = 'blur(30px)';
+            } else if (window.innerWidth < 1024) {
+                auraRef.current.style.width = '60%';
+                auraRef.current.style.top = '-35%';
+                auraRef.current.style.filter = 'blur(40px)';
+            } else {
+                auraRef.current.style.width = '50%';
+                auraRef.current.style.top = '-40%';
+                auraRef.current.style.filter = 'blur(50px)';
+            }
         };
 
         const setDiscs = () => {
             const { width, height } = state.render;
             state.discs = [];
 
+            // Adjust disc sizes based on screen size
+            const isMobile = window.innerWidth < 768;
+            const isTablet = window.innerWidth < 1024;
+            
+            const startWidth = isMobile ? width * 0.9 : isTablet ? width * 0.8 : width * 0.75;
+            const startHeight = isMobile ? height * 0.6 : isTablet ? height * 0.65 : height * 0.7;
+            
             state.startDisc = {
                 x: width * 0.5,
-                y: height * 0.45,
-                w: width * 0.75,
-                h: height * 0.7
+                y: height * (isMobile ? 0.4 : 0.45),
+                w: startWidth,
+                h: startHeight
             };
 
             state.endDisc = {
                 x: width * 0.5,
-                y: height * 0.95,
-                w: 20,
-                h: 10
+                y: height * (isMobile ? 0.9 : 0.95),
+                w: isMobile ? 15 : 20,
+                h: isMobile ? 8 : 10
             };
 
-            const totalDiscs = 100;
+            const totalDiscs = isMobile ? 80 : 100; // Fewer discs on mobile
             let prevBottom = height;
             state.clip = {};
 
@@ -135,7 +158,8 @@ const AHoleEffect = () => {
             const { width, height } = state.render;
             state.lines = [];
 
-            const totalLines = 100;
+            const isMobile = window.innerWidth < 768;
+            const totalLines = isMobile ? 60 : 100; // Fewer lines on mobile
             const linesAngle = (Math.PI * 2) / totalLines;
 
             for (let i = 0; i < totalLines; i++) {
@@ -161,12 +185,13 @@ const AHoleEffect = () => {
             state.particleArea = {
                 sw: state.clip.disc.w * 0.5,
                 ew: state.clip.disc.w * 2,
-                h: height * 0.85
+                h: height * (window.innerWidth < 768 ? 0.8 : 0.85)
             };
             state.particleArea.sx = (state.render.width - state.particleArea.sw) / 2;
             state.particleArea.ex = (state.render.width - state.particleArea.ew) / 2;
 
-            const totalParticles = 100;
+            const isMobile = window.innerWidth < 768;
+            const totalParticles = isMobile ? 60 : 100; // Fewer particles on mobile
             for (let i = 0; i < totalParticles; i++) {
                 state.particles.push(initParticle(true));
             }
@@ -175,7 +200,7 @@ const AHoleEffect = () => {
         // Draw functions
         const drawDiscs = () => {
             ctx.strokeStyle = "#444";
-            ctx.lineWidth = 2;
+            ctx.lineWidth = window.innerWidth < 768 ? 1 : 2; // Thinner lines on mobile
 
             // Outer disc
             const outerDisc = state.startDisc;
@@ -193,8 +218,11 @@ const AHoleEffect = () => {
             ctx.closePath();
 
             // Inner discs
+            const isMobile = window.innerWidth < 768;
+            const skipCount = isMobile ? 10 : 5; // Draw fewer discs on mobile
+            
             state.discs.forEach((disc, i) => {
-                if (i % 5 !== 0) return;
+                if (i % skipCount !== 0) return;
 
                 if (disc.w < state.clip.disc.w - 5) {
                     ctx.save();
@@ -214,7 +242,7 @@ const AHoleEffect = () => {
 
         const drawLines = () => {
             ctx.strokeStyle = "#444";
-            ctx.lineWidth = 2;
+            ctx.lineWidth = window.innerWidth < 768 ? 1 : 2; // Thinner lines on mobile
 
             state.lines.forEach((line) => {
                 ctx.beginPath();
@@ -246,8 +274,9 @@ const AHoleEffect = () => {
 
         // Animation functions
         const moveDiscs = () => {
+            const speed = window.innerWidth < 768 ? 0.001 : 0.002; // Slower animation on mobile
             state.discs.forEach((disc) => {
-                disc.p = (disc.p + 0.002) % 1;
+                disc.p = (disc.p + speed) % 1;
                 tweenDisc(disc);
             });
         };
@@ -290,10 +319,12 @@ const AHoleEffect = () => {
 
         // Handle resize
         const handleResize = () => {
+            cancelAnimationFrame(animationRef.current);
             setSize();
             setDiscs();
             setLines();
             setParticles();
+            tick();
         };
 
         window.addEventListener('resize', handleResize);
@@ -317,17 +348,14 @@ const AHoleEffect = () => {
             height: '100vh',
             overflow: 'hidden'
         }}>
-            <canvas className="js-canvas" ref={canvasRef} style={{ display: 'block', width: '100%', height: '100vh', }}></canvas>
-            <div className="aura" style={{
+            <canvas className="js-canvas" ref={canvasRef} style={{ display: 'block', width: '100%', height: '100vh' }}></canvas>
+            <div className="aura" ref={auraRef} style={{
                 position: 'absolute',
-                top: '-40%',
                 left: '50%',
                 zIndex: 3,
-                width: '50%',
                 height: '100%',
                 background: 'linear-gradient(20deg, #00f8f1, #ffbd1e20 16.5%, #ff9a1e 10%, #39008d 30%, #00f8f1 66%, #00f8f160 85.5%, #ffbd1e 100%) 0 100% / 100% 200%',
                 borderRadius: '0 0 100% 100%',
-                filter: 'blur(50px)',
                 mixBlendMode: 'plus-lighter',
                 opacity: 0.75,
                 transform: 'translate3d(-50%, 0, 0)',
@@ -340,41 +368,52 @@ const AHoleEffect = () => {
                 zIndex: 10,
                 width: '100%',
                 height: '100%',
-                background: 'repeating-linear-gradient(transparent, transparent 1px, white 1px, white 2px)',
+                background: window.innerWidth < 768 ? 
+                    'repeating-linear-gradient(transparent, transparent 2px, white 2px, white 3px)' : 
+                    'repeating-linear-gradient(transparent, transparent 1px, white 1px, white 2px)',
                 mixBlendMode: 'overlay',
-                opacity: 0.5
+                opacity: window.innerWidth < 768 ? 0.3 : 0.5
             }}></div>
             <style>{`
-        @keyframes aura-glow {
-          0% { background-position: 0 100%; }
-          100% { background-position: 0 300%; }
-        }
-        .a-hole::before {
-          position: absolute;
-          top: 50%;
-          left: 50%;
-          z-index: 2;
-          display: block;
-          width: 150%;
-          height: 100%;
-          background: radial-gradient(ellipse at 50% 55%, transparent 10%, rgb(11, 2, 25) 50%);
-          transform: translate3d(-50%, -50%, 0);
-          content: "";
-        }
-        .a-hole::after {
-          position: absolute;
-          top: 50%;
-          left: 50%;
-          z-index: 5;
-          display: block;
-          width: 100%;
-          height: 100%;
-          background: radial-gradient(ellipse at 50% 75%, #a900ff 20%, transparent 75%);
-          mix-blend-mode: overlay;
-          transform: translate3d(-50%, -50%, 0);
-          content: "";
-        }
-      `}</style>
+                @keyframes aura-glow {
+                    0% { background-position: 0 100%; }
+                    100% { background-position: 0 300%; }
+                }
+                .a-hole::before {
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    z-index: 2;
+                    display: block;
+                    width: 150%;
+                    height: 100%;
+                    background: radial-gradient(ellipse at 50% 55%, transparent 10%, rgb(11, 2, 25) 50%);
+                    transform: translate3d(-50%, -50%, 0);
+                    content: "";
+                }
+                .a-hole::after {
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    z-index: 5;
+                    display: block;
+                    width: 100%;
+                    height: 100%;
+                    background: radial-gradient(ellipse at 50% 75%, #a900ff 20%, transparent 75%);
+                    mix-blend-mode: overlay;
+                    transform: translate3d(-50%, -50%, 0);
+                    content: "";
+                }
+                
+                @media (max-width: 768px) {
+                    .a-hole::before {
+                        background: radial-gradient(ellipse at 50% 55%, transparent 5%, rgb(11, 2, 25) 40%);
+                    }
+                    .a-hole::after {
+                        background: radial-gradient(ellipse at 50% 75%, #a900ff 15%, transparent 70%);
+                    }
+                }
+            `}</style>
         </div>
     );
 };

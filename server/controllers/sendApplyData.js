@@ -2,26 +2,37 @@ const nodemailer = require("nodemailer");
 
 const sendApplyData = async (req, res) => {
     const { name, email, phone, country, city, resumeLink, jobTitle } = req.body;
+    const pool = req.app.get('dbPool'); // Get the shared connection pool
 
-    const transporter = nodemailer.createTransport({
-        host: "smtp.hostinger.com",
-        port: 465, // Use 465 for SSL (recommended) or 587 for TLS
-        secure: true, // true for 465, false for 587
-        auth: {
-            user: process.env.MAIL_USER,
-            pass: 'S9867867878$#@4delta',
-        },
-        tls: {
-            rejectUnauthorized: false // Only if you get TLS errors (not ideal for production)
-        }
-    });
+    try {
+        // 1. First store the application in MySQL
+        const connection = await pool.getConnection();
+        const [result] = await connection.query(
+            'INSERT INTO job_applications (name, email, phone, country, city, resume_link, job_title) VALUES (?, ?, ?, ?, ?, ?, ?)',
+            [name, email, phone, country, city, resumeLink, jobTitle]
+        );
+        connection.release();
 
-    // Email to Admin
-    const mailOptions = {
-        from: `"QuantumHash Corporation" <${process.env.MAIL_USER}>`,
-        to: process.env.MAIL_USER,
-        subject: `New Job Application: ${jobTitle}`,
-        html: `
+        // 2. Then send emails
+        const transporter = nodemailer.createTransport({
+            host: "smtp.hostinger.com",
+            port: 465,
+            secure: true,
+            auth: {
+                user: process.env.MAIL_USER,
+                pass: process.env.MAIL_PASSWORD, // Use environment variable
+            },
+            tls: {
+                rejectUnauthorized: false
+            }
+        });
+
+        // Email to Admin
+        const mailOptions = {
+            from: `${name} <${process.env.MAIL_USER}>`,
+            to: process.env.MAIL_USER,
+            subject: `New Job Application: ${jobTitle}`,
+            html: `
 <!DOCTYPE html>
 <html>
 <head>
@@ -64,15 +75,15 @@ const sendApplyData = async (req, res) => {
     </div>
 </body>
 </html>
-        `,
-    };
+            `,
+        };
 
-    // Auto-reply to Applicant
-    const autoReply = {
-        from: `"QuantumHash Corporation" <${process.env.MAIL_USER}>`,
-        to: email,
-        subject: `Application Received for ${jobTitle} – QuantumHash`,
-        html: `
+        // Auto-reply to Applicant
+        const autoReply = {
+            from: `"QuantumHash Corporation" <${process.env.MAIL_USER}>`,
+            to: email,
+            subject: `Application Received for ${jobTitle} – QuantumHash`,
+            html: `
 <!DOCTYPE html>
 <html>
 <head>
@@ -105,16 +116,24 @@ const sendApplyData = async (req, res) => {
   </div>
 </body>
 </html>
-        `,
-    };
+            `,
+        };
 
-    try {
         await transporter.sendMail(mailOptions);   // Admin
         await transporter.sendMail(autoReply);     // Applicant
-        res.status(200).json({ message: "Application submitted successfully" });
+
+        res.status(200).json({ 
+            success: true,
+            message: "Application submitted successfully",
+            applicationId: result.insertId 
+        });
     } catch (error) {
-        console.error("Email sending error:", error);
-        res.status(500).json({ message: "Failed to submit application", error });
+        console.error("Error:", error);
+        res.status(500).json({ 
+            success: false,
+            message: "Failed to submit application",
+            error: process.env.NODE_ENV === 'development' ? error.message : undefined
+        });
     }
 };
 

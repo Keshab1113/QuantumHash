@@ -5,7 +5,7 @@ import 'react-calendar/dist/Calendar.css';
 import axios from "axios";
 import { useToast } from "../ToastContext";
 import { DateTime } from 'luxon';
-import {Link} from "react-router-dom"
+import { Link } from "react-router-dom"
 
 const customStyles = {
     control: (provided, state) => ({
@@ -50,7 +50,7 @@ const customStyles = {
 };
 
 const Meeting = () => {
-    const [value, onChange] = useState(new Date());
+    const [value, setValue] = useState(DateTime.local().toJSDate());
     const [duration, setDuration] = useState(20);
     const [timezone, setTimezone] = useState(Intl.DateTimeFormat().resolvedOptions().timeZone);
     const [timeSlots, setTimeSlots] = useState([]);
@@ -58,6 +58,8 @@ const Meeting = () => {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isConfirmed, setIsConfirmed] = useState(false);
     const [meetingDetails, setMeetingDetails] = useState(null);
+    const [bookedSlots, setBookedSlots] = useState([]);
+    const [isLoadingSlots, setIsLoadingSlots] = useState(false);
 
 
     const { addToast } = useToast();
@@ -76,6 +78,7 @@ const Meeting = () => {
             ...prev,
             [name]: value,
         }));
+
     };
 
     const timezones = Intl.supportedValuesOf('timeZone').map((tz) => ({
@@ -83,39 +86,82 @@ const Meeting = () => {
         label: tz,
     }));
 
-    useEffect(() => {
-        generateTimeSlots(value);
-    }, [value, timezone]);
+    // useEffect(() => {
+    //     generateTimeSlots(value);
+    // }, [value, timezone]);
 
 
+    const fetchBookedSlots = async (selectedDate) => {
+        setIsLoadingSlots(true);
+        const formattedDate = DateTime.fromJSDate(selectedDate)
+            .setZone(timezone)
+            .toFormat('yyyy-MM-dd');
 
-    const generateTimeSlots = (selectedDate) => {
+        try {
+            const response = await axios.get(
+                `${import.meta.env.VITE_BACKEND_URL}/api/meetings?date=${formattedDate}`
+            );
+            const slots = response.data;
+            setBookedSlots(slots); // still update state
+            generateTimeSlots(selectedDate, slots); // ✅ pass freshly fetched slots directly
+        } catch (error) {
+            console.error("Error fetching booked slots:", error);
+            addToast("error", "Failed to load available time slots");
+            setBookedSlots([]);
+            generateTimeSlots(selectedDate, []); // empty if fetch fails
+        } finally {
+            setIsLoadingSlots(false);
+        }
+    };
+
+    const generateTimeSlots = (selectedDate, customBookedSlots = bookedSlots) => {
         const slots = [];
-
         const now = DateTime.local().setZone(timezone);
         const selectedDateTime = DateTime.fromJSDate(selectedDate).setZone(timezone);
-
         const isToday = now.hasSame(selectedDateTime, 'day');
 
-        // Define fixed Kuwait time range
         const kuwaitStart = DateTime.fromJSDate(selectedDate)
             .setZone('Asia/Kuwait')
             .set({ hour: 10, minute: 0, second: 0, millisecond: 0 });
 
         const kuwaitEnd = kuwaitStart.set({ hour: 22, minute: 0 });
 
-        // Convert to user's timezone
         const userStart = kuwaitStart.setZone(timezone);
         const userEnd = kuwaitEnd.setZone(timezone);
 
         let current = userStart;
+
         while (current < userEnd) {
             const label = current.toFormat('hh:mm a');
-
-            // ✅ Only mark as past if the selected date is today
+            const timeValue = current.toFormat('HH:mm');
             const isPast = isToday && current < now;
 
-            slots.push({ label, isPast });
+            const isBooked = customBookedSlots.some(slot => {
+                if (!slot || !slot.meeting_time) return false;
+
+                try {
+                    const fullSlotDateTime = DateTime.fromFormat(
+                        `${DateTime.fromJSDate(selectedDate).toFormat('yyyy-MM-dd')} ${slot.meeting_time}`,
+                        'yyyy-MM-dd hh:mm a',
+                        { zone: timezone }
+                    );
+
+                    if (!fullSlotDateTime.isValid) return false;
+
+                    return fullSlotDateTime.toFormat('HH:mm') === timeValue;
+                } catch (e) {
+                    console.warn("Invalid slot:", slot.meeting_time);
+                    return false;
+                }
+            });
+
+            slots.push({
+                label,
+                isPast,
+                isBooked,
+                disabled: isPast || isBooked,
+            });
+
             current = current.plus({ minutes: 30 });
         }
 
@@ -125,11 +171,16 @@ const Meeting = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setIsSubmitting(true);
+
         const formData = new FormData(form.current);
+
+        const formattedDate = DateTime.fromJSDate(value)
+            .setZone(timezone)
+            .toFormat('yyyy-MM-dd');
 
         const data = {
             ...Object.fromEntries(formData.entries()),
-            date: value.toDateString(),
+            date: formattedDate,
             time: selectedTime,
             duration,
             timezone,
@@ -137,14 +188,20 @@ const Meeting = () => {
 
         try {
             await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/meeting`, data);
-            setMeetingDetails({ date: value.toDateString(), time: selectedTime });
+            setMeetingDetails({ date: formattedDate, time: selectedTime });
             setIsConfirmed(true);
             addToast("success", "Meeting will be scheduled soon.");
             form.current.reset();
             setFormValues({ fullName: '', email: '', query: '' });
             setSelectedTime(null);
+            fetchBookedSlots(value);
         } catch (err) {
-            addToast("error", "Failed to schedule the meeting.");
+            if (err.response?.data?.error === 'Time slot already booked') {
+                addToast("error", "This time slot is already booked. Please choose another time.");
+                fetchBookedSlots(value);
+            } else {
+                addToast("error", "Failed to schedule the meeting.");
+            }
         } finally {
             setIsSubmitting(false);
         }
@@ -155,6 +212,10 @@ const Meeting = () => {
         const allFilled = fullName && email && query;
         setIsFormValid(!!allFilled);
     }, [formValues]);
+
+    useEffect(() => {
+        fetchBookedSlots(value);
+    }, [value]);
 
     return (
         <section className='w-full'>
@@ -190,7 +251,14 @@ const Meeting = () => {
                 <div className='flex md:flex-row flex-col gap-6 mt-16 w-full flex-wrap'>
                     <div className={` md:px-10 border border-solid border-white bg-slate-200 px-4 md:py-10 py-8 rounded-2xl w-full lg:w-[40%] flex flex-col justify-start items-center md:w-[70%] mx-auto ${selectedTime && "hidden"}`}>
                         <h1 className='h1head1 capitalize text-2xl mb-10 font-bold text-center'>Choose the date from here</h1>
-                        <Calendar onChange={onChange} value={value} className={" font-bold p-4 rounded-2xl bg-white "} minDate={new Date()} />
+                        <Calendar onChange={(date) => {
+                            setValue(date);
+                            fetchBookedSlots(date);
+                        }}
+                            value={value}
+                            className={" font-bold p-4 rounded-2xl bg-white "}
+                            minDate={DateTime.local().toJSDate()}
+                        />
                     </div>
 
                     {selectedTime ? (
@@ -242,7 +310,7 @@ const Meeting = () => {
                             <button onClick={() => setSelectedTime(null)} className='bg-white mr-3 cursor-pointer text-black px-4 py-2 rounded hover:bg-gray-200'>
                                 Back
                             </button>
-                            <button type='submit' className='bg-white disabled:opacity-50 cursor-pointer text-black px-4 py-2 rounded hover:bg-gray-200' disabled={!isFormValid}>
+                            <button type='submit' className='bg-white disabled:opacity-50 cursor-pointer text-black px-4 py-2 rounded hover:bg-gray-200' disabled={!isFormValid || isSubmitting}>
                                 {isSubmitting ? "Submitting..." : "Submit"}
                             </button>
                         </form>
@@ -275,27 +343,32 @@ const Meeting = () => {
                             {/* Available Time Slots */}
                             <div className='mt-6'>
                                 <h3 className='font-semibold mb-2'>Available Time Slots:</h3>
-                                <div className='grid grid-cols-4 gap-2 max-h-[300px] overflow-y-auto'>
-                                    {timeSlots.map((slot, index) => (
-                                        <button
-                                            key={index}
-                                            onClick={() => {
-                                                if (!slot.isPast) setSelectedTime(slot.label);
-                                            }}
-                                            disabled={slot.isPast}
-                                            className={`border px-4 py-2 rounded transition-all
-      ${slot.isPast
-                                                    ? 'bg-gray-400 text-white cursor-not-allowed opacity-50'
-                                                    : selectedTime === slot.label
-                                                        ? 'bg-white text-black font-semibold'
-                                                        : 'hover:bg-white hover:text-black'}
-    `}
-                                        >
-                                            {slot.label}
-                                        </button>
-                                    ))}
-
-                                </div>
+                                {isLoadingSlots ? (
+                                    <div className="text-center py-4">Loading available slots...</div>
+                                ) :
+                                    <div className='grid grid-cols-4 gap-2 max-h-[300px] overflow-y-auto'>
+                                        {timeSlots.map((slot, index) => (
+                                            <button
+                                                key={index}
+                                                onClick={() => {
+                                                    if (!slot.disabled) setSelectedTime(slot.label);
+                                                }}
+                                                disabled={slot.disabled}
+                                                className={`border px-4 py-2 rounded transition-all
+                                                    ${slot.disabled
+                                                        ? 'bg-gray-400 text-white cursor-not-allowed opacity-50'
+                                                        : selectedTime === slot.label
+                                                            ? 'bg-white text-black font-semibold'
+                                                            : 'hover:bg-white hover:text-black'}
+                                                `}
+                                                title={slot.isBooked ? "This slot is already booked" : ""}
+                                            >
+                                                {slot.label}
+                                                {slot.isBooked && " (Booked)"}
+                                            </button>
+                                        ))}
+                                    </div>
+                                }
                             </div>
                         </div>
                     }

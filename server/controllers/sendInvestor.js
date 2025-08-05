@@ -2,25 +2,37 @@ const nodemailer = require("nodemailer");
 
 const sendInvestor = async (req, res) => {
   const { name, email, companyName, investmentInterest, message } = req.body;
+  const pool = req.app.get('dbPool'); // Get the shared connection pool
 
-  const transporter = nodemailer.createTransport({
-    host: "smtp.hostinger.com",
-    port: 465, // Use 465 for SSL (recommended) or 587 for TLS
-    secure: true, // true for 465, false for 587
-    auth: {
-      user: process.env.MAIL_USER,
-      pass: 'S9867867878$#@4delta',
-    },
-    tls: {
-      rejectUnauthorized: false // Only if you get TLS errors (not ideal for production)
-    }
-  });
-  // Admin notification
-  const adminMailOptions = {
-    from: `"QuantumHash Corporation" <${process.env.MAIL_USER}>`,
-    to: process.env.MAIL_USER,
-    subject: `New Investor Inquiry from ${name}`,
-    html: `
+  try {
+    // 1. First store the investor inquiry in MySQL
+    const connection = await pool.getConnection();
+    const [result] = await connection.query(
+      'INSERT INTO investor_form (name, email, company_name, investment_interest, message) VALUES (?, ?, ?, ?, ?)',
+      [name, email, companyName, investmentInterest, message]
+    );
+    connection.release();
+
+    // 2. Then send emails
+    const transporter = nodemailer.createTransport({
+      host: "smtp.hostinger.com",
+      port: 465,
+      secure: true,
+      auth: {
+        user: process.env.MAIL_USER,
+        pass: process.env.MAIL_PASSWORD, // Use environment variable
+      },
+      tls: {
+        rejectUnauthorized: false
+      }
+    });
+
+    // Admin notification
+    const adminMailOptions = {
+      from: `${name} <${process.env.MAIL_USER}>`,
+      to: process.env.MAIL_USER,
+      subject: `New Investor Inquiry from ${name}`,
+      html: `
 <!DOCTYPE html>
 <html>
 <head>
@@ -63,15 +75,15 @@ const sendInvestor = async (req, res) => {
     </div>
 </body>
 </html>
-        `,
-  };
+      `,
+    };
 
-  // Auto-reply to investor
-  const userAutoReply = {
-    from: `"QuantumHash Corporation" <${process.env.MAIL_USER}>`,
-    to: email,
-    subject: "Thank You for Your Interest in QuantumHash",
-    html: `
+    // Auto-reply to investor
+    const userAutoReply = {
+      from: `"QuantumHash Corporation" <${process.env.MAIL_USER}>`,
+      to: email,
+      subject: "Thank You for Your Interest in QuantumHash",
+      html: `
 <!DOCTYPE html>
 <html>
 <head>
@@ -95,7 +107,7 @@ const sendInvestor = async (req, res) => {
     </div>
     <div class="content">
       <p>Dear <strong>${name}</strong>,</p>
-      <p>Thank you for showing interest in <strong>QuantumHash</strong>. We’ve received your inquiry and our investor relations team will contact you soon.</p>
+      <p>Thank you for showing interest in <strong>QuantumHash</strong>. We've received your inquiry and our investor relations team will contact you soon.</p>
       
       <div class="details-box">
         <p><span class="label">Company Name:</span> ${companyName}</p>
@@ -114,16 +126,24 @@ const sendInvestor = async (req, res) => {
   </div>
 </body>
 </html>
-        `,
-  };
+      `,
+    };
 
-  try {
     await transporter.sendMail(adminMailOptions);  // To Admin
     await transporter.sendMail(userAutoReply);     // Auto-reply to user
-    res.status(200).json({ message: "Inquiry submitted successfully" });
+
+    res.status(200).json({ 
+      success: true,
+      message: "Inquiry submitted successfully",
+      inquiryId: result.insertId 
+    });
   } catch (error) {
-    console.error("Email sending error:", error);
-    res.status(500).json({ message: "Failed to submit inquiry", error });
+    console.error("Error:", error);
+    res.status(500).json({ 
+      success: false,
+      message: "Failed to submit inquiry",
+      error: process.env.NODE_ENV === 'development' ? error.message : undefined
+    });
   }
 };
 

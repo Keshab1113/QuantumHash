@@ -218,7 +218,7 @@ const InvestorModal = () => {
                                             <Button onPress={handleClose} className=" border border-solid border-white rounded-full px-6 py-2 text-white">
                                                 Close
                                             </Button>
-                                            <Button type="submit" className=" border border-solid border-white rounded-full px-6 py-2 text-white disabled:opacity-50" disabled={!isFormValid}>
+                                            <Button type="submit" className=" border border-solid border-white rounded-full px-6 py-2 text-white disabled:opacity-50" disabled={!isFormValid || isSubmitting}>
                                                 {isSubmitting ? "Submitting..." : "Submit"}
                                             </Button>
                                         </div>
