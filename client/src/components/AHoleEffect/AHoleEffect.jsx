@@ -92,7 +92,7 @@ const AHoleEffect = () => {
                 x: width * 0.5,
                 y: height * 0.95,
                 w: 20,
-                h: 20
+                h: 10
             };
 
             const totalDiscs = 100;
@@ -247,7 +247,7 @@ const AHoleEffect = () => {
         // Animation functions
         const moveDiscs = () => {
             state.discs.forEach((disc) => {
-                disc.p = (disc.p + 0.001) % 1;
+                disc.p = (disc.p + 0.002) % 1;
                 tweenDisc(disc);
             });
         };
@@ -314,10 +314,10 @@ const AHoleEffect = () => {
             margin: 0,
             padding: 0,
             width: '100%',
-            height: '800px',
+            height: '100vh',
             overflow: 'hidden'
         }}>
-            <canvas className="js-canvas" ref={canvasRef} style={{ display: 'block', width: '100%' }}></canvas>
+            <canvas className="js-canvas" ref={canvasRef} style={{ display: 'block', width: '100%', height: '100vh', }}></canvas>
             <div className="aura" style={{
                 position: 'absolute',
                 top: '-40%',

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 const teamData = [
   {
@@ -24,6 +24,27 @@ const teamData = [
 ];
 
 const Teams = () => {
+  const [flippedIndex, setFlippedIndex] = useState(null);
+  const [isMobileOrTablet, setIsMobileOrTablet] = useState(false);
+
+  // Detect screen size
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobileOrTablet(window.innerWidth < 1024);
+    };
+
+    handleResize(); // Initial check
+    window.addEventListener("resize", handleResize);
+
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  const handleCardClick = (index) => {
+    if (isMobileOrTablet) {
+      setFlippedIndex((prev) => (prev === index ? null : index));
+    }
+  };
+
   return (
     <section className="h-full w-full">
       <div className="container mx-auto px-4 pt-16 pb-6">
@@ -42,8 +63,12 @@ const Teams = () => {
             <div
               key={index}
               className="group [perspective:1000px] h-[40vh] w-full bg-transparent cursor-pointer"
+              onClick={() => handleCardClick(index)}
             >
-              <div className="relative h-full w-full transition-transform duration-700 [transform-style:preserve-3d] group-hover:[transform:rotateY(180deg)]">
+              <div
+                className={`relative h-full w-full transition-transform duration-700 [transform-style:preserve-3d] ${flippedIndex === index ? "[transform:rotateY(180deg)]" : ""
+                  } group-hover:[transform:rotateY(180deg)]`}
+              >
                 {/* Front */}
                 <div className="absolute inset-0 bg-white rounded-xl shadow-md overflow-hidden flex flex-col items-center justify-center backface-hidden">
                   <img
