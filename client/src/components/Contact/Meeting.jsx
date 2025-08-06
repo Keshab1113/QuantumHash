@@ -6,6 +6,7 @@ import axios from "axios";
 import { useToast } from "../ToastContext";
 import { DateTime } from 'luxon';
 import { Link } from "react-router-dom"
+import { convertFromKuwaitTime } from "../../lib/utils";
 
 const customStyles = {
     control: (provided, state) => ({
@@ -60,8 +61,6 @@ const Meeting = () => {
     const [meetingDetails, setMeetingDetails] = useState(null);
     const [bookedSlots, setBookedSlots] = useState([]);
     const [isLoadingSlots, setIsLoadingSlots] = useState(false);
-
-
     const { addToast } = useToast();
     const form = useRef(null);
 
@@ -70,6 +69,7 @@ const Meeting = () => {
         email: '',
         query: '',
     });
+
     const [isFormValid, setIsFormValid] = useState(false);
 
     const handleInputChange = (e) => {
@@ -78,7 +78,6 @@ const Meeting = () => {
             ...prev,
             [name]: value,
         }));
-
     };
 
     const timezones = Intl.supportedValuesOf('timeZone').map((tz) => ({
@@ -86,38 +85,29 @@ const Meeting = () => {
         label: tz,
     }));
 
-    // useEffect(() => {
-    //     generateTimeSlots(value);
-    // }, [value, timezone]);
-
-
-    const fetchBookedSlots = async (selectedDate) => {
+    const fetchBookedSlots = async (selectedDate, updatedTimezone = timezone) => {
         setIsLoadingSlots(true);
-        const formattedDate = DateTime.fromJSDate(selectedDate)
-            .setZone(timezone)
-            .toFormat('yyyy-MM-dd');
+        const formattedDate = DateTime.fromJSDate(selectedDate).setZone(updatedTimezone).toFormat('yyyy-MM-dd');
 
         try {
-            const response = await axios.get(
-                `${import.meta.env.VITE_BACKEND_URL}/api/meetings?date=${formattedDate}`
-            );
+            const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/meetings?date=${formattedDate}`);
             const slots = response.data;
-            setBookedSlots(slots); // still update state
-            generateTimeSlots(selectedDate, slots); // ✅ pass freshly fetched slots directly
+            setBookedSlots(slots);
+            generateTimeSlots(selectedDate, slots, updatedTimezone);
         } catch (error) {
             console.error("Error fetching booked slots:", error);
             addToast("error", "Failed to load available time slots");
             setBookedSlots([]);
-            generateTimeSlots(selectedDate, []); // empty if fetch fails
+            generateTimeSlots(selectedDate, [], updatedTimezone);
         } finally {
             setIsLoadingSlots(false);
         }
     };
 
-    const generateTimeSlots = (selectedDate, customBookedSlots = bookedSlots) => {
+    const generateTimeSlots = (selectedDate, customBookedSlots = bookedSlots, activeTimezone = timezone) => {
         const slots = [];
-        const now = DateTime.local().setZone(timezone);
-        const selectedDateTime = DateTime.fromJSDate(selectedDate).setZone(timezone);
+        const now = DateTime.local().setZone(activeTimezone);
+        const selectedDateTime = DateTime.fromJSDate(selectedDate).setZone(activeTimezone);
         const isToday = now.hasSame(selectedDateTime, 'day');
 
         const kuwaitStart = DateTime.fromJSDate(selectedDate)
@@ -125,9 +115,8 @@ const Meeting = () => {
             .set({ hour: 10, minute: 0, second: 0, millisecond: 0 });
 
         const kuwaitEnd = kuwaitStart.set({ hour: 22, minute: 0 });
-
-        const userStart = kuwaitStart.setZone(timezone);
-        const userEnd = kuwaitEnd.setZone(timezone);
+        const userStart = kuwaitStart.setZone(activeTimezone);
+        const userEnd = kuwaitEnd.setZone(activeTimezone);
 
         let current = userStart;
 
@@ -137,22 +126,16 @@ const Meeting = () => {
             const isPast = isToday && current < now;
 
             const isBooked = customBookedSlots.some(slot => {
-                if (!slot || !slot.meeting_time) return false;
+                const time24 = DateTime.fromFormat(slot.meeting_time, "hh:mm a", {
+                    zone: 'Asia/Kuwait',
+                }).toFormat("HH:mm");
 
-                try {
-                    const fullSlotDateTime = DateTime.fromFormat(
-                        `${DateTime.fromJSDate(selectedDate).toFormat('yyyy-MM-dd')} ${slot.meeting_time}`,
-                        'yyyy-MM-dd hh:mm a',
-                        { zone: timezone }
-                    );
+                const date = DateTime.fromISO(slot.meeting_date).toFormat("yyyy-MM-dd");
+                const converted = convertFromKuwaitTime(time24, date, activeTimezone);
 
-                    if (!fullSlotDateTime.isValid) return false;
-
-                    return fullSlotDateTime.toFormat('HH:mm') === timeValue;
-                } catch (e) {
-                    console.warn("Invalid slot:", slot.meeting_time);
-                    return false;
-                }
+                if (!converted || !converted.kuwaitISO) return false;
+                const convertedTime = DateTime.fromISO(converted.kuwaitISO).toFormat("HH:mm");
+                return convertedTime === timeValue;
             });
 
             slots.push({
@@ -173,10 +156,7 @@ const Meeting = () => {
         setIsSubmitting(true);
 
         const formData = new FormData(form.current);
-
-        const formattedDate = DateTime.fromJSDate(value)
-            .setZone(timezone)
-            .toFormat('yyyy-MM-dd');
+        const formattedDate = DateTime.fromJSDate(value).setZone(timezone).toFormat('yyyy-MM-dd');
 
         const data = {
             ...Object.fromEntries(formData.entries()),
@@ -194,11 +174,11 @@ const Meeting = () => {
             form.current.reset();
             setFormValues({ fullName: '', email: '', query: '' });
             setSelectedTime(null);
-            fetchBookedSlots(value);
+            fetchBookedSlots(value, timezone);
         } catch (err) {
             if (err.response?.data?.error === 'Time slot already booked') {
                 addToast("error", "This time slot is already booked. Please choose another time.");
-                fetchBookedSlots(value);
+                fetchBookedSlots(value, timezone);
             } else {
                 addToast("error", "Failed to schedule the meeting.");
             }
@@ -214,8 +194,8 @@ const Meeting = () => {
     }, [formValues]);
 
     useEffect(() => {
-        fetchBookedSlots(value);
-    }, [value]);
+        fetchBookedSlots(value, timezone);
+    }, [value, timezone]);
 
     return (
         <section className='w-full'>
@@ -234,11 +214,6 @@ const Meeting = () => {
                             {meetingDetails?.date}<br />
                             {meetingDetails?.time}
                         </p>
-                        <Link to="/meeting" className="mt-6 bg-[#00c3ff] cursor-pointer text-white px-6 py-2 rounded hover:bg-[#00aacc] mr-4">
-                            <button>
-                                Meet
-                            </button>
-                        </Link>
                         <button
                             onClick={() => setIsConfirmed(false)}
                             className="mt-6 bg-[#00c3ff] cursor-pointer text-white px-6 py-2 rounded hover:bg-[#00aacc]"
@@ -253,7 +228,7 @@ const Meeting = () => {
                         <h1 className='h1head1 capitalize text-2xl mb-10 font-bold text-center'>Choose the date from here</h1>
                         <Calendar onChange={(date) => {
                             setValue(date);
-                            fetchBookedSlots(date);
+                            fetchBookedSlots(date, timezone);
                         }}
                             value={value}
                             className={" font-bold p-4 rounded-2xl bg-white "}
@@ -267,8 +242,6 @@ const Meeting = () => {
                                 <h3 className="text-lg font-bold capitalize">Your information</h3>
                                 <h4 className="text-[12px] ">Quantumhash Digital Conference</h4>
                                 <h2 className="text-[12px] ">{value.toDateString()} - {selectedTime} | Duration: {duration} minutes | {timezone}</h2>
-                                <div className="text-sm text-gray-300">
-                                </div>
                             </div>
                             <div>
                                 <label className='block text-sm mb-1'>Full Name</label>
@@ -305,18 +278,11 @@ const Meeting = () => {
                                 />
                             </div>
 
-
-
-                            <button onClick={() => setSelectedTime(null)} className='bg-white mr-3 cursor-pointer text-black px-4 py-2 rounded hover:bg-gray-200'>
-                                Back
-                            </button>
-                            <button type='submit' className='bg-white disabled:opacity-50 cursor-pointer text-black px-4 py-2 rounded hover:bg-gray-200' disabled={!isFormValid || isSubmitting}>
-                                {isSubmitting ? "Submitting..." : "Submit"}
-                            </button>
+                            <button onClick={() => setSelectedTime(null)} className='bg-white mr-3 cursor-pointer text-black px-4 py-2 rounded hover:bg-gray-200'>Back</button>
+                            <button type='submit' className='bg-white disabled:opacity-50 cursor-pointer text-black px-4 py-2 rounded hover:bg-gray-200' disabled={!isFormValid || isSubmitting}>{isSubmitting ? "Submitting..." : "Submit"}</button>
                         </form>
                     ) :
                         <div className='border border-white border-solid rounded-2xl lg:w-[55%] w-full p-6 text-white'>
-                            {/* Meeting Duration */}
                             <div className='mb-4'>
                                 <label className='block mb-1 font-semibold'>Meeting Duration (in minutes)</label>
                                 <input
@@ -328,7 +294,6 @@ const Meeting = () => {
                                 />
                             </div>
 
-                            {/* Timezone Selection */}
                             <div className='mb-4'>
                                 <label className='block mb-1 font-semibold'>What time works best? (Timezone)</label>
                                 <Select
@@ -340,7 +305,6 @@ const Meeting = () => {
                                 />
                             </div>
 
-                            {/* Available Time Slots */}
                             <div className='mt-6'>
                                 <h3 className='font-semibold mb-2'>Available Time Slots:</h3>
                                 {isLoadingSlots ? (
@@ -359,12 +323,11 @@ const Meeting = () => {
                                                         ? 'bg-gray-400 text-white cursor-not-allowed opacity-50'
                                                         : selectedTime === slot.label
                                                             ? 'bg-white text-black font-semibold'
-                                                            : 'hover:bg-white hover:text-black'}
+                                                            : 'hover:bg-white cursor-pointer hover:text-black'} ${slot.isBooked && "bg-gray-400"}
                                                 `}
                                                 title={slot.isBooked ? "This slot is already booked" : ""}
                                             >
                                                 {slot.label}
-                                                {slot.isBooked && " (Booked)"}
                                             </button>
                                         ))}
                                     </div>

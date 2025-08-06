@@ -1,15 +1,42 @@
 const nodemailer = require("nodemailer");
+const { DateTime } = require('luxon');
+
 
 const sendMeeting = async (req, res) => {
   const { fullName, email, time, date, duration, timezone, query } = req.body;
-  const pool = req.app.get('dbPool'); // Get the shared connection pool
+  const pool = req.app.get('dbPool');
+
 
   try {
-    // 1. First store the meeting request in MySQL
+    const userDateTime = DateTime.fromFormat(
+      `${date} ${time}`,
+      'yyyy-MM-dd hh:mm a',
+      { zone: timezone }
+    );
+
+    if (!userDateTime.isValid) {
+      throw new Error(`Invalid datetime: ${userDateTime.invalidExplanation}`);
+    }
+    const kuwaitDateTime = userDateTime.setZone('Asia/Kuwait');
+    const meetingDateForDB = kuwaitDateTime.toFormat('yyyy-MM-dd');
+    const meetingTimeForDB = kuwaitDateTime.toFormat('hh:mm a');
+    const kuwaitTimezone = 'Asia/Kuwait';
+
     const connection = await pool.getConnection();
     const [result] = await connection.query(
-      'INSERT INTO meeting_requests (full_name, email, meeting_time, meeting_date, duration, timezone, query) VALUES (?, ?, ?, ?, ?, ?, ?)',
-      [fullName, email, time, date, duration, timezone, query]
+      'INSERT INTO meeting_requests (full_name, email, meeting_time, meeting_date, duration, timezone, query, original_timezone, original_meeting_time, original_meeting_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+      [
+        fullName,
+        email,
+        meetingTimeForDB,  // Stored in Kuwait time
+        meetingDateForDB,  // Stored in Kuwait time
+        duration,
+        kuwaitTimezone,    // Stored as Asia/Kuwait
+        query,
+        timezone,         // Original user timezone
+        time,              // Original user time
+        date               // Original user date
+      ]
     );
     connection.release();
 
@@ -123,14 +150,14 @@ const sendMeeting = async (req, res) => {
     await transporter.sendMail(adminMailOptions);
     await transporter.sendMail(userMailOptions);
 
-    res.status(200).json({ 
+    res.status(200).json({
       success: true,
       message: "Meeting request submitted and emails sent successfully",
-      meetingId: result.insertId 
+      meetingId: result.insertId
     });
   } catch (error) {
     console.error("Error:", error);
-    res.status(500).json({ 
+    res.status(500).json({
       success: false,
       message: "An error occurred while processing your meeting request",
       error: process.env.NODE_ENV === 'development' ? error.message : undefined

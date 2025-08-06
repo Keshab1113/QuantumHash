@@ -28,7 +28,7 @@ export function App() {
         <Route path='/investor' element={<Investor />} />
         <Route path='/career' element={<Career />} />
         <Route path='/connect' element={<Contact />} />
-        <Route path='/meeting' element={<Meeting />} />
+        <Route path='/conference/:id' element={<Meeting />} />
       </Route>
       <Route path="*" element={<NoPage />} />
     </Routes>

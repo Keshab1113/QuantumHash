@@ -7,6 +7,7 @@ const sendApplyData = require("./controllers/sendApplyData");
 const sendInvestor = require("./controllers/sendInvestor");
 const sendMeeting = require("./controllers/sendMeeting");
 const getMeetings = require("./controllers/getMeetings");
+const sendReminderEmails = require("./controllers/sendReminder");
 
 dotenv.config();
 const app = express();
@@ -34,5 +35,6 @@ app.post("/api/apply", sendApplyData);
 app.post("/api/investor", sendInvestor);
 app.post("/api/meeting", sendMeeting);
 app.get("/api/meetings", getMeetings);
+sendReminderEmails(app);
 
 app.listen(PORT, () => console.log(`Server running on PORT ${PORT}`));

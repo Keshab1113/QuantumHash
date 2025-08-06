@@ -1,4 +1,3 @@
-// controllers/getMeetings.js
 const getMeetings = async (req, res) => {
   const pool = req.app.get('dbPool');
   
@@ -6,7 +5,7 @@ const getMeetings = async (req, res) => {
     const { date } = req.query;
     const connection = await pool.getConnection();
     const [results] = await connection.query(
-      'SELECT meeting_time FROM meeting_requests WHERE meeting_date = ?',
+      'SELECT meeting_time, meeting_date, original_timezone FROM meeting_requests WHERE meeting_date = ?',
       [date]
     );
     connection.release();
