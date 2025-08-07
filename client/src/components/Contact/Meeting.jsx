@@ -299,9 +299,9 @@ const Meeting = () => {
               selectedTime && "hidden"
             }`}
           >
-            <h1 className="h1head1 capitalize text-2xl mb-6 font-bold text-center">
+            {/* <h1 className="h1head1 capitalize text-2xl mb-6 font-bold text-center">
               Choose the date from here
-            </h1>
+            </h1> */}
             <Calendar
               onChange={(date) => {
                 setValue(date);
@@ -392,8 +392,8 @@ const Meeting = () => {
               </button>
             </form>
           ) : (
-            <div className="border border-white border-solid rounded-2xl lg:w-[55%] w-full p-6 text-white">
-              <div className="mb-4">
+            <div className="border border-white border-solid rounded-2xl lg:w-[55%] w-full p-6 py-10 text-white">
+              <div className="mb-5">
                 <label className="block mb-2 font-semibold md:text-xl text-lg">
                   Meeting Duration (in minutes)
                 </label>
@@ -408,7 +408,7 @@ const Meeting = () => {
                 />
               </div>
 
-              <div className="mb-4">
+              <div className="mb-5">
                 <label className="block mb-2 font-semibold md:text-xl text-lg">
                   What time works best? (Timezone)
                 </label>
@@ -423,7 +423,7 @@ const Meeting = () => {
                 />
               </div>
 
-              <div className="mt-6">
+              <div className="">
                 <h3 className="font-semibold mb-4 md:text-xl text-lg">
                   Available Time Slots:
                 </h3>
@@ -432,7 +432,7 @@ const Meeting = () => {
                     Loading available slots...
                   </div>
                 ) : (
-                  <div className="grid md:grid-cols-3 grid-cols-2 gap-2 max-h-[400px] overflow-y-auto">
+                  <div className="grid lg:grid-cols-4 md:grid-cols-3 grid-cols-2 gap-2 max-h-[400px] overflow-y-auto">
                     {timeSlots.map((slot, index) => (
                       <button
                         key={index}

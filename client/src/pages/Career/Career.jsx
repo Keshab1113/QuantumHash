@@ -10,7 +10,7 @@ const Career = () => {
                 <title>Career | QuantumHash</title>
                 <link rel="canonical" href="http://mysite.com/example" />
             </Helmet>
-            <section className=" h-full w-full bg-[#0d0125] ">
+            <section className=" h-full w-full min-h-screen bg-[#0d0125] ">
                 <AiBotSection headText="Career" />
                 <div className="container mx-auto px-4 py-20 flex flex-col justify-center items-center h-full">
                     <h1 className=" w-fit h1head1 md:text-[38px] text-[28px] text-center font-bold">Join Our Team at QuantumHash</h1>

@@ -159,7 +159,7 @@ const Slide = ({ slide, index, current, handleSlideClick }: SlideProps) => {
 
 
   return (
-    <div className="[perspective:1200px] [transform-style:preserve-3d]">
+    <div className="[perspective:1200px] [transform-style:preserve-3d] ">
       <li
         ref={slideRef}
         className="flex flex-1 flex-col items-center justify-center relative text-center text-white opacity-100 transition-all duration-300 ease-in-out w-[90vw] lg:h-[82vmin] md:h-[80vh] h-screen mx-[4vmin] z-10"
@@ -176,7 +176,7 @@ const Slide = ({ slide, index, current, handleSlideClick }: SlideProps) => {
         }}
       >
         <div
-          className="absolute top-0 left-0 w-full h-full stbox rounded-[1%] overflow-hidden transition-all duration-150 ease-out"
+          className="absolute top-0 left-0 w-full h-full stbox py-10 bg-amber-800 rounded-[1%] overflow-hidden transition-all duration-150 ease-out"
           style={{
             transform:
               current === index
@@ -193,15 +193,15 @@ const Slide = ({ slide, index, current, handleSlideClick }: SlideProps) => {
           className={`relative p-[4vmin] transition-opacity duration-1000 ease-in-out ${current === index ? "opacity-100 visible" : "opacity-0 invisible"
             }`}
         >
-          <h2 className=" md:text-4xl md:mb-6 text-xl font-semibold  relative">
+          <h2 className=" md:text-3xl md:mb-6 text-xl font-semibold  relative">
             {title} - {type}
           </h2>
           <div className=" flex justify-start items-start flex-col mb-2">
             <h2 className=" md:text-xl text-lg font-semibold  relative mb-1">
               Overview
             </h2>
-            <p className=" text-start md:text-lg text-sm">{overview}</p>
-            <div className=" grid md:grid-cols-3 grid-cols-1 gap-10 mt-10 overflow-y-auto md:overflow-y-hidden h-[50vh] md:h-full">
+            <p className=" text-start md:text-base text-sm">{overview}</p>
+            <div className=" grid md:grid-cols-3 grid-cols-1 gap-10 mt-4 overflow-y-auto md:overflow-y-hidden h-[50vh] md:h-full">
               <div>
                 <h2 className=" font-semibold  relative text-xl mb-2 underline">
                   Responsibilities
@@ -405,7 +405,7 @@ export default function Carousel({ slides }: CarouselProps) {
 
   return (
     <div
-      className="relative w-[90vw] lg:h-[82vmin] md:h-[80vh] h-screen mx-auto"
+      className="relative w-[90vw] lg:h-[85vh] md:h-[80vh] h-screen mx-auto"
       aria-labelledby={`carousel-heading-${id}`}
     >
       <ul
@@ -425,7 +425,7 @@ export default function Carousel({ slides }: CarouselProps) {
         ))}
       </ul>
 
-      <div className="absolute flex justify-center w-full top-[calc(100%+1rem)]">
+      <div className="absolute flex justify-center w-full top-[calc(100%+1rem)] ">
         <CarouselControl
           type="previous"
           title="Go to previous slide"
