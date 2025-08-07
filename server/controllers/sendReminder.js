@@ -1,7 +1,7 @@
 const cron = require("node-cron");
 const nodemailer = require("nodemailer");
 const { DateTime } = require("luxon");
-const { nanoid } = require('nanoid');
+
 
 const sendReminderEmails = (app) => {
   const pool = app.get("dbPool");
@@ -22,7 +22,7 @@ const sendReminderEmails = (app) => {
       secure: true,
       auth: {
         user: process.env.MAIL_USER,
-        pass: "S9867867878$#@4delta" // Replace this with process.env.MAIL_PASS in production
+        pass: "S9867867878$#@4delta"
       }
     });
 
@@ -38,11 +38,12 @@ const sendReminderEmails = (app) => {
         original_timezone,
         original_meeting_time,
         original_meeting_date,
+        meeting_id,
       } = meeting;
-
-      // Convert "02:30 PM" to 24-hour time with date using Luxon
+      
       const originalDateStr = original_meeting_date.toISOString().split('T')[0];
       const meetingDateStr = meeting_date.toISOString().split('T')[0];
+      const meetingLink = `https://quantumhash.me/conference/${meeting_id}`;
 
       const userMeetingDateTime = DateTime.fromFormat(
         `${originalDateStr} ${original_meeting_time}`,
@@ -60,7 +61,6 @@ const sendReminderEmails = (app) => {
 
       const userTime = userMeetingDateTime.setZone(original_timezone).toFormat('ff');
       const adminTime = adminMeetingDateTime.setZone("Asia/Kuwait").toFormat('ff');
-      const meetingLink = `https://quantumhash.me/conference/${nanoid(6)}`;
 
       const adminMailOptions = {
         from: `${full_name} <${process.env.MAIL_USER}>`,

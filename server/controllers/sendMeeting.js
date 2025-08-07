@@ -1,10 +1,12 @@
 const nodemailer = require("nodemailer");
 const { DateTime } = require('luxon');
+const { nanoid } = require('nanoid');
 
 
 const sendMeeting = async (req, res) => {
   const { fullName, email, time, date, duration, timezone, query } = req.body;
   const pool = req.app.get('dbPool');
+  
 
 
   try {
@@ -21,10 +23,12 @@ const sendMeeting = async (req, res) => {
     const meetingDateForDB = kuwaitDateTime.toFormat('yyyy-MM-dd');
     const meetingTimeForDB = kuwaitDateTime.toFormat('hh:mm a');
     const kuwaitTimezone = 'Asia/Kuwait';
+    const meetingID = nanoid(6);
+    const meetingLink = `https://quantumhash.me/conference/${meetingID}`;
 
     const connection = await pool.getConnection();
     const [result] = await connection.query(
-      'INSERT INTO meeting_requests (full_name, email, meeting_time, meeting_date, duration, timezone, query, original_timezone, original_meeting_time, original_meeting_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+      'INSERT INTO meeting_requests (full_name, email, meeting_time, meeting_date, duration, timezone, query, original_timezone, original_meeting_time, original_meeting_date, meeting_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
       [
         fullName,
         email,
@@ -35,7 +39,8 @@ const sendMeeting = async (req, res) => {
         query,
         timezone,         // Original user timezone
         time,              // Original user time
-        date               // Original user date
+        date,               // Original user date
+        meetingID,
       ]
     );
     connection.release();
@@ -78,14 +83,14 @@ const sendMeeting = async (req, res) => {
       <p><strong>Message:</strong> ${query}</p>
     </div>
     <div style="text-align: center; margin: 20px 0;">
-      <a href="https://quantumhash.me/pages/meetRoom?CH=070b-175d5949243" style="display: inline-block; padding: 12px 20px; background-color: #5c2d91; color: white; text-decoration: none; border-radius: 5px; font-weight: bold;">
+      <a href=${meetingLink} style="display: inline-block; padding: 12px 20px; background-color: #5c2d91; color: white; text-decoration: none; border-radius: 5px; font-weight: bold;">
         Open Meeting Room
       </a>
     </div>
     <p style="text-align: center;">Meeting Room Link:</p>
     <div style="text-align: center; margin-bottom: 30px;">
-      <a href="https://quantumhash.me/pages/meetRoom?CH=070b-175d5949243" style="color: #5c2d91;">
-        https://quantumhash.me/pages/meetRoom?CH=070b-175d5949243
+      <a href=${meetingLink} style="color: #5c2d91;">
+        ${meetingLink}
       </a>
     </div>
     <p>Kindly ensure this meeting is acknowledged or assigned accordingly.</p>
@@ -125,14 +130,14 @@ const sendMeeting = async (req, res) => {
       <p><strong>Duration:</strong> ${duration} minutes</p>
     </div>
     <div style="text-align: center; margin: 20px 0;">
-      <a href="https://quantumhash.me/pages/meetRoom?CH=070b-175d5949243" style="display: inline-block; padding: 12px 20px; background-color: #5c2d91; color: white; text-decoration: none; border-radius: 5px; font-weight: bold;">
+      <a href=${meetingLink} style="display: inline-block; padding: 12px 20px; background-color: #5c2d91; color: white; text-decoration: none; border-radius: 5px; font-weight: bold;">
         Join Your Meeting Room
       </a>
     </div>
     <p style="text-align: center;">Or share this link with others:</p>
     <div style="text-align: center; margin-bottom: 30px;">
-      <a href="https://quantumhash.me/pages/meetRoom?CH=070b-175d5949243" style="color: #5c2d91;">
-        https://quantumhash.me/pages/meetRoom?CH=070b-175d5949243
+      <a href=${meetingLink} style="color: #5c2d91;">
+        ${meetingLink}
       </a>
     </div>
     <p>If you need to modify your meeting request, feel free to reply to this email.</p>

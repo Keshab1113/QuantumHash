@@ -15,6 +15,7 @@ import Career from './pages/Career/Career';
 import Contact from './pages/Contact/Contact';
 import ScrollToTop from './components/ScrollToTop/ScrollToTop';
 import Meeting from './pages/Meeting/Meeting';
+import NotMeeting from './pages/Meeting/NotMeeting';
 
 export function App() {
   return (
@@ -29,6 +30,7 @@ export function App() {
         <Route path='/career' element={<Career />} />
         <Route path='/connect' element={<Contact />} />
         <Route path='/conference/:id' element={<Meeting />} />
+        <Route path='/noschedule' element={<NotMeeting />} />
       </Route>
       <Route path="*" element={<NoPage />} />
     </Routes>

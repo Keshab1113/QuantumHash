@@ -1,13 +1,16 @@
 import { Helmet } from "react-helmet";
 import AiBotSection from "../../components/AiBot/AiBotSection";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+import axios from "axios";
 
 const Meeting = () => {
     const [accessGranted, setAccessGranted] = useState(false);
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(true);
     const { id } = useParams();
+    const navigate = useNavigate();
+    const [isAllowed, setIsAllowed] = useState(null);
 
     useEffect(() => {
         const requestMediaAccess = async () => {
@@ -26,6 +29,26 @@ const Meeting = () => {
 
         requestMediaAccess();
     }, []);
+
+    useEffect(() => {
+        const validateAccess = async () => {
+            try {
+                const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/meeting/validate/${id}`);
+                if (res.data.allowed) {
+                    setIsAllowed(true);
+                } else {
+                    navigate("/noschedule");
+                }
+            } catch (err) {
+                console.error("Validation error:", err);
+                navigate("/nopage");
+            }
+        };
+
+        validateAccess();
+    }, [id, navigate]);
+
+    if (isAllowed === null) return <p>Checking access...</p>;
 
     return (
         <>
@@ -53,7 +76,7 @@ const Meeting = () => {
                         {loading && (
                             <p className="text-white text-center">Requesting camera and microphone access...</p>
                         )}
-                        
+
                         {accessGranted && (
                             <iframe
                                 src={`${import.meta.env.VITE_MEETING_URL}/${id}`}
@@ -64,10 +87,10 @@ const Meeting = () => {
                             />
                         )}
                         {accessGranted && (
-                        <div className="text-2xl font-bold text-white flex flex-col justify-center md:pl-10 md:items-start items-center absolute top-0 left-0 bg-[#171212] md:w-[17rem] w-full h-[5rem] rounded-tl-md rounded-tr-md md:rounded-tr-none border-t border-l md:border-r-0 border-r border-white border-solid">
-                            <img src="/logo.webp" alt="logo" width="150px" loading="lazy" />
-                            <span className="text-base font-normal tracking-[.18rem]">CORPORATION</span>
-                        </div>)}
+                            <div className="text-2xl font-bold text-white flex flex-col justify-center md:pl-10 md:items-start items-center absolute top-0 left-0 bg-[#171212] md:w-[17rem] w-full h-[5rem] rounded-tl-md rounded-tr-md md:rounded-tr-none border-t border-l md:border-r-0 border-r border-white border-solid">
+                                <img src="/logo.webp" alt="logo" width="150px" loading="lazy" />
+                                <span className="text-base font-normal tracking-[.18rem]">CORPORATION</span>
+                            </div>)}
                         {error && (
                             <p className="text-red-500 text-center mt-4">{error}</p>
                         )}
