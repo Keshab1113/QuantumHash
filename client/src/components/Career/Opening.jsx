@@ -85,7 +85,7 @@ const Openings = [
 const Opening = () => {
     return (
         <section className=" h-full  w-full mt-10 pb-10" style={{
-            backgroundImage: "url('/careerBG.png')",
+            backgroundImage: "url('/Images/careerBG.png')",
             backgroundSize: "cover",
         }}>
             <h1 className=" h1head1 md:text-[38px] text-[28px] font-bold w-fit mb-10">Opening Positions</h1>

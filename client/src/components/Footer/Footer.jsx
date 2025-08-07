@@ -6,10 +6,10 @@ const Footer = () => {
     return (
         <section className="  h-full w-full bg-[#0d0125] footer relative overflow-hidden">
             <div className="container mx-auto px-4 mt-20  h-full flex md:flex-row flex-col ">
-                <img src="/footer-man.webp" alt="" className=" h-[306px]" loading="lazy" />
+                <img src="/Images/footer-man.webp" alt="" className=" h-[306px]" loading="lazy" />
                 <div className=" h-full w-full  mt-16 border-t border-solid border-amber-50 grid md:grid-cols-1 lg:grid-cols-3 grid-col-1 pb-48 md:pb-[250px]">
                     <div className=" pt-10 px-4">
-                        <img src="/logo.webp" alt="" className=" w-40 mb-4" loading="lazy" />
+                        <img src="/Images/logo.webp" alt="" className=" w-40 mb-4" loading="lazy" />
                         <ol className="space-y-1">
                             <li>
                                 <a
@@ -140,7 +140,7 @@ const Footer = () => {
                 </div>
             </div>
             <div className=" w-full md:rounded-t-full rounded-t-4xl footer-inner absolute px-10 flex justify-center items-center">
-                <img src="/footer.png" alt="" className=" rotate-180 absolute bottom-0 md:left-10" />
+                <img src="/Images/footer.png" alt="" className=" rotate-180 absolute bottom-0 md:left-10" />
                 <p className=" text-center text-white">Copyright © 2025 QuantumHash. All rights reserved</p>
             </div>
         </section>

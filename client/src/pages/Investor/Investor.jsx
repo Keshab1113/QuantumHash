@@ -64,13 +64,13 @@ const Investor = () => {
                 <AiBotSection headText="Investor Relations" />
                 <div className="container mx-auto px-4 py-6">
                     <section className="md:h-[50vh] h-full w-full bg-[#0d0125] flex md:flex-row flex-col gap-10 justify-center items-center" style={{
-                        backgroundImage: "url('/investorBG.png')",
+                        backgroundImage: "url('/Images/investorBG.png')",
                         backgroundPosition: " center",
                         backgroundSize: "300px 300px",
                         backgroundRepeat: "no-repeat",
                     }}>
                         <div className=" w-[216px] h-[216px] rounded-full p-6 border border-white border-solid">
-                            <img src="/investor.webp" alt="" className=" h-full w-full" loading="lazy"/>
+                            <img src="/Images/investor.webp" alt="" className=" h-full w-full" loading="lazy"/>
                         </div>
                         <h1 className=" text-white text-[20px] lg:max-w-[80%] md:max-w-[50%]">QuantumHash Technologies is a deep-tech startup driving innovation in voice AI, safety intelligence, and personalized learning. Our ecosystem includes four cutting-edge platforms, each targeting a vital sector with scalable AI solutions.</h1>
                     </section>

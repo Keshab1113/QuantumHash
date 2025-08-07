@@ -11,7 +11,7 @@ const Innovation = () => {
                 <h1 className=" md:text-[38px] text-[28px] font-bold text-white max-w-[90%] mb-10">AI Innovation <span className="h1head1">Empowering</span> Industries, Educators, and Individuals</h1>
                 <div className=" w-full flex md:flex-row flex-col-reverse">
                     <div className=" md:w-[60%] w-full text-white mt-5 pt-5 pb-20" style={{
-                        backgroundImage: "url('/InnovationBG.png')",
+                        backgroundImage: "url('/Images/InnovationBG.png')",
                         backgroundSize: 'cover'
                     }}>
                         <ul className=" space-y-4 md:max-w-[90%]">
@@ -42,13 +42,13 @@ const Innovation = () => {
                         </Link>
                     </div>
                     <div className=" pb-20  w-full md:w-[40%] flex justify-center items-center">
-                        <img src="/image.webp" alt="" className="w-[400px] h-[400px]" loading="lazy"/>
+                        <img src="/Images/image.webp" alt="" className="w-[400px] h-[400px]" loading="lazy"/>
                     </div>
                 </div>
                 <Banner />
                 <section className=" flex flex-col lg:flex-row lg:h-screen h-full">
                     <div className=" lg:w-[40%] w-full">
-                        <img src="/image2.webp" alt="" loading="lazy"/>
+                        <img src="/Images/image2.webp" alt="" loading="lazy"/>
                     </div>
                     <div className="lg:w-[60%] w-full  h-full relative overflow-hidden md:py-20 lg:py-0">
                         <CardSwap height={450}>

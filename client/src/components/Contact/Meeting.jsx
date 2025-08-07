@@ -7,7 +7,7 @@ import { useToast } from "../ToastContext";
 import { DateTime } from "luxon";
 import { Link } from "react-router-dom";
 import { convertFromKuwaitTime } from "../../lib/utils";
-import groupedTimezones from './groupedTimezones.json';
+import groupedTimezones from "./groupedTimezones.json";
 
 const customStyles = {
   control: (provided, state) => ({
@@ -80,8 +80,6 @@ const customStyles = {
   }),
 };
 
-
-
 const Meeting = () => {
   const [value, setValue] = useState(DateTime.local().toJSDate());
   const [duration, setDuration] = useState(20);
@@ -147,6 +145,10 @@ const Meeting = () => {
     customBookedSlots = bookedSlots,
     activeTimezone = timezone
   ) => {
+    console.log("selectedDate: ",selectedDate);
+    console.log("customBookedSlots: ",customBookedSlots);
+    console.log("activeTimezone: ",activeTimezone);
+    
     const slots = [];
     const now = DateTime.local().setZone(activeTimezone);
     const selectedDateTime =
@@ -174,13 +176,18 @@ const Meeting = () => {
         }).toFormat("HH:mm");
 
         const date = DateTime.fromISO(slot.meeting_date).toFormat("yyyy-MM-dd");
+
         const converted = convertFromKuwaitTime(time24, date, activeTimezone);
 
-        if (!converted || !converted.kuwaitISO) return false;
-        const convertedTime = DateTime.fromISO(converted.kuwaitISO).toFormat(
-          "HH:mm"
+        if (!converted || !converted.convertedISO) return false;
+
+        const convertedDateTime = DateTime.fromISO(converted.convertedISO);
+
+        return (
+          convertedDateTime.toFormat("yyyy-MM-dd") ===
+            selectedDateTime.toFormat("yyyy-MM-dd") &&
+          convertedDateTime.toFormat("HH:mm") === timeValue
         );
-        return convertedTime === timeValue;
       });
 
       slots.push({
@@ -259,7 +266,7 @@ const Meeting = () => {
         <div className="w-full flex items-center justify-center mt-20">
           <div className="bg-white p-10 rounded-xl text-center shadow-lg w-full max-w-sm">
             <img
-              src="/confirmed-icon.png"
+              src="/Images/confirmed-icon.png"
               alt="confirmed"
               className="w-16 h-16 mx-auto mb-4"
               loading="lazy"
@@ -309,7 +316,6 @@ const Meeting = () => {
               <h1 className=" text-xl font-bold my-2">
                 Meet the QuantumHash Team
               </h1>
-              <p className=" text-sm font-bold text-zinc-800">🕒 20 min</p>
               <p className=" text-sm mt-2">
                 Want to unlock the full potential of your digital ecosystem?
                 Book a session with our expert team to explore your ideas, solve

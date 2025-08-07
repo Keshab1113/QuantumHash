@@ -88,7 +88,7 @@ const Meeting = () => {
                         )}
                         {accessGranted && (
                             <div className="text-2xl font-bold text-white flex flex-col justify-center md:pl-10 md:items-start items-center absolute top-0 left-0 bg-[#171212] md:w-[17rem] w-full h-[5rem] rounded-tl-md rounded-tr-md md:rounded-tr-none border-t border-l md:border-r-0 border-r border-white border-solid">
-                                <img src="/logo.webp" alt="logo" width="150px" loading="lazy" />
+                                <img src="/Images/logo.webp" alt="logo" width="150px" loading="lazy" />
                                 <span className="text-base font-normal tracking-[.18rem]">CORPORATION</span>
                             </div>)}
                         {error && (

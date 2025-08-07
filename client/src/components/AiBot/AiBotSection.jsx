@@ -6,13 +6,13 @@ const AiBotSection = ({ headText }) => {
     <section
       className="h-[60vh] w-full bg-[#d7cfe6] pt-[15vh] relative overflow-hidden"
       style={{
-        backgroundImage: "url('/aboutBanner.webp')",
+        backgroundImage: "url('/Images/aboutBanner.webp')",
         backgroundSize: 'cover',
         backgroundPosition: '50% 50%',
         backgroundAttachment: 'fixed'
       }}
     >
-      <img src="/aboutBanner.webp" alt="About Banner Preload" className="hidden" loading="lazy" />
+      <img src="/Images/aboutBanner.webp" alt="About Banner Preload" className="hidden" loading="lazy" />
       <div className="h-full container mx-auto flex flex-col md:flex-row justify-center items-center">
         <div className="mt-5 w-[80px] md:w-[100px]">
           <div className="robot-body">

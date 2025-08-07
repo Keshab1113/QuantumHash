@@ -34,7 +34,7 @@ const Header = () => {
         >
             <div className="container mx-auto px-4 py-4 flex justify-between items-center text-white lg:h-[5rem]">
                 <Link to={"/"} className="text-2xl font-bold flex flex-col">
-                    <img src="/logo.webp" alt="logo" width="150px" loading="lazy"/>
+                    <img src="/Images/logo.webp" alt="logo" width="150px" loading="lazy"/>
                     <span className="text-base font-normal tracking-[.18rem]">CORPORATION</span>
                 </Link>
 

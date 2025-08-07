@@ -156,7 +156,7 @@ const InvestorModal = () => {
                     {(onClose) => (
                         <>
                             <DrawerBody className=" bg-[#0d0125] h-screen min-h-screen max-h-screen flex justify-center items-center" style={{
-                                backgroundImage: "url('/careerBG.png')",
+                                backgroundImage: "url('/Images/careerBG.png')",
                                 backgroundSize: "cover",
                             }}>
                                 <div className="stbox p-6 rounded-lg w-full max-w-md relative mx-auto">

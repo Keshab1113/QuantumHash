@@ -197,10 +197,10 @@ const Contact = () => {
 
                         </div>
                         <div className=" md:w-[40%] w-full">
-                            <img src="/contactTree.webp" alt="" loading="lazy" />
+                            <img src="/Images/contactTree.webp" alt="" loading="lazy" />
                         </div>
                     </div>
-                    <img src="/gap.png" alt="" className=" h-10 w-full mt-16" />
+                    <img src="/Images/gap.png" alt="" className=" h-10 w-full mt-16" />
 
                 </section>
                 <section id="meeting" className="container mx-auto px-4 py-6">

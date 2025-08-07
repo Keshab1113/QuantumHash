@@ -4,7 +4,7 @@ import { FaReact, FaNodeJs, FaHtml5 } from "react-icons/fa";
 const Intro = () => {
     return (
         <section className=" h-full w-full bg-[#000000e6]" style={{
-            backgroundImage: "url('/IntroBG.png')",
+            backgroundImage: "url('/Images/IntroBG.png')",
             backgroundSize: 'cover'
         }}>
             <div className="container mx-auto px-4 py-8">

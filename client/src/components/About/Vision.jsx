@@ -4,7 +4,7 @@ const Vision = () => {
             <div className="container mx-auto px-4 py-0 flex flex-col">
                 <div className="about-box py-10 flex md:flex-row flex-col">
                     <div className=" md:w-[40%] w-full">
-                        <img src="/vision1.webp" alt="" className=" h-[250px] w-[250px]" loading="lazy"/>
+                        <img src="/Images/vision1.webp" alt="" className=" h-[250px] w-[250px]" loading="lazy"/>
                     </div>
                     <div className=" md:w-[60%] w-full px-6">
                         <h1 className=" text-white text-[32px] font-bold my-4 md:my-0">Our <span className="h1head1">Vision</span></h1>
@@ -13,7 +13,7 @@ const Vision = () => {
                 </div>
                 <div className="about-box2 py-10 flex md:flex-row-reverse flex-col-reverse">
                     <div className=" md:w-[40%] w-full  flex justify-end items-center">
-                        <img src="/vision2.webp" alt="" className=" h-[250px] w-[250px]" loading="lazy"/>
+                        <img src="/Images/vision2.webp" alt="" className=" h-[250px] w-[250px]" loading="lazy"/>
                     </div>
                     <div className=" md:w-[60%] w-full px-6">
                         <h1 className=" text-white text-[32px] font-bold my-4 md:my-0">Our <span className="h1head1">Mission</span></h1>

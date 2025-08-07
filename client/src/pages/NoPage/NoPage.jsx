@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import somethingLost from '/something-lost.webp';
+import somethingLost from '/Images/something-lost.webp';
 
 const NoPage = () => {
   return (
