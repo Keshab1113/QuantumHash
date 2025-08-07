@@ -8,12 +8,14 @@ const sendInvestor = require("./controllers/sendInvestor");
 const sendMeeting = require("./controllers/sendMeeting");
 const getMeetings = require("./controllers/getMeetings");
 const sendReminderEmails = require("./controllers/sendReminder");
+const meetingRoutes = require("./routes/meeting");
 
 dotenv.config();
 const app = express();
 app.use(cors());
 app.use(express.json({ limit: '10mb' })); // or more depending on expected file size
 app.use(express.urlencoded({ limit: '10mb', extended: true }));
+app.use("/api/meeting", meetingRoutes);
 
 const pool = mysql.createPool({
   host: process.env.DB_HOST,

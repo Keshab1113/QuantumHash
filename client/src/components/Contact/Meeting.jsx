@@ -224,8 +224,8 @@ const Meeting = () => {
                 </div>
             ) :
                 <div className='flex md:flex-row flex-col gap-6 mt-16 w-full flex-wrap'>
-                    <div className={` md:px-10 border border-solid border-white bg-slate-200 px-4 md:py-10 py-8 rounded-2xl w-full lg:w-[40%] flex flex-col justify-start items-center md:w-[70%] mx-auto ${selectedTime && "hidden"}`}>
-                        <h1 className='h1head1 capitalize text-2xl mb-10 font-bold text-center'>Choose the date from here</h1>
+                    <div className={` md:px-10 border border-solid border-white bg-slate-200 px-4 md:py-10 py-8 rounded-2xl w-full lg:w-[40%] flex flex-col justify-start items-center mx-auto ${selectedTime && "hidden"}`}>
+                        <h1 className='h1head1 capitalize text-2xl mb-6 font-bold text-center'>Choose the date from here</h1>
                         <Calendar onChange={(date) => {
                             setValue(date);
                             fetchBookedSlots(date, timezone);
@@ -234,6 +234,12 @@ const Meeting = () => {
                             className={" font-bold p-4 rounded-2xl bg-white "}
                             minDate={DateTime.local().toJSDate()}
                         />
+                        <div className=' mt-6 bg-white rounded-2xl p-4'>
+                            <p className=' text-sm font-bold text-zinc-800'>🚀 Connect</p>
+                            <h1 className=' text-xl font-bold my-2'>Meet the QuantumHash Team</h1>
+                            <p className=' text-sm font-bold text-zinc-800'>🕒 20 min</p>
+                            <p className=' text-sm mt-2'>Want to unlock the full potential of your digital ecosystem? Book a session with our expert team to explore your ideas, solve key technical challenges, and learn how QuantumHash’s innovative solutions can accelerate your product, streamline operations, and drive results across your business.</p>
+                        </div>
                     </div>
 
                     {selectedTime ? (
@@ -284,10 +290,12 @@ const Meeting = () => {
                     ) :
                         <div className='border border-white border-solid rounded-2xl lg:w-[55%] w-full p-6 text-white'>
                             <div className='mb-4'>
-                                <label className='block mb-1 font-semibold'>Meeting Duration (in minutes)</label>
+                                <label className='block mb-2 font-semibold md:text-xl text-lg'>Meeting Duration (in minutes)</label>
                                 <input
-                                    type='number'
-                                    min={5}
+                                    type='text'
+                                    min={20}
+                                    max={20}
+                                    readOnly
                                     value={duration}
                                     onChange={(e) => setDuration(Number(e.target.value))}
                                     className='w-full p-2 px-3 rounded-xl text-white bg-white/20 outline-0'
@@ -295,7 +303,7 @@ const Meeting = () => {
                             </div>
 
                             <div className='mb-4'>
-                                <label className='block mb-1 font-semibold'>What time works best? (Timezone)</label>
+                                <label className='block mb-2 font-semibold md:text-xl text-lg'>What time works best? (Timezone)</label>
                                 <Select
                                     options={timezones}
                                     value={timezones.find((tz) => tz.value === timezone)}
@@ -306,11 +314,11 @@ const Meeting = () => {
                             </div>
 
                             <div className='mt-6'>
-                                <h3 className='font-semibold mb-2'>Available Time Slots:</h3>
+                                <h3 className='font-semibold mb-4 md:text-xl text-lg'>Available Time Slots:</h3>
                                 {isLoadingSlots ? (
                                     <div className="text-center py-4">Loading available slots...</div>
                                 ) :
-                                    <div className='grid grid-cols-4 gap-2 max-h-[300px] overflow-y-auto'>
+                                    <div className='grid md:grid-cols-3 grid-cols-2 gap-2 max-h-[400px] overflow-y-auto'>
                                         {timeSlots.map((slot, index) => (
                                             <button
                                                 key={index}
