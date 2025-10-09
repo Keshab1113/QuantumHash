@@ -15,12 +15,12 @@ const sendEmail = async (req, res) => {
 
     // 2. Then send emails
     const transporter = nodemailer.createTransport({
-      host: "smtp.hostinger.com",
-      port: 465,
+      host: process.env.MAIL_HOST,
+      port: process.env.MAIL_PORT,
       secure: true,
       auth: {
         user: process.env.MAIL_USER,
-        pass: "S9867867878$#@4delta",
+        pass: process.env.MAIL_PASS,
       },
       tls: {
         rejectUnauthorized: false
