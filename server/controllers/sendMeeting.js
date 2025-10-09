@@ -1,45 +1,42 @@
 const nodemailer = require("nodemailer");
-const { DateTime } = require('luxon');
-const { nanoid } = require('nanoid');
-
+const { DateTime } = require("luxon");
+const { nanoid } = require("nanoid");
 
 const sendMeeting = async (req, res) => {
   const { fullName, email, time, date, duration, timezone, query } = req.body;
-  const pool = req.app.get('dbPool');
-  
-
+  const pool = req.app.get("dbPool");
 
   try {
     const userDateTime = DateTime.fromFormat(
       `${date} ${time}`,
-      'yyyy-MM-dd hh:mm a',
+      "yyyy-MM-dd hh:mm a",
       { zone: timezone }
     );
 
     if (!userDateTime.isValid) {
       throw new Error(`Invalid datetime: ${userDateTime.invalidExplanation}`);
     }
-    const kuwaitDateTime = userDateTime.setZone('Asia/Kuwait');
-    const meetingDateForDB = kuwaitDateTime.toFormat('yyyy-MM-dd');
-    const meetingTimeForDB = kuwaitDateTime.toFormat('hh:mm a');
-    const kuwaitTimezone = 'Asia/Kuwait';
+    const kuwaitDateTime = userDateTime.setZone("Asia/Kuwait");
+    const meetingDateForDB = kuwaitDateTime.toFormat("yyyy-MM-dd");
+    const meetingTimeForDB = kuwaitDateTime.toFormat("hh:mm a");
+    const kuwaitTimezone = "Asia/Kuwait";
     const meetingID = nanoid(6);
     const meetingLink = `https://quantumhash.me/conference/${meetingID}`;
 
     const connection = await pool.getConnection();
     const [result] = await connection.query(
-      'INSERT INTO meeting_requests (full_name, email, meeting_time, meeting_date, duration, timezone, query, original_timezone, original_meeting_time, original_meeting_date, meeting_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+      "INSERT INTO meeting_requests (full_name, email, meeting_time, meeting_date, duration, timezone, query, original_timezone, original_meeting_time, original_meeting_date, meeting_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
       [
         fullName,
         email,
-        meetingTimeForDB,  // Stored in Kuwait time
-        meetingDateForDB,  // Stored in Kuwait time
+        meetingTimeForDB, // Stored in Kuwait time
+        meetingDateForDB, // Stored in Kuwait time
         duration,
-        kuwaitTimezone,    // Stored as Asia/Kuwait
+        kuwaitTimezone, // Stored as Asia/Kuwait
         query,
-        timezone,         // Original user timezone
-        time,              // Original user time
-        date,               // Original user date
+        timezone, // Original user timezone
+        time, // Original user time
+        date, // Original user date
         meetingID,
       ]
     );
@@ -47,23 +44,23 @@ const sendMeeting = async (req, res) => {
 
     // 2. Then send emails
     const transporter = nodemailer.createTransport({
-      host: "smtp.hostinger.com",
-      port: 465,
+      host: process.env.MAIL_HOST,
+      port: process.env.MAIL_PORT,
       secure: true,
       auth: {
         user: process.env.MAIL_USER,
-        pass: "S9867867878$#@4delta",
+        pass: process.env.MAIL_PASSWORD,
       },
       tls: {
-        rejectUnauthorized: false
-      }
+        rejectUnauthorized: false,
+      },
     });
 
     // --- Email to Admin ---
     const adminMailOptions = {
       from: `${fullName} <${process.env.MAIL_USER}>`,
       to: process.env.MAIL_USER,
-      subject: 'New Meeting Form Submission',
+      subject: "New Meeting Form Submission",
       html: `
 <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #ddd; border-radius: 8px; overflow: hidden;">
   <div style="background-color: #5c2d91; padding: 20px; text-align: center; color: white; font-weight: bold; font-size: 18px;">
@@ -101,14 +98,14 @@ const sendMeeting = async (req, res) => {
     <a href="https://www.quantumhash.me" style="color: #5c2d91;">www.quantumhash.me</a>
   </div>
 </div>
-      `
+      `,
     };
 
     // --- Auto-Reply to User ---
     const userMailOptions = {
       from: `"QuantumHash Corporation" <${process.env.MAIL_USER}>`,
       to: email,
-      subject: 'Meeting Confirmation – QuantumHash',
+      subject: "Meeting Confirmation – QuantumHash",
       html: `
 <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #ddd; border-radius: 8px; overflow: hidden;">
   <div style="background-color: #5c2d91; padding: 20px; text-align: center; color: white; font-weight: bold; font-size: 18px;">
@@ -148,7 +145,7 @@ const sendMeeting = async (req, res) => {
     <a href="https://www.quantumhash.me" style="color: #5c2d91;">www.quantumhash.me</a>
   </div>
 </div>
-      `
+      `,
     };
 
     // Send both emails
@@ -158,14 +155,14 @@ const sendMeeting = async (req, res) => {
     res.status(200).json({
       success: true,
       message: "Meeting request submitted and emails sent successfully",
-      meetingId: result.insertId
+      meetingId: result.insertId,
     });
   } catch (error) {
     console.error("Error:", error);
     res.status(500).json({
       success: false,
       message: "An error occurred while processing your meeting request",
-      error: process.env.NODE_ENV === 'development' ? error.message : undefined
+      error: process.env.NODE_ENV === "development" ? error.message : undefined,
     });
   }
 };
