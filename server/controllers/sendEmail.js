@@ -15,12 +15,12 @@ const sendEmail = async (req, res) => {
 
     // 2. Then send emails
     const transporter = nodemailer.createTransport({
-      host: process.env.MAIL_HOST,
-      port: process.env.MAIL_PORT,
+      host: "email.artlabss.com",
+      port: 465,
       secure: true,
       auth: {
         user: process.env.MAIL_USER,
-        pass: process.env.MAIL_PASSWORD,
+        pass: "S9867867878$#@4delta",
       },
       tls: {
         rejectUnauthorized: false
