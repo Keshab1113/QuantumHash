@@ -16,10 +16,10 @@ const sendEmail = async (req, res) => {
     // 2. Then send emails
     const transporter = nodemailer.createTransport({
       host: "email.artlabss.com",
-      port: 465,
-      secure: true,
+      port: 587,
+      secure: false,
       auth: {
-        user: process.env.MAIL_USER,
+        user: "admin@quantumhash.me",
         pass: "S9867867878$#@4delta",
       },
       tls: {
