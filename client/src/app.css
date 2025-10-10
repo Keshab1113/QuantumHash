@@ -105,6 +105,17 @@ body {
     transform: rotateY(-20deg); /* Returns to left */
   }
 }
+@keyframes typing {
+  from { width: 0 }
+  to { width: 100% }
+}
+
+.animate-typing {
+  display: inline-block;
+  animation: typing 3s steps(30, end) forwards;
+  white-space: nowrap;
+  overflow: hidden;
+}
 
 .bot-head {
   animation: headTurn 3s ease-in-out infinite;
