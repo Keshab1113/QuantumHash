@@ -17,6 +17,7 @@ app.use(express.json({ limit: '10mb' })); // or more depending on expected file 
 app.use(express.urlencoded({ limit: '10mb', extended: true }));
 app.use("/api/meeting", meetingRoutes);
 
+
 const pool = mysql.createPool({
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
@@ -31,6 +32,15 @@ const pool = mysql.createPool({
 app.set('dbPool', pool);
 
 const PORT = process.env.PORT || 5000;
+
+// ✅ Default route to check server is running
+app.get("/", (req, res) => {
+  res.send({
+    status: "success",
+    message: "🚀 Server is up and running!",
+    time: new Date().toISOString()
+  });
+});
 
 app.post("/api/send-email", sendEmail);
 app.post("/api/apply", sendApplyData);

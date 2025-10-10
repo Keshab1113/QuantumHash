@@ -5,51 +5,41 @@ import { Accordion, AccordionItem } from "@heroui/react";
 import AiBotSection from "../../components/AiBot/AiBotSection";
 
 const product = [
-    {
-        name: "QuantumAI",
-        image: "/Projects/image.webp",
-        link: "https://qhashai.com/",
-    },
-    {
-        name: "ASES",
-        image: "/Projects/image2.webp",
-        link: "https://asesystem.com/",
-    },
-    {
-        name: "QuantumEdu",
-        image: "/Projects/image4.webp",
-        link: "https://quantumedu.in/",
-    },
-    {
-        name: "QuantumAI",
-        image: "/Projects/image.webp",
-        link: "https://qhashai.com/",
-    },
+   
+           {
+    name: "Office MOM",
+    image: "/Projects/officemom.PNG",
+    link: "#",
+    description:
+      "Office MOM (Moments of the Meeting) is an AI-powered meeting management platform that automatically records, transcribes, summarizes, and organizes every meeting. It transforms team collaboration by turning conversations into actionable insights.",
+  },
+  {
+    name: "Assessment System",
+    image: "/Projects/assesment.PNG",
+    link: "#",
+    description:
+      "The Assessment System helps organizations evaluate employee performance through smart, adaptive testing. It offers AI-driven insights, skill tracking, and personalized learning recommendations to foster continuous workforce development.",
+  },
+  
+    
     {
         name: "ASES",
         image: "/Projects/image2.webp",
         link: "https://asesystem.com/",
     },
-    {
-        name: "QuantumEdu",
-        image: "/Projects/image4.webp",
-        link: "https://quantumedu.in/",
-    },
+  
     {
         name: "QuantumAI",
         image: "/Projects/image.webp",
         link: "https://qhashai.com/",
     },
-    {
-        name: "ASES",
-        image: "/Projects/image2.webp",
-        link: "https://asesystem.com/",
-    },
-    {
+    
+     {
         name: "QuantumEdu",
         image: "/Projects/image4.webp",
         link: "https://quantumedu.in/",
     },
+
 ]
 
 const Investor = () => {

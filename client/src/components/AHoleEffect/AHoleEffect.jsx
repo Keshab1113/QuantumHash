@@ -1,417 +1,461 @@
+ 
+
+// import React, { useEffect, useRef } from 'react';
+
+// const AHoleEffect = () => {
+//     const particleCanvasRef = useRef(null);
+//     const containerRef = useRef(null);
+//     const particleAnimationRef = useRef(null);
+
+//     // Particle Animation Effect
+//     useEffect(() => {
+//         const canvas = particleCanvasRef.current;
+//         if (!canvas) return;
+
+//         const ctx = canvas.getContext('2d');
+//         canvas.width = window.innerWidth;
+//         canvas.height = window.innerHeight;
+
+//         const mouse = { x: canvas.width / 2, y: canvas.height / 2 };
+//         let time = 0;
+
+//         class Particle {
+//           constructor() {
+//                 this.x = Math.random() * canvas.width;
+//                 this.y = Math.random() * canvas.height;
+//                 this.vx = (Math.random() - 0.5) * 0.2;
+//                 this.vy = (Math.random() - 0.5) * 0.2;
+//                 this.radius = Math.random() * 4 + 3;
+//                 this.opacity = Math.random() * 0.5 + 0.6;
+//                 this.pulseOffset = Math.random() * Math.PI * 2;
+//                 const colors = [
+//                     'rgba(168, 85, 247, ',
+//                     'rgba(236, 72, 153, ',
+//                     'rgba(34, 211, 238, ',
+//                     'rgba(251, 146, 60, '
+//                 ];
+//                 this.color = colors[Math.floor(Math.random() * colors.length)];
+//             }
+
+//             update() {
+//                 // Add constant directional force to keep moving
+//                 this.vx += (Math.random() - 0.5) * 0.1;
+//                 this.vy += (Math.random() - 0.5) * 0.1;
+                
+//                 // Limit max speed
+//                 const maxSpeed = 1;
+//                 const speed = Math.sqrt(this.vx * this.vx + this.vy * this.vy);
+//                 if (speed > maxSpeed) {
+//                     this.vx = (this.vx / speed) * maxSpeed;
+//                     this.vy = (this.vy / speed) * maxSpeed;
+//                 }
+                
+//                 // Add minimum speed to ensure constant movement
+//                 const minSpeed = 1;
+//                 if (speed < minSpeed && speed > 0) {
+//                     this.vx = (this.vx / speed) * minSpeed;
+//                     this.vy = (this.vy / speed) * minSpeed;
+//                 }
+
+//                 // Mouse interaction
+//                 const dx = mouse.x - this.x;
+//                 const dy = mouse.y - this.y;
+//                 const distance = Math.sqrt(dx * dx + dy * dy);
+                
+//                 if (distance < 180) {
+//                     const force = (180 - distance) / 180;
+//                     const angle = Math.atan2(dy, dx);
+//                     this.vx -= Math.cos(angle) * force * 0.2;
+//                     this.vy -= Math.sin(angle) * force * 0.2;
+//                 }
+
+//                 this.x += this.vx;
+//                 this.y += this.vy;
+
+//                 // Wrap around edges
+//                 if (this.x < -10) this.x = canvas.width + 10;
+//                 if (this.x > canvas.width + 10) this.x = -10;
+//                 if (this.y < -10) this.y = canvas.height + 10;
+//                 if (this.y > canvas.height + 10) this.y = -10;
+
+//                 // Smooth pulsing
+//                 this.currentOpacity = this.opacity + Math.sin(time * 0.03 + this.pulseOffset) * 0.2;
+//                 this.currentRadius = this.radius + Math.sin(time * 0.025 + this.pulseOffset) * 0.5;
+//             }
+
+//             draw() {
+//                 // Brighter glow
+//                 ctx.shadowBlur = 20;
+//                 ctx.shadowColor = this.color + '0.8)';
+//                 ctx.beginPath();
+//                 ctx.arc(this.x, this.y, this.currentRadius, 0, Math.PI * 2);
+//                 ctx.fillStyle = this.color + this.currentOpacity + ')';
+//                 ctx.fill();
+//                 ctx.shadowBlur = 0;
+//             }
+//         }
+
+//         class ConnectionLine {
+//             constructor(p1, p2, distance, maxDistance) {
+//                 this.p1 = p1;
+//                 this.p2 = p2;
+//                 this.distance = distance;
+//                 this.maxDistance = maxDistance;
+//             }
+
+//             draw() {
+//                 const opacity = (1 - this.distance / this.maxDistance) * 0.3;
+//                 ctx.beginPath();
+//                 ctx.strokeStyle = this.p1.color + opacity + ')';
+//                 ctx.lineWidth = 0.8;
+//                 ctx.moveTo(this.p1.x, this.p1.y);
+//                 ctx.lineTo(this.p2.x, this.p2.y);
+//                 ctx.stroke();
+//             }
+//         }
+
+//         const particles = Array.from({ length: 100 }, () => new Particle());
+
+//         const animateParticles = () => {
+//             ctx.clearRect(0, 0, canvas.width, canvas.height);
+//             time++;
+
+//             particles.forEach(particle => {
+//                 particle.update();
+//                 particle.draw();
+//             });
+
+//             // Only draw connections for nearby particles
+//             const maxDistance = 150;
+//             for (let i = 0; i < particles.length; i++) {
+//                 for (let j = i + 1; j < particles.length; j++) {
+//                     const dx = particles[i].x - particles[j].x;
+//                     const dy = particles[i].y - particles[j].y;
+//                     const distance = Math.sqrt(dx * dx + dy * dy);
+
+//                     if (distance < maxDistance) {
+//                         new ConnectionLine(particles[i], particles[j], distance, maxDistance).draw();
+//                     }
+//                 }
+//             }
+
+//             particleAnimationRef.current = requestAnimationFrame(animateParticles);
+//         };
+
+//         animateParticles();
+
+//         const handleParticleResize = () => {
+//             canvas.width = window.innerWidth;
+//             canvas.height = window.innerHeight;
+//         };
+
+//         const handleMouseMove = (e) => {
+//             mouse.x = e.clientX;
+//             mouse.y = e.clientY;
+//         };
+
+//         window.addEventListener('resize', handleParticleResize);
+//         window.addEventListener('mousemove', handleMouseMove);
+
+//         return () => {
+//             cancelAnimationFrame(particleAnimationRef.current);
+//             window.removeEventListener('resize', handleParticleResize);
+//             window.removeEventListener('mousemove', handleMouseMove);
+//         };
+//     }, []);
+
+//     return (
+//         <div ref={containerRef} style={{
+//             position: 'absolute',
+//             top: 0,
+//             left: 0,
+//             background: 'linear-gradient(135deg, #0a0118 0%, #1a0b2e 50%, #0f051d 100%)',
+//             margin: 0,
+//             padding: 0,
+//             width: '100%',
+//             height: '100vh',
+//             overflow: 'hidden'
+//         }}>
+//             <canvas 
+//                 ref={particleCanvasRef} 
+//                 style={{ 
+//                     position: 'absolute',
+//                     top: 0,
+//                     left: 0,
+//                     display: 'block', 
+//                     width: '100%', 
+//                     height: '100vh',
+//                     zIndex: 1
+//                 }}
+//             />
+            
+//             {/* Lighter ambient effects */}
+//             <div style={{
+//                 position: 'absolute',
+//                 top: '15%',
+//                 left: '10%',
+//                 width: '400px',
+//                 height: '400px',
+//                 background: 'radial-gradient(circle, rgba(168, 85, 247, 0.08) 0%, transparent 70%)',
+//                 filter: 'blur(50px)',
+//                 zIndex: 0,
+//                 animation: 'float 15s ease-in-out infinite',
+//                 pointerEvents: 'none'
+//             }} />
+            
+//             <div style={{
+//                 position: 'absolute',
+//                 bottom: '10%',
+//                 right: '15%',
+//                 width: '450px',
+//                 height: '450px',
+//                 background: 'radial-gradient(circle, rgba(236, 72, 153, 0.06) 0%, transparent 70%)',
+//                 filter: 'blur(60px)',
+//                 zIndex: 0,
+//                 animation: 'float 18s ease-in-out infinite reverse',
+//                 pointerEvents: 'none'
+//             }} />
+            
+//             <style>{`
+//                 @keyframes float {
+//                     0%, 100% { transform: translate(0, 0); }
+//                     50% { transform: translate(20px, -20px); }
+//                 }
+//             `}</style>
+//         </div>
+//     );
+// };
+
+// export default AHoleEffect;
+
+
 import React, { useEffect, useRef } from 'react';
-import easingUtils from 'https://esm.sh/easing-utils';
 
 const AHoleEffect = () => {
-    const canvasRef = useRef(null);
+    const particleCanvasRef = useRef(null);
     const containerRef = useRef(null);
-    const animationRef = useRef(null);
-    const auraRef = useRef(null);
+    const particleAnimationRef = useRef(null);
 
+    // Particle Animation Effect
     useEffect(() => {
-        const container = containerRef.current;
-        const canvas = canvasRef.current;
+        const canvas = particleCanvasRef.current;
+        if (!canvas) return;
+
         const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
 
-        // Animation state
-        const state = {
-            discs: [],
-            lines: [],
-            particles: [],
-            clip: {},
-            startDisc: {},
-            endDisc: {},
-            particleArea: {},
-            render: {
-                width: 0,
-                height: 0,
-                dpi: window.devicePixelRatio
+        const mouse = { x: canvas.width / 2, y: canvas.height / 2 };
+        let time = 0;
+        
+        // Detect mobile devices
+        const isMobile = window.innerWidth <= 768;
+        const particleCount = isMobile ? 40 : 100;
+        const speedMultiplier = isMobile ? 0.4 : 1;
+
+        class Particle {
+          constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.vx = (Math.random() - 0.5) * 0.2 * speedMultiplier;
+                this.vy = (Math.random() - 0.5) * 0.2 * speedMultiplier;
+                this.radius = Math.random() * (isMobile ? 3 : 4) + (isMobile ? 2 : 3);
+                this.opacity = Math.random() * 0.5 + 0.6;
+                this.pulseOffset = Math.random() * Math.PI * 2;
+                const colors = [
+                    'rgba(168, 85, 247, ',
+                    'rgba(236, 72, 153, ',
+                    'rgba(34, 211, 238, ',
+                    'rgba(251, 146, 60, '
+                ];
+                this.color = colors[Math.floor(Math.random() * colors.length)];
             }
-        };
 
-        // Helper functions
-        const tweenValue = (start, end, p, ease = false) => {
-            const delta = end - start;
-            const easeFn = easingUtils[
-                ease ? "ease" + ease.charAt(0).toUpperCase() + ease.slice(1) : "linear"
-            ];
-            return start + delta * easeFn(p);
-        };
-
-        const tweenDisc = (disc) => {
-            disc.x = tweenValue(state.startDisc.x, state.endDisc.x, disc.p);
-            disc.y = tweenValue(state.startDisc.y, state.endDisc.y, disc.p, "inExpo");
-            disc.w = tweenValue(state.startDisc.w, state.endDisc.w, disc.p);
-            disc.h = tweenValue(state.startDisc.h, state.endDisc.h, disc.p);
-            return disc;
-        };
-
-        const initParticle = (start = false) => {
-            const sx = state.particleArea.sx + state.particleArea.sw * Math.random();
-            const ex = state.particleArea.ex + state.particleArea.ew * Math.random();
-            const dx = ex - sx;
-            const vx = 0.1 + Math.random() * 0.5;
-            const y = start ? state.particleArea.h * Math.random() : state.particleArea.h;
-            const r = 0.5 + Math.random() * (window.innerWidth < 768 ? 2 : 4); // Smaller particles on mobile
-            const vy = 0.5 + Math.random();
-
-            return {
-                x: sx,
-                sx,
-                dx,
-                y,
-                vy,
-                p: 0,
-                r,
-                c: `rgba(255, 255, 255, ${Math.random()})`
-            };
-        };
-
-        // Setup functions
-        const setSize = () => {
-            const rect = container.getBoundingClientRect();
-            state.render = {
-                width: rect.width,
-                height: rect.height,
-                dpi: window.devicePixelRatio
-            };
-            canvas.width = state.render.width * state.render.dpi;
-            canvas.height = state.render.height * state.render.dpi;
-            
-            // Adjust aura size for mobile
-            if (window.innerWidth < 768) {
-                auraRef.current.style.width = '80%';
-                auraRef.current.style.top = '-30%';
-                auraRef.current.style.filter = 'blur(30px)';
-            } else if (window.innerWidth < 1024) {
-                auraRef.current.style.width = '60%';
-                auraRef.current.style.top = '-35%';
-                auraRef.current.style.filter = 'blur(40px)';
-            } else {
-                auraRef.current.style.width = '50%';
-                auraRef.current.style.top = '-40%';
-                auraRef.current.style.filter = 'blur(50px)';
-            }
-        };
-
-        const setDiscs = () => {
-            const { width, height } = state.render;
-            state.discs = [];
-
-            // Adjust disc sizes based on screen size
-            const isMobile = window.innerWidth < 768;
-            const isTablet = window.innerWidth < 1024;
-            
-            const startWidth = isMobile ? width * 0.9 : isTablet ? width * 0.8 : width * 0.75;
-            const startHeight = isMobile ? height * 0.6 : isTablet ? height * 0.65 : height * 0.7;
-            
-            state.startDisc = {
-                x: width * 0.5,
-                y: height * (isMobile ? 0.4 : 0.45),
-                w: startWidth,
-                h: startHeight
-            };
-
-            state.endDisc = {
-                x: width * 0.5,
-                y: height * (isMobile ? 0.9 : 0.95),
-                w: isMobile ? 15 : 20,
-                h: isMobile ? 8 : 10
-            };
-
-            const totalDiscs = isMobile ? 80 : 100; // Fewer discs on mobile
-            let prevBottom = height;
-            state.clip = {};
-
-            for (let i = 0; i < totalDiscs; i++) {
-                const p = i / totalDiscs;
-                const disc = { p };
-                tweenDisc(disc);
-
-                const bottom = disc.y + disc.h;
-                if (bottom <= prevBottom) {
-                    state.clip = { disc: { ...disc }, i };
+            update() {
+                // Add constant directional force to keep moving
+                this.vx += (Math.random() - 0.5) * 0.1 * speedMultiplier;
+                this.vy += (Math.random() - 0.5) * 0.1 * speedMultiplier;
+                
+                // Limit max speed
+                const maxSpeed = isMobile ? 0.5 : 1;
+                const speed = Math.sqrt(this.vx * this.vx + this.vy * this.vy);
+                if (speed > maxSpeed) {
+                    this.vx = (this.vx / speed) * maxSpeed;
+                    this.vy = (this.vy / speed) * maxSpeed;
+                }
+                
+                // Add minimum speed to ensure constant movement
+                const minSpeed = isMobile ? 0.3 : 1;
+                if (speed < minSpeed && speed > 0) {
+                    this.vx = (this.vx / speed) * minSpeed;
+                    this.vy = (this.vy / speed) * minSpeed;
                 }
 
-                prevBottom = bottom;
-                state.discs.push(disc);
-            }
-
-            state.clip.path = new Path2D();
-            state.clip.path.ellipse(
-                state.clip.disc.x,
-                state.clip.disc.y,
-                state.clip.disc.w,
-                state.clip.disc.h,
-                0,
-                0,
-                Math.PI * 2
-            );
-            state.clip.path.rect(
-                state.clip.disc.x - state.clip.disc.w,
-                0,
-                state.clip.disc.w * 2,
-                state.clip.disc.y
-            );
-        };
-
-        const setLines = () => {
-            const { width, height } = state.render;
-            state.lines = [];
-
-            const isMobile = window.innerWidth < 768;
-            const totalLines = isMobile ? 60 : 100; // Fewer lines on mobile
-            const linesAngle = (Math.PI * 2) / totalLines;
-
-            for (let i = 0; i < totalLines; i++) {
-                state.lines.push([]);
-            }
-
-            state.discs.forEach((disc) => {
-                for (let i = 0; i < totalLines; i++) {
-                    const angle = i * linesAngle;
-                    const p = {
-                        x: disc.x + Math.cos(angle) * disc.w,
-                        y: disc.y + Math.sin(angle) * disc.h
-                    };
-                    state.lines[i].push(p);
-                }
-            });
-        };
-
-        const setParticles = () => {
-            const { height } = state.render;
-            state.particles = [];
-
-            state.particleArea = {
-                sw: state.clip.disc.w * 0.5,
-                ew: state.clip.disc.w * 2,
-                h: height * (window.innerWidth < 768 ? 0.8 : 0.85)
-            };
-            state.particleArea.sx = (state.render.width - state.particleArea.sw) / 2;
-            state.particleArea.ex = (state.render.width - state.particleArea.ew) / 2;
-
-            const isMobile = window.innerWidth < 768;
-            const totalParticles = isMobile ? 60 : 100; // Fewer particles on mobile
-            for (let i = 0; i < totalParticles; i++) {
-                state.particles.push(initParticle(true));
-            }
-        };
-
-        // Draw functions
-        const drawDiscs = () => {
-            ctx.strokeStyle = "#444";
-            ctx.lineWidth = window.innerWidth < 768 ? 1 : 2; // Thinner lines on mobile
-
-            // Outer disc
-            const outerDisc = state.startDisc;
-            ctx.beginPath();
-            ctx.ellipse(
-                outerDisc.x,
-                outerDisc.y,
-                outerDisc.w,
-                outerDisc.h,
-                0,
-                0,
-                Math.PI * 2
-            );
-            ctx.stroke();
-            ctx.closePath();
-
-            // Inner discs
-            const isMobile = window.innerWidth < 768;
-            const skipCount = isMobile ? 10 : 5; // Draw fewer discs on mobile
-            
-            state.discs.forEach((disc, i) => {
-                if (i % skipCount !== 0) return;
-
-                if (disc.w < state.clip.disc.w - 5) {
-                    ctx.save();
-                    ctx.clip(state.clip.path);
+                // Mouse interaction (disabled on mobile)
+                if (!isMobile) {
+                    const dx = mouse.x - this.x;
+                    const dy = mouse.y - this.y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    
+                    if (distance < 180) {
+                        const force = (180 - distance) / 180;
+                        const angle = Math.atan2(dy, dx);
+                        this.vx -= Math.cos(angle) * force * 0.2;
+                        this.vy -= Math.sin(angle) * force * 0.2;
+                    }
                 }
 
+                this.x += this.vx;
+                this.y += this.vy;
+
+                // Wrap around edges
+                if (this.x < -10) this.x = canvas.width + 10;
+                if (this.x > canvas.width + 10) this.x = -10;
+                if (this.y < -10) this.y = canvas.height + 10;
+                if (this.y > canvas.height + 10) this.y = -10;
+
+                // Smooth pulsing
+                this.currentOpacity = this.opacity + Math.sin(time * 0.03 + this.pulseOffset) * 0.2;
+                this.currentRadius = this.radius + Math.sin(time * 0.025 + this.pulseOffset) * 0.5;
+            }
+
+            draw() {
+                // Brighter glow (reduced on mobile for performance)
+                ctx.shadowBlur = isMobile ? 10 : 20;
+                ctx.shadowColor = this.color + '0.8)';
                 ctx.beginPath();
-                ctx.ellipse(disc.x, disc.y, disc.w, disc.h, 0, 0, Math.PI * 2);
-                ctx.stroke();
-                ctx.closePath();
-
-                if (disc.w < state.clip.disc.w - 5) {
-                    ctx.restore();
-                }
-            });
-        };
-
-        const drawLines = () => {
-            ctx.strokeStyle = "#444";
-            ctx.lineWidth = window.innerWidth < 768 ? 1 : 2; // Thinner lines on mobile
-
-            state.lines.forEach((line) => {
-                ctx.beginPath();
-                for (let i = 0; i < line.length - 1; i++) {
-                    const p0 = line[i];
-                    const p1 = line[i + 1];
-                    ctx.moveTo(p0.x, p0.y);
-                    ctx.lineTo(p1.x, p1.y);
-                }
-                ctx.stroke();
-                ctx.closePath();
-            });
-        };
-
-        const drawParticles = () => {
-            ctx.save();
-            ctx.clip(state.clip.path);
-
-            state.particles.forEach((particle) => {
-                ctx.fillStyle = particle.c;
-                ctx.beginPath();
-                ctx.rect(particle.x, particle.y, particle.r, particle.r);
-                ctx.closePath();
+                ctx.arc(this.x, this.y, this.currentRadius, 0, Math.PI * 2);
+                ctx.fillStyle = this.color + this.currentOpacity + ')';
                 ctx.fill();
-            });
+                ctx.shadowBlur = 0;
+            }
+        }
 
-            ctx.restore();
-        };
+        class ConnectionLine {
+            constructor(p1, p2, distance, maxDistance) {
+                this.p1 = p1;
+                this.p2 = p2;
+                this.distance = distance;
+                this.maxDistance = maxDistance;
+            }
 
-        // Animation functions
-        const moveDiscs = () => {
-            const speed = window.innerWidth < 768 ? 0.001 : 0.002; // Slower animation on mobile
-            state.discs.forEach((disc) => {
-                disc.p = (disc.p + speed) % 1;
-                tweenDisc(disc);
-            });
-        };
+            draw() {
+                const opacity = (1 - this.distance / this.maxDistance) * 0.3;
+                ctx.beginPath();
+                ctx.strokeStyle = this.p1.color + opacity + ')';
+                ctx.lineWidth = 0.8;
+                ctx.moveTo(this.p1.x, this.p1.y);
+                ctx.lineTo(this.p2.x, this.p2.y);
+                ctx.stroke();
+            }
+        }
 
-        const moveParticles = () => {
-            state.particles.forEach((particle) => {
-                particle.p = 1 - particle.y / state.particleArea.h;
-                particle.x = particle.sx + particle.dx * particle.p;
-                particle.y -= particle.vy;
+        const particles = Array.from({ length: particleCount }, () => new Particle());
 
-                if (particle.y < 0) {
-                    Object.assign(particle, initParticle());
-                }
-            });
-        };
-
-        // Main animation loop
-        const tick = () => {
+        const animateParticles = () => {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.save();
-            ctx.scale(state.render.dpi, state.render.dpi);
+            time++;
 
-            moveDiscs();
-            moveParticles();
+            particles.forEach(particle => {
+                particle.update();
+                particle.draw();
+            });
 
-            drawDiscs();
-            drawLines();
-            drawParticles();
+            // Only draw connections for nearby particles
+            const maxDistance = isMobile ? 120 : 150;
+            for (let i = 0; i < particles.length; i++) {
+                for (let j = i + 1; j < particles.length; j++) {
+                    const dx = particles[i].x - particles[j].x;
+                    const dy = particles[i].y - particles[j].y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
 
-            ctx.restore();
-            animationRef.current = requestAnimationFrame(tick);
+                    if (distance < maxDistance) {
+                        new ConnectionLine(particles[i], particles[j], distance, maxDistance).draw();
+                    }
+                }
+            }
+
+            particleAnimationRef.current = requestAnimationFrame(animateParticles);
         };
 
-        // Initial setup
-        setSize();
-        setDiscs();
-        setLines();
-        setParticles();
-        tick();
+        animateParticles();
 
-        // Handle resize
-        const handleResize = () => {
-            cancelAnimationFrame(animationRef.current);
-            setSize();
-            setDiscs();
-            setLines();
-            setParticles();
-            tick();
+        const handleParticleResize = () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
         };
 
-        window.addEventListener('resize', handleResize);
+        const handleMouseMove = (e) => {
+            mouse.x = e.clientX;
+            mouse.y = e.clientY;
+        };
 
-        // Cleanup
+        window.addEventListener('resize', handleParticleResize);
+        window.addEventListener('mousemove', handleMouseMove);
+
         return () => {
-            window.removeEventListener('resize', handleResize);
-            cancelAnimationFrame(animationRef.current);
+            cancelAnimationFrame(particleAnimationRef.current);
+            window.removeEventListener('resize', handleParticleResize);
+            window.removeEventListener('mousemove', handleMouseMove);
         };
     }, []);
 
     return (
-        <div className="a-hole" ref={containerRef} style={{
+        <div ref={containerRef} style={{
             position: 'absolute',
             top: 0,
             left: 0,
-            backgroundColor: '#17042b',
+            background: 'linear-gradient(135deg, #0a0118 0%, #1a0b2e 50%, #0f051d 100%)',
             margin: 0,
             padding: 0,
             width: '100%',
             height: '100vh',
             overflow: 'hidden'
         }}>
-            <canvas className="js-canvas" ref={canvasRef} style={{ display: 'block', width: '100%', height: '100vh' }}></canvas>
-            <div className="aura" ref={auraRef} style={{
+            <canvas 
+                ref={particleCanvasRef} 
+                style={{ 
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    display: 'block', 
+                    width: '100%', 
+                    height: '100vh',
+                    zIndex: 1
+                }}
+            />
+            
+            {/* Lighter ambient effects */}
+            <div style={{
                 position: 'absolute',
-                left: '50%',
-                zIndex: 3,
-                height: '100%',
-                background: 'linear-gradient(20deg, #00f8f1, #ffbd1e20 16.5%, #ff9a1e 10%, #39008d 30%, #00f8f1 66%, #00f8f160 85.5%, #ffbd1e 100%) 0 100% / 100% 200%',
-                borderRadius: '0 0 100% 100%',
-                mixBlendMode: 'plus-lighter',
-                opacity: 0.75,
-                transform: 'translate3d(-50%, 0, 0)',
-                animation: 'aura-glow 5s infinite linear'
-            }}></div>
-            <div className="overlay" style={{
+                top: '15%',
+                left: '10%',
+                width: '400px',
+                height: '400px',
+                background: 'radial-gradient(circle, rgba(168, 85, 247, 0.08) 0%, transparent 70%)',
+                filter: 'blur(50px)',
+                zIndex: 0,
+                animation: 'float 15s ease-in-out infinite',
+                pointerEvents: 'none'
+            }} />
+            
+            <div style={{
                 position: 'absolute',
-                top: 0,
-                left: 0,
-                zIndex: 10,
-                width: '100%',
-                height: '100%',
-                background: window.innerWidth < 768 ? 
-                    'repeating-linear-gradient(transparent, transparent 2px, white 2px, white 3px)' : 
-                    'repeating-linear-gradient(transparent, transparent 1px, white 1px, white 2px)',
-                mixBlendMode: 'overlay',
-                opacity: window.innerWidth < 768 ? 0.3 : 0.5
-            }}></div>
+                bottom: '10%',
+                right: '15%',
+                width: '450px',
+                height: '450px',
+                background: 'radial-gradient(circle, rgba(236, 72, 153, 0.06) 0%, transparent 70%)',
+                filter: 'blur(60px)',
+                zIndex: 0,
+                animation: 'float 18s ease-in-out infinite reverse',
+                pointerEvents: 'none'
+            }} />
+            
             <style>{`
-                @keyframes aura-glow {
-                    0% { background-position: 0 100%; }
-                    100% { background-position: 0 300%; }
-                }
-                .a-hole::before {
-                    position: absolute;
-                    top: 50%;
-                    left: 50%;
-                    z-index: 2;
-                    display: block;
-                    width: 150%;
-                    height: 100%;
-                    background: radial-gradient(ellipse at 50% 55%, transparent 10%, rgb(11, 2, 25) 50%);
-                    transform: translate3d(-50%, -50%, 0);
-                    content: "";
-                }
-                .a-hole::after {
-                    position: absolute;
-                    top: 50%;
-                    left: 50%;
-                    z-index: 5;
-                    display: block;
-                    width: 100%;
-                    height: 100%;
-                    background: radial-gradient(ellipse at 50% 75%, #a900ff 20%, transparent 75%);
-                    mix-blend-mode: overlay;
-                    transform: translate3d(-50%, -50%, 0);
-                    content: "";
-                }
-                
-                @media (max-width: 768px) {
-                    .a-hole::before {
-                        background: radial-gradient(ellipse at 50% 55%, transparent 5%, rgb(11, 2, 25) 40%);
-                    }
-                    .a-hole::after {
-                        background: radial-gradient(ellipse at 50% 75%, #a900ff 15%, transparent 70%);
-                    }
+                @keyframes float {
+                    0%, 100% { transform: translate(0, 0); }
+                    50% { transform: translate(20px, -20px); }
                 }
             `}</style>
         </div>
