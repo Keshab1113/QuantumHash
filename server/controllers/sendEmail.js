@@ -48,7 +48,7 @@ const sendEmail = async (req, res) => {
                     <p><strong>Query:</strong> ${message}</p>
                   </div>
                   <p>You may reply directly to the user's email or follow up via phone.</p>
-                  <p>Best regards, <br /><strong>QuantumHash System Notification</strong></p>
+                  <p>Best regards, <br /><strong>QuantumHash Corporation</strong></p>
                 </div>
                 <div style="background-color: #f5f5f5; text-align: center; padding: 10px; font-size: 12px; color: #777;">
                   QuantumHash Corporation<br />

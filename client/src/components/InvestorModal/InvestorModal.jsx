@@ -1,238 +1,796 @@
+// import { useEffect, useRef, useState } from "react";
+// import axios from "axios";
+// import {
+//   Drawer,
+//   DrawerContent,
+//   DrawerBody,
+//   Button,
+// } from "@heroui/react";
+// import Select from "react-select";
+// import { useToast } from "../ToastContext";
+
+// const customStyles = {
+//   control: (provided, state) => ({
+//     ...provided,
+//     backgroundColor: "rgba(255, 255, 255, 0.1)",
+//     border: "1px solid rgba(255, 255, 255, 0.2)",
+//     boxShadow: state.isFocused ? "0 0 10px #a855f7" : "none",
+//     borderRadius: "12px",
+//     color: "#fff",
+//     padding: "2px 4px",
+//     transition: "all 0.3s ease",
+//     "&:hover": { borderColor: "#a855f7" },
+//   }),
+//   singleValue: (provided) => ({
+//     ...provided,
+//     color: "#fff",
+//   }),
+//   menu: (provided) => ({
+//     ...provided,
+//     backgroundColor: "rgba(0,0,0,0.9)",
+//     backdropFilter: "blur(10px)",
+//     zIndex: 99,
+//   }),
+//   option: (provided, state) => ({
+//     ...provided,
+//     backgroundColor: state.isFocused
+//       ? "rgba(255, 255, 255, 0.2)"
+//       : "rgba(255, 255, 255, 0.1)",
+//     color: "#fff",
+//     cursor: "pointer",
+//     padding: "10px 15px",
+//     borderRadius: "6px",
+//   }),
+//   input: (provided) => ({
+//     ...provided,
+//     color: "#fff",
+//   }),
+//   placeholder: (provided) => ({
+//     ...provided,
+//     color: "rgba(255, 255, 255, 0.5)",
+//   }),
+// };
+
+// const InvestorModal = () => {
+//   const { addToast } = useToast();
+//   const [placement, setPlacement] = useState("bottom");
+//   const [formValues, setFormValues] = useState({
+//     name: "",
+//     email: "",
+//     companyName: "",
+//     message: "",
+//   });
+//   const [isSubmitting, setIsSubmitting] = useState(false);
+//   const [isFormValid, setIsFormValid] = useState(false);
+//   const [isOpen, setIsOpen] = useState(false);
+
+//   const options = [
+//     { value: "Seed", label: "Seed" },
+//     { value: "Angel", label: "Angel" },
+//   ];
+
+//   const handleOpen = () => setIsOpen(true);
+//   const handleClose = () => setIsOpen(false);
+
+//   const handleInputChange = (e) => {
+//     const { name, value } = e.target;
+//     setFormValues((prev) => ({ ...prev, [name]: value }));
+//   };
+
+//   const formRef = useRef(null);
+//   const handleSubmit = async (e) => {
+//     e.preventDefault();
+//     setIsSubmitting(true);
+//     try {
+//       await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/investor`, {
+//         name: formValues.name,
+//         email: formValues.email,
+//         companyName: formValues.companyName,
+//         investmentInterest: formValues.investmentInterest,
+//         message: formValues.message,
+//       });
+//       formRef.current?.reset();
+//       handleClose();
+//       addToast("success", "Form submitted successfully!");
+//     } catch (error) {
+//       addToast("error", "Failed to submit form. Please try again.");
+//     } finally {
+//       setIsSubmitting(false);
+//     }
+//   };
+
+//   useEffect(() => {
+//   const { name, email, companyName, investmentInterest, message } = formValues;
+//   const allFilled = name && email && companyName && investmentInterest && message;
+//   setIsFormValid(!!allFilled);
+// }, [formValues]);
+
+//   return (
+// <section className="pb-10 flex items-center justify-center">
+//   <button
+//     onClick={() => handleOpen("bottom")}
+//     className="relative cursor-pointer overflow-hidden border border-white rounded-full py-4 px-10 shadow-lg shadow-white/20 text-white w-[350px] h-[56px] group font-medium transition-all duration-500 hover:shadow-white/40 hover:scale-105"
+//   >
+//     <h1 className="absolute w-full left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transition-transform duration-500 group-hover:translate-x-full">
+//       Join our Investor Circle
+//     </h1>
+//     <div className="absolute left-1/2 top-1/2 -translate-x-[400%] -translate-y-1/2 transition-transform duration-500 group-hover:translate-x-[-50%]">
+//       Let's Connect
+//     </div>
+//   </button>
+
+//   <Drawer isOpen={isOpen} placement={placement} onOpenChange={setIsOpen}>
+//     <DrawerContent>
+//       {(onClose) => (
+//         <>
+//           <DrawerBody
+//             className="relative h-screen min-h-screen max-h-screen flex justify-center items-center overflow-hidden"
+//           >
+//             {/* Animated gradient background */}
+//             <div className="absolute inset-0 bg-[linear-gradient(135deg,#2e026d,#15162c,#4b006e)] bg-[length:300%_300%] animate-[gradient_10s_ease_infinite]"></div>
+
+//             {/* Soft glowing blurred orbs */}
+//             <div className="absolute top-20 left-10 w-72 h-72 bg-purple-500/20 blur-3xl rounded-full animate-pulse"></div>
+//             <div className="absolute bottom-20 right-10 w-80 h-80 bg-pink-500/20 blur-3xl rounded-full animate-pulse delay-1000"></div>
+
+//             <div className="relative p-8 rounded-xl w-full max-w-md bg-black/40 backdrop-blur-lg shadow-2xl mx-auto border border-white/10">
+//               <h2 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-500 text-center mb-2">
+//                 Join Our Investor Circle
+//               </h2>
+//               <p className="text-sm text-gray-300 text-center mb-6">
+//                 Let's build the future together. Fill out the form to connect with our team.
+//               </p>
+//               <div className="w-16 h-[2px] bg-gradient-to-r from-purple-500 to-pink-500 mx-auto mb-6 rounded-full"></div>
+
+//               <form ref={formRef} className="space-y-4 text-white" onSubmit={handleSubmit}>
+//                 <div>
+//                   <label className="block mb-1 text-sm font-medium text-gray-300">
+//                     Full Name
+//                   </label>
+//                   <input
+//                     name="name"
+//                     type="text"
+//                     placeholder="Enter your full name"
+//                     className="w-full px-4 py-2 border border-gray-600 rounded-lg bg-transparent text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500"
+//                     onChange={handleInputChange}
+//                     required
+//                   />
+//                 </div>
+
+//                 <div>
+//                   <label className="block mb-1 text-sm font-medium text-gray-300">
+//                     Email
+//                   </label>
+//                   <input
+//                     name="email"
+//                     type="email"
+//                     placeholder="Enter your email"
+//                     onChange={handleInputChange}
+//                     className="w-full px-4 py-2 border border-gray-600 rounded-lg bg-transparent text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500"
+//                     required
+//                   />
+//                 </div>
+
+//                 <div>
+//                   <label className="block mb-1 text-sm font-medium text-gray-300">
+//                     Company Name
+//                   </label>
+//                   <input
+//                     name="companyName"
+//                     type="text"
+//                     placeholder="Enter your company name"
+//                     onChange={handleInputChange}
+//                     className="w-full px-4 py-2 border border-gray-600 rounded-lg bg-transparent text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500"
+//                     required
+//                   />
+//                 </div>
+
+//                 <div>
+//                   <label className="block mb-1 text-sm font-medium text-gray-300">
+//                     Investment Interest
+//                   </label>
+//                  <Select
+//   name="investmentInterest"
+//   options={options}
+//   styles={customStyles}
+//   value={options.find(option => option.value === formValues.investmentInterest) || null}
+//   onChange={(selectedOption) =>
+//     setFormValues((prev) => ({
+//       ...prev,
+//       investmentInterest: selectedOption ? selectedOption.value : "",
+//     }))
+//   }
+// />
+
+//                 </div>
+
+//                 <div>
+//                   <label className="block mb-1 text-sm font-medium text-gray-300">
+//                     Message
+//                   </label>
+//                   <input
+//                     type="text"
+//                     name="message"
+//                     placeholder="Enter your message"
+//                     onChange={handleInputChange}
+//                     className="w-full px-4 py-2 border border-gray-600 rounded-lg bg-transparent text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500"
+//                     required
+//                   />
+//                 </div>
+
+//                 <div className="flex justify-end gap-4 pt-4">
+//                   <Button
+//                     onPress={handleClose}
+//                     className="border border-white rounded-full px-6 py-2 text-white hover:bg-white/10 transition"
+//                   >
+//                     Close
+//                   </Button>
+//                   <Button
+//                     type="submit"
+//                     className="rounded-full px-6 py-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white font-semibold hover:opacity-90 transition disabled:opacity-50"
+//                     disabled={!isFormValid || isSubmitting}
+//                   >
+//                     {isSubmitting ? "Submitting..." : "Submit"}
+//                   </Button>
+//                 </div>
+//               </form>
+//             </div>
+//           </DrawerBody>
+//         </>
+//       )}
+//     </DrawerContent>
+//   </Drawer>
+
+//   {/* Gradient animation keyframes */}
+//   <style>{`
+//     @keyframes gradient {
+//       0% { background-position: 0% 50%; }
+//       50% { background-position: 100% 50%; }
+//       100% { background-position: 0% 50%; }
+//     }
+//   `}</style>
+// </section>
+
+//   );
+// };
+
+// export default InvestorModal;
+
 import { useEffect, useRef, useState } from "react";
-import axios from "axios"
-import {
-    Drawer,
-    DrawerContent,
-    DrawerHeader,
-    DrawerBody,
-    DrawerFooter,
-    Button,
-    useDisclosure,
-} from "@heroui/react";
+import axios from "axios";
+import { Drawer, DrawerContent, DrawerBody, Button } from "@heroui/react";
 import Select from "react-select";
 import { useToast } from "../ToastContext";
 
-
 const customStyles = {
-    control: (provided, state) => ({
-        ...provided,
-        backgroundColor: "rgba(255, 255, 255, 0.2)", // bg-white/20
-        borderColor: state.isFocused ? "rgba(255, 255, 255, 0.2)" : "rgba(255, 255, 255, 0.2)", // Tailwind purple-500
-        boxShadow: state.isFocused ? "0 0 0 1px #a855f7" : "none",
-        "&:hover": {
-            borderColor: "#a855f7",
-        },
-        borderRedius: "10px",
-        color: "rgba(255,255,255,0.4)", // text-white/40
-        fontSize: state.selectProps.myFontSize,
-    }),
-    singleValue: (provided, state) => ({
-        ...provided,
-        color: "rgba(255,255,255,0.4)",
-        fontSize: state.selectProps.myFontSize,
-    }),
-    menu: (provided) => ({
-        ...provided,
-        backgroundColor: "black", // bg-white/20
-        // glass effect (optional)
-        zIndex: 99,
-    }),
-    option: (provided, state) => ({
-        ...provided,
-        fontWeight: state.isSelected ? "bold" : "normal",
-        backgroundColor: state.isFocused
-            ? "rgba(255,255,255,0.3)"
-            : "rgba(255, 255, 255, 0.2)",
-        color: "rgba(255,255,255,0.8)",
-        fontSize: state.selectProps.myFontSize,
-        cursor: "pointer",
-    }),
-    input: (provided) => ({
-        ...provided,
-        color: "rgba(255,255,255,0.4)",
-    }),
-    placeholder: (provided) => ({
-        ...provided,
-        color: "rgba(255,255,255,0.4)",
-    }),
+  control: (provided, state) => ({
+    ...provided,
+    backgroundColor: "rgba(255, 255, 255, 0.08)",
+    border: state.isFocused
+      ? "1px solid rgba(168, 85, 247, 0.6)"
+      : "1px solid rgba(255, 255, 255, 0.15)",
+    boxShadow: "none",
+    borderRadius: "10px",
+    color: "#fff",
+    padding: "6px 8px",
+    minHeight: "46px",
+    transition: "all 0.2s ease",
+    "&:hover": {
+      borderColor: "rgba(168, 85, 247, 0.4)",
+      backgroundColor: "rgba(255, 255, 255, 0.12)",
+    },
+  }),
+  singleValue: (provided) => ({
+    ...provided,
+    color: "#fff",
+  }),
+  menu: (provided) => ({
+    ...provided,
+    backgroundColor: "rgba(17, 17, 27, 0.98)",
+    backdropFilter: "blur(20px)",
+    border: "1px solid rgba(255, 255, 255, 0.1)",
+    borderRadius: "12px",
+    boxShadow: "0 10px 40px rgba(0, 0, 0, 0.5)",
+    marginTop: "8px",
+    zIndex: 99,
+  }),
+  option: (provided, state) => ({
+    ...provided,
+    backgroundColor: state.isFocused
+      ? "rgba(168, 85, 247, 0.2)"
+      : "transparent",
+    color: state.isFocused ? "#fff" : "rgba(255, 255, 255, 0.85)",
+    cursor: "pointer",
+    padding: "12px 16px",
+    transition: "all 0.15s ease",
+    "&:active": {
+      backgroundColor: "rgba(168, 85, 247, 0.3)",
+    },
+  }),
+  input: (provided) => ({
+    ...provided,
+    color: "#fff",
+  }),
+  placeholder: (provided) => ({
+    ...provided,
+    color: "rgba(255, 255, 255, 0.45)",
+  }),
+  dropdownIndicator: (provided) => ({
+    ...provided,
+    color: "rgba(255, 255, 255, 0.5)",
+    "&:hover": {
+      color: "rgba(255, 255, 255, 0.7)",
+    },
+  }),
+  indicatorSeparator: () => ({
+    display: "none",
+  }),
 };
 
-
 const InvestorModal = () => {
-    const { addToast } = useToast();
-    const [placement, setPlacement] = useState("left");
-    const [formValues, setFormValues] = useState({
-        name: '',
-        email: '',
-        companyName: '',
-        Message: '',
-    });
-    const [isSubmitting, setIsSubmitting] = useState(false);
+  const { addToast } = useToast();
+  const [placement, setPlacement] = useState("bottom");
+  const [formValues, setFormValues] = useState({
+    name: "",
+    email: "",
+    companyName: "",
+    message: "",
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isFormValid, setIsFormValid] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
-    const [isFormValid, setIsFormValid] = useState(false);
-    const [interest, setInterest] = useState("");
-    const options = [
-        { value: "Seed", label: "Seed", color: "white" },
-        { value: "Angel", label: "Angel", color: "white" },
-    ];
+  const options = [
+    { value: "Seed", label: "Seed" },
+    { value: "Angel", label: "Angel" },
+  ];
 
-    const [isOpen, setIsOpen] = useState(false);
+  const handleOpen = () => setIsOpen(true);
+  const handleClose = () => setIsOpen(false);
 
-    const handleOpen = (placement) => {
-        setPlacement(placement);
-        setIsOpen(true);  // directly open the drawer
-    };
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormValues((prev) => ({ ...prev, [name]: value }));
+  };
 
-    const handleClose = () => {
-        setIsOpen(false);
-    };
+  const formRef = useRef(null);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    try {
+      await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/investor`, {
+        name: formValues.name,
+        email: formValues.email,
+        companyName: formValues.companyName,
+        investmentInterest: formValues.investmentInterest,
+        message: formValues.message,
+      });
+      formRef.current?.reset();
+      setFormValues({
+        name: "",
+        email: "",
+        companyName: "",
+        message: "",
+      });
+      handleClose();
+      addToast("success", "Form submitted successfully!");
+    } catch (error) {
+      addToast("error", "Failed to submit form. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
+  useEffect(() => {
+    const { name, email, companyName, investmentInterest, message } =
+      formValues;
+    const allFilled =
+      name && email && companyName && investmentInterest && message;
+    setIsFormValid(!!allFilled);
+  }, [formValues]);
 
-    const handleInputChange = (e) => {
-        const { name, value } = e.target;
-        setFormValues((prev) => ({
-            ...prev,
-            [name]: value,
-        }));
-    };
+  return (
+    <section className="pb-10 flex items-center justify-center">
+      <button
+        onClick={() => handleOpen("bottom")}
+        className="relative cursor-pointer overflow-hidden border border-white/20 rounded-full py-4 px-10 shadow-lg text-white w-[350px] h-[56px] group font-medium transition-all duration-300 hover:border-white/40 hover:shadow-xl hover:shadow-purple-500/10">
+        <span className="absolute w-full left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transition-transform duration-500 group-hover:translate-x-full">
+          Join our Investor Circle
+        </span>
+        <span className="absolute left-1/2 top-1/2 -translate-x-[400%] -translate-y-1/2 transition-transform duration-500 group-hover:translate-x-[-50%]">
+          Let's Connect
+        </span>
+      </button>
 
-    const formRef = useRef(null);
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        setIsSubmitting(true);
-        const form = e.currentTarget;
-        const formData = new FormData(form);
+      <Drawer isOpen={isOpen} placement={placement} onOpenChange={setIsOpen}>
+        <DrawerContent>
+          {(onClose) => (
+            <>
+              <DrawerBody className="relative h-screen overflow-hidden p-0 md:p-6 bg-[#0a0614] flex flex-col">
+                {/* Enhanced Animated Background */}
+                <div className="absolute inset-0 overflow-hidden">
+                  {/* Gradient orbs */}
+                  <div className="absolute -top-40 -left-40 w-80 h-80 bg-purple-600 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob"></div>
+                  <div className="absolute -top-40 -right-40 w-80 h-80 bg-pink-600 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-2000"></div>
+                  <div className="absolute -bottom-40 left-1/2 -translate-x-1/2 w-80 h-80 bg-indigo-600 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-4000"></div>
 
+                  {/* Radial gradient overlay */}
+                  <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(147,51,234,0.15),transparent_50%)]"></div>
 
-        try {
-            const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/investor`, {
-                name: formData.get('name'),
-                email: formData.get('email'),
-                companyName: formData.get('companyName'),
-                investmentInterest: formData.get('investmentInterest'),
-                message: formData.get('message'),
-            });
-            formRef.current?.reset();
-            handleClose();
-            addToast("success", "Form submitted successfully!");
-        } catch (error) {
-            console.error('Error:', error);
-            addToast("error", "Failed to submit form. Please try again.");
-        } finally {
-            setIsSubmitting(false);
-        }
-    };
+                  {/* Animated lines */}
+                  <svg
+                    className="absolute inset-0 w-full h-full opacity-20"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                      <linearGradient
+                        id="grad1"
+                        x1="0%"
+                        y1="0%"
+                        x2="100%"
+                        y2="100%">
+                        <stop
+                          offset="0%"
+                          style={{
+                            stopColor: "rgb(168, 85, 247)",
+                            stopOpacity: 0.3,
+                          }}
+                        />
+                        <stop
+                          offset="100%"
+                          style={{
+                            stopColor: "rgb(236, 72, 153)",
+                            stopOpacity: 0,
+                          }}
+                        />
+                      </linearGradient>
+                    </defs>
+                    <path
+                      d="M0,50 Q150,20 300,50 T600,50"
+                      stroke="url(#grad1)"
+                      strokeWidth="2"
+                      fill="none"
+                      className="animate-draw"
+                    />
+                    <path
+                      d="M100,100 Q250,70 400,100 T700,100"
+                      stroke="url(#grad1)"
+                      strokeWidth="2"
+                      fill="none"
+                      className="animate-draw animation-delay-1000"
+                    />
+                  </svg>
 
-    useEffect(() => {
-        const { name, email, companyName, message } = formValues;
-        const allFilled = name && email && companyName && message;
-        setIsFormValid(!!allFilled);
-    }, [formValues]);
-
-    return (
-        <section className="pb-10  flex items-center justify-center">
-            <button
-                onClick={() =>
-                    handleOpen("bottom")}
-                className="relative cursor-pointer overflow-hidden border border-white rounded-full py-4 px-10 shadow-xl shadow-white text-white w-[350px] h-[56px] group font-medium"
-            >
-                <h1
-                    className="absolute w-full left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transition-transform duration-500 group-hover:translate-x-full"
-                >
-                    Join our Investor Circle
-                </h1>
-
-                <div
-                    className="absolute left-1/2 top-1/2 -translate-x-[400%] -translate-y-1/2 transition-transform duration-500 group-hover:translate-x-[-50%]"
-                >
-                    Let's Connect
+                  {/* Grid pattern */}
+                  <div className="absolute inset-0 bg-[linear-gradient(rgba(168,85,247,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(168,85,247,0.03)_1px,transparent_1px)] bg-[size:50px_50px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_50%,black_40%,transparent)]"></div>
                 </div>
-            </button>
 
+                <div className="relative w-full grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 overflow-y-auto md:overflow-hidden max-h-[100vh] p-4 md:p-6 pt-8">
 
+                  {/* Left Side - Info Section */}
+                  <div className="w-full space-y-4 md:space-y-6 mt-6 md:mt-0">
 
-            <Drawer isOpen={isOpen} placement={placement} onOpenChange={setIsOpen}>
-                <DrawerContent>
-                    {(onClose) => (
-                        <>
-                            <DrawerBody className=" bg-[#0d0125] h-screen min-h-screen max-h-screen flex justify-center items-center" style={{
-                                backgroundImage: "url('/Images/careerBG.png')",
-                                backgroundSize: "cover",
-                            }}>
-                                <div className="stbox p-6 rounded-lg w-full max-w-md relative mx-auto">
-                                    <h2 className="text-2xl text-white font-semibold mb-4 text-center">Join Our Investor Circle</h2>
-                                    <form ref={formRef} className="space-y-4 text-white" onSubmit={(e) => handleSubmit(e)}>
-                                        <div>
-                                            <label className="block mb-1 text-sm">Full Name</label>
-                                            <input
-                                                name="name"
-                                                type="text"
-                                                placeholder="Enter your full name"
-                                                className="w-full px-4 py-2 border border-gray-300 rounded-md bg-transparent text-white placeholder-gray-300 focus:outline-none focus:ring focus:ring-indigo-300"
-                                                onChange={handleInputChange}
-                                                required
-                                            />
-                                        </div>
+                    {/* Main Card */}
+                    <div className="bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-2xl rounded-2xl md:rounded-3xl border border-white/20 p-6 md:p-8 shadow-2xl">
+                      <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-gradient-to-r from-purple-500/20 to-pink-500/20 border border-purple-400/30 text-purple-300 text-xs font-medium mb-4">
+                        <svg
+                          className="w-3 h-3"
+                          fill="currentColor"
+                          viewBox="0 0 20 20">
+                          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                        </svg>
+                        Investment Opportunity
+                      </div>
 
-                                        <div>
-                                            <label className="block mb-1 text-sm">Email</label>
-                                            <input
-                                                name="email"
-                                                type="email"
-                                                placeholder="Enter your email"
-                                                onChange={handleInputChange}
-                                                className="w-full px-4 py-2 border border-gray-300 rounded-md bg-transparent text-white placeholder-gray-300 focus:outline-none focus:ring focus:ring-indigo-300"
-                                                required
-                                            />
-                                        </div>
+                      <h3 className="text-2xl md:text-3xl font-bold text-white mb-3 leading-tight bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
+                        Partner with Innovation
+                      </h3>
+                      <p className="text-gray-300 text-sm md:text-base leading-relaxed mb-6">
+                        Join a network of visionary investors building the
+                        future. We're looking for strategic partners who share
+                        our vision for innovation and exponential growth.
+                      </p>
 
-                                        <div>
-                                            <label className="block mb-1 text-sm">Company Name</label>
-                                            <input
-                                                name="companyName"
-                                                type="text"
-                                                placeholder="Enter your Company Name"
-                                                onChange={handleInputChange}
-                                                className="w-full px-4 py-2 border border-gray-300 rounded-md bg-transparent text-white placeholder-gray-300 focus:outline-none focus:ring focus:ring-indigo-300"
-                                                required
-                                            />
-                                        </div>
+                      {/* Stats */}
+                      <div className="grid grid-cols-2 gap-3 md:gap-4 mb-6">
+                        <div className="bg-gradient-to-br from-purple-500/10 to-transparent rounded-xl md:rounded-2xl p-4 md:p-5 border border-purple-500/20 backdrop-blur-sm">
+                          <div className="text-2xl md:text-3xl font-bold text-white mb-1 bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+                            $50M+
+                          </div>
+                          <div className="text-xs text-gray-400">
+                            Target Raise
+                          </div>
+                        </div>
+                        <div className="bg-gradient-to-br from-pink-500/10 to-transparent rounded-xl md:rounded-2xl p-4 md:p-5 border border-pink-500/20 backdrop-blur-sm">
+                          <div className="text-2xl md:text-3xl font-bold text-white mb-1 bg-gradient-to-r from-pink-400 to-purple-400 bg-clip-text text-transparent">
+                            20+
+                          </div>
+                          <div className="text-xs text-gray-400">
+                            Active Partners
+                          </div>
+                        </div>
+                      </div>
 
-                                        <div>
-                                            <label className="block mb-1 text-sm">Investment Interest</label>
-                                            <Select myFontSize="15px" name="investmentInterest" options={options} styles={customStyles} />
-                                        </div>
+                      {/* Features */}
+                      <div className="space-y-3 md:space-y-4">
+                        <div className="flex items-start gap-3">
+                          <div className="mt-1 w-5 h-5 md:w-6 md:h-6 rounded-full bg-gradient-to-br from-purple-500/30 to-purple-500/10 flex items-center justify-center flex-shrink-0 border border-purple-500/30">
+                            <svg
+                              className="w-3 h-3 text-purple-300"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke="currentColor">
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2.5}
+                                d="M5 13l4 4L19 7"
+                              />
+                            </svg>
+                          </div>
+                          <div>
+                            <p className="text-sm md:text-base text-gray-200 font-medium">
+                              High Growth Trajectory
+                            </p>
+                            <p className="text-xs md:text-sm text-gray-400 mt-0.5">
+                              Disrupting markets with AI-powered innovation
+                            </p>
+                          </div>
+                        </div>
+                        <div className="flex items-start gap-3">
+                          <div className="mt-1 w-5 h-5 md:w-6 md:h-6 rounded-full bg-gradient-to-br from-purple-500/30 to-purple-500/10 flex items-center justify-center flex-shrink-0 border border-purple-500/30">
+                            <svg
+                              className="w-3 h-3 text-purple-300"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke="currentColor">
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2.5}
+                                d="M5 13l4 4L19 7"
+                              />
+                            </svg>
+                          </div>
+                          <div>
+                            <p className="text-sm md:text-base text-gray-200 font-medium">
+                              Proven Leadership
+                            </p>
+                            <p className="text-xs md:text-sm text-gray-400 mt-0.5">
+                              Team with 3 successful exits and 50+ years
+                              combined experience
+                            </p>
+                          </div>
+                        </div>
+                        <div className="flex items-start gap-3">
+                          <div className="mt-1 w-5 h-5 md:w-6 md:h-6 rounded-full bg-gradient-to-br from-purple-500/30 to-purple-500/10 flex items-center justify-center flex-shrink-0 border border-purple-500/30">
+                            <svg
+                              className="w-3 h-3 text-purple-300"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke="currentColor">
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2.5}
+                                d="M5 13l4 4L19 7"
+                              />
+                            </svg>
+                          </div>
+                          <div>
+                            <p className="text-sm md:text-base text-gray-200 font-medium">
+                              Strategic Network
+                            </p>
+                            <p className="text-xs md:text-sm text-gray-400 mt-0.5">
+                              Direct access to Fortune 500 decision makers
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
 
-                                        <div>
-                                            <label className="block mb-1 text-sm">Message</label>
-                                            <input
-                                                type="text"
-                                                name="message"
-                                                placeholder="Enter your Message"
-                                                onChange={handleInputChange}
-                                                className="w-full px-4 py-2 border border-gray-300 rounded-md bg-transparent text-white placeholder-gray-300 focus:outline-none focus:ring focus:ring-indigo-300"
-                                                required
-                                            />
-                                        </div>
-                                        <div className="flex justify-end gap-4">
-                                            <Button onPress={handleClose} className=" border border-solid border-white rounded-full px-6 py-2 text-white">
-                                                Close
-                                            </Button>
-                                            <Button type="submit" className=" border border-solid border-white rounded-full px-6 py-2 text-white disabled:opacity-50" disabled={!isFormValid || isSubmitting}>
-                                                {isSubmitting ? "Submitting..." : "Submit"}
-                                            </Button>
-                                        </div>
-                                    </form>
-                                </div>
+                  {/* Right Side - Form */}
+                  <div className="w-full max-w-3xl">
 
-                            </DrawerBody>
+                    <div className="bg-gradient-to-br from-white/15 to-white/5 backdrop-blur-2xl rounded-2xl md:rounded-3xl border border-white/30 shadow-2xl overflow-hidden">
+                      {/* Header */}
+                      <div className="px-6 md:px-8 pt-6 md:pt-8 pb-5 md:pb-6 bg-gradient-to-br from-purple-500/15 via-transparent to-pink-500/10 border-b border-white/20">
+                        <h2 className="text-xl md:text-2xl font-semibold text-white mb-2">
+                          Let's Connect
+                        </h2>
+                        <p className="text-xs md:text-sm text-gray-300">
+                          Share your details and expect a response within 24
+                          hours
+                        </p>
+                      </div>
 
-                        </>
-                    )}
-                </DrawerContent>
-            </Drawer>
-        </section>
-    )
-}
+                      {/* Form */}
+                      <form
+                        ref={formRef}
+                        onSubmit={handleSubmit}
+                        className="p-6 md:p-8 space-y-4 md:space-y-5">
+                        <div>
+                          <label className="block mb-2 text-sm font-medium text-gray-200">
+                            Full Name
+                          </label>
+                          <input
+                            name="name"
+                            type="text"
+                            placeholder="Full Name"
+                            className="w-full px-4 py-3 md:py-3.5 border border-white/20 rounded-xl bg-white/10 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500/60 focus:border-transparent focus:bg-white/15 transition-all"
+                            onChange={handleInputChange}
+                            value={formValues.name}
+                            required
+                          />
+                        </div>
+
+                        <div>
+                          <label className="block mb-2 text-sm font-medium text-gray-200">
+                            Email Address
+                          </label>
+                          <input
+                            name="email"
+                            type="email"
+                            placeholder="xyz@company.com"
+                            onChange={handleInputChange}
+                            value={formValues.email}
+                            className="w-full px-4 py-3 md:py-3.5 border border-white/20 rounded-xl bg-white/10 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500/60 focus:border-transparent focus:bg-white/15 transition-all"
+                            required
+                          />
+                        </div>
+
+                        <div>
+                          <label className="block mb-2 text-sm font-medium text-gray-200">
+                            Company Name
+                          </label>
+                          <input
+                            name="companyName"
+                            type="text"
+                            placeholder="Your Company"
+                            onChange={handleInputChange}
+                            value={formValues.companyName}
+                            className="w-full px-4 py-3 md:py-3.5 border border-white/20 rounded-xl bg-white/10 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500/60 focus:border-transparent focus:bg-white/15 transition-all"
+                            required
+                          />
+                        </div>
+
+                        <div>
+                          <label className="block mb-2 text-sm font-medium text-gray-200">
+                            Investment Type
+                          </label>
+                          <Select
+                            name="investmentInterest"
+                            options={options}
+                            styles={customStyles}
+                            placeholder="Select investment type"
+                            value={
+                              options.find(
+                                (option) =>
+                                  option.value === formValues.investmentInterest
+                              ) || null
+                            }
+                            onChange={(selectedOption) =>
+                              setFormValues((prev) => ({
+                                ...prev,
+                                investmentInterest: selectedOption
+                                  ? selectedOption.value
+                                  : "",
+                              }))
+                            }
+                          />
+                        </div>
+
+                        <div>
+                          <label className="block mb-2 text-sm font-medium text-gray-200">
+                            Message
+                          </label>
+                          <textarea
+                            name="message"
+                            placeholder="Share your investment interests and goals..."
+                            onChange={handleInputChange}
+                            value={formValues.message}
+                            rows="4"
+                            className="w-full px-4 py-3 border border-white/20 rounded-xl bg-white/10 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500/60 focus:border-transparent focus:bg-white/15 transition-all resize-none"
+                            required
+                          />
+                        </div>
+
+                        {/* Action Buttons */}
+                        <div className="flex flex-col sm:flex-row gap-3 pt-2">
+                         
+                          <Button
+                            type="submit"
+                            className="w-full sm:flex-1 rounded-xl px-6 py-3 bg-gradient-to-r from-purple-600 via-purple-500 to-pink-500 text-white font-semibold hover:shadow-xl hover:shadow-purple-500/30 transition-all disabled:opacity-40 disabled:cursor-not-allowed shadow-lg"
+                            disabled={!isFormValid || isSubmitting}>
+                            {isSubmitting ? (
+                              <span className="flex items-center justify-center gap-2">
+                                <svg
+                                  className="animate-spin h-4 w-4"
+                                  viewBox="0 0 24 24">
+                                  <circle
+                                    className="opacity-25"
+                                    cx="12"
+                                    cy="12"
+                                    r="10"
+                                    stroke="currentColor"
+                                    strokeWidth="4"
+                                    fill="none"></circle>
+                                  <path
+                                    className="opacity-75"
+                                    fill="currentColor"
+                                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                </svg>
+                                Sending...
+                              </span>
+                            ) : (
+                              "Submit Inquiry"
+                            )}
+                          </Button>
+                           <Button
+                            onPress={handleClose}
+                            className="w-full sm:flex-1 border border-white/30 rounded-xl px-6 py-3 text-white bg-white/5 hover:bg-white/10 transition-all font-medium">
+                            Cancel
+                          </Button>
+                        </div>
+
+                        {/* Privacy Note */}
+                        <div className="flex items-center justify-center gap-2 pt-2">
+                          <svg
+                            className="w-3.5 h-3.5 text-gray-500"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor">
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+                            />
+                          </svg>
+                          <p className="text-xs text-gray-400">
+                            Your information is encrypted and secure
+                          </p>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </DrawerBody>
+            </>
+          )}
+        </DrawerContent>
+      </Drawer>
+
+      <style>{`
+            @keyframes blob {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(30px, -50px) scale(1.1); }
+            66% { transform: translate(-20px, 20px) scale(0.9); }
+            }
+            .animate-blob {
+            animation: blob 7s infinite;
+            }
+            .animation-delay-1000 {
+            animation-delay: 1s;
+            }
+            .animation-delay-2000 {
+            animation-delay: 2s;
+            }
+            .animation-delay-4000 {
+            animation-delay: 4s;
+            }
+            @keyframes draw {
+            0% { stroke-dashoffset: 1000; }
+            100% { stroke-dashoffset: 0; }
+            }
+            .animate-draw {
+            stroke-dasharray: 1000;
+            animation: draw 8s ease-in-out infinite;
+            }
+             
+        `}</style>
+    </section>
+  );
+};
 
 export default InvestorModal;

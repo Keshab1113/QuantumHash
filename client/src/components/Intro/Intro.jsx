@@ -226,83 +226,105 @@ const Intro = () => {
         </div>
       </div>
 
-      <style jsx>{`
-        @keyframes marquee-left {
-          0% {
-            transform: translateX(0);
-          }
-          100% {
-            transform: translateX(-33.333%);
-          }
-        }
-        @keyframes marquee-right {
-          0% {
-            transform: translateX(-33.333%);
-          }
-          100% {
-            transform: translateX(0);
-          }
-        }
-        @keyframes gradientShift {
-          0% {
-            background-position: 0% 50%;
-          }
-          50% {
-            background-position: 100% 50%;
-          }
-          100% {
-            background-position: 0% 50%;
-          }
-        }
-        @keyframes floatSlow {
-          0%,
-          100% {
-            transform: translate(0, 0);
-          }
-          50% {
-            transform: translate(40px, -30px);
-          }
-        }
-        @keyframes floatMedium {
-          0%,
-          100% {
-            transform: translate(0, 0);
-          }
-          50% {
-            transform: translate(-30px, 20px);
-          }
-        }
-        @keyframes floatFast {
-          0%,
-          100% {
-            transform: translate(0, 0);
-          }
-          50% {
-            transform: translate(25px, -40px);
-          }
-        }
-        .animate-gradient {
-          animation: gradientShift 15s ease infinite;
-        }
-        .animate-float-slow {
-          animation: floatSlow 14s ease-in-out infinite;
-        }
-        .animate-float-medium {
-          animation: floatMedium 10s ease-in-out infinite;
-        }
-        .animate-float-fast {
-          animation: floatFast 8s ease-in-out infinite;
-        }
-        .animate-marquee-left {
-          animation: marquee-left 35s linear infinite;
-        }
-        .animate-marquee-right {
-          animation: marquee-right 35s linear infinite;
-        }
-        .hover\\:pause-animation:hover {
-          animation-play-state: paused;
-        }
-      `}</style>
+ <style jsx>{`
+  /* === Marquee Animations === */
+  @keyframes marquee-left {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-33.333%);
+    }
+  }
+  @keyframes marquee-right {
+    0% {
+      transform: translateX(-33.333%);
+    }
+    100% {
+      transform: translateX(0);
+    }
+  }
+
+  /* === Default (Desktop) Speed === */
+  .animate-marquee-left {
+    animation: marquee-left 35s linear infinite;
+  }
+  .animate-marquee-right {
+    animation: marquee-right 35s linear infinite;
+  }
+
+  /* === Faster Marquee on Mobile === */
+  @media (max-width: 768px) {
+    .animate-marquee-left {
+      animation: marquee-left 15s linear infinite; /* Faster */
+    }
+    .animate-marquee-right {
+      animation: marquee-right 15s linear infinite; /* Faster */
+    }
+    .flex {
+      gap: 0.5rem; /* Slightly tighter spacing */
+    }
+  }
+
+  /* === Background Gradient Animation === */
+  @keyframes gradientShift {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+
+  /* === Floating Background Particles === */
+  @keyframes floatSlow {
+    0%, 100% {
+      transform: translate(0, 0);
+    }
+    50% {
+      transform: translate(40px, -30px);
+    }
+  }
+  @keyframes floatMedium {
+    0%, 100% {
+      transform: translate(0, 0);
+    }
+    50% {
+      transform: translate(-30px, 20px);
+    }
+  }
+  @keyframes floatFast {
+    0%, 100% {
+      transform: translate(0, 0);
+    }
+    50% {
+      transform: translate(25px, -40px);
+    }
+  }
+
+  .animate-gradient {
+    animation: gradientShift 15s ease infinite;
+  }
+  .animate-float-slow {
+    animation: floatSlow 14s ease-in-out infinite;
+  }
+  .animate-float-medium {
+    animation: floatMedium 10s ease-in-out infinite;
+  }
+  .animate-float-fast {
+    animation: floatFast 8s ease-in-out infinite;
+  }
+
+  /* === Hover Pause === */
+  .hover\\:pause-animation:hover {
+    animation-play-state: paused;
+  }
+`}</style>
+
+
     </section>
   );
 };
