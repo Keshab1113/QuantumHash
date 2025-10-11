@@ -7,6 +7,7 @@ const careerJourney = [
     title: "MAY 2025",
     link: "https://qhashai.com/",
     heading: "QhashAi Assistance",
+    logo: "/Images/q.png",
     description: `QhashAi is an advanced autonomous digital intelligence system designed to act as a personal digital twin. It learns from user behaviour, automates tasks, and adapts dynamically to emotions and needs. With features like real-time emotion detection, AI-powered memory recall, and multimodal input/output processing, it revolutionizes human-AI interaction. Its neural mind map and autonomous thinking capabilities enable continuous learning and proactive insights, making it a powerful tool for productivity and decision-making.
 
 Key Features of QhashAi (Developed & Under Progress):
@@ -26,6 +27,7 @@ Key Features:
     title: "AUGUST 2025",
     link: "https://quantumedu.in/",
     heading: "QuantumEdu – AI-Powered Learning Platform for Class 4 to 12",
+    logo: "/Images/qedu-logo.png",
     description: `QuantumEdu is an innovative, AI-powered educational platform designed to provide high-quality learning to students globally, with a primary focus on Indian students from Class 4 to Class 12. By leveraging cutting-edge technology, QuantumEdu aims to bridge the education gap and democratize access to world-class tutoring.
 
 Key Features:
@@ -42,6 +44,7 @@ Key Features:
     title: "SEPTEMBER 2025",
     link: "https://asesystem.hsequiz.quantumhash.me/",
     heading: "Assessment System – Employee Evaluation & Skill Tracking",
+    logo: "/Images/ases-logo.png",
     description: `A smart AI-powered assessment system that allows organizations to test, evaluate, and track employee skills in real time. Managers can create customized assessments, get actionable insights on performance, and foster continuous learning to improve team productivity and engagement.
 
 Key Features:
@@ -58,6 +61,7 @@ Key Features:
     title: "OCTOBER 2025",
     link: "https://officemom.me/",
     heading: "Office MOM – Smart Moments of the Meeting System",
+    logo: "/Images/officemom-logo.png",
     description: `Office MOM is a next-gen meeting management platform that automatically captures, transcribes, and organizes every meeting. It empowers teams to focus on collaboration while ensuring that discussions, decisions, and action items are easily trackable and actionable.
 
 Key Features:
@@ -75,6 +79,7 @@ Key Features:
     link: "/",
     heading:
       "QuantumHash Data Center – AI-First Infrastructure for Scalable, Secure Growth",
+      logo: "/Images/logo.webp",
     description:
       "As Quantumhash Corporation expands its AI-driven platforms—including ASES (industrial safety), QhashAi (conversational AI), QuantumEdu (adaptive education), and ArtLabss (voice tech)—the demand for secure, real-time, and high-performance infrastructure has become critical. Building a dedicated data centre gives Quantumhash full control over its AI ecosystem, ensuring performance, privacy, and profitability.\n\n" +
       "Strategic Benefits:\n" +
