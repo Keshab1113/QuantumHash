@@ -15,17 +15,17 @@ const sendApplyData = async (req, res) => {
 
         // 2. Then send emails
         const transporter = nodemailer.createTransport({
-            host: "smtp.hostinger.com",
-            port: 465,
-            secure: true,
-            auth: {
-                user: process.env.MAIL_USER,
-                pass: "S9867867878$#@4delta",
-            },
-            tls: {
-                rejectUnauthorized: false
-            }
-        });
+             host: process.env.MAIL_HOST,
+             port: process.env.MAIL_PORT,
+             secure: true,
+             auth: {
+               user: process.env.MAIL_USER,
+               pass: process.env.MAIL_PASSWORD,
+             },
+             tls: {
+               rejectUnauthorized: false
+             }
+           });  
 
         // Email to Admin
         const mailOptions = {

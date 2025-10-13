@@ -2,20 +2,40 @@ const express = require("express");
 const cors = require("cors");
 const dotenv = require("dotenv");
 const mysql = require('mysql2/promise');
-const sendEmail = require("./controllers/sendEmail");
-const sendApplyData = require("./controllers/sendApplyData");
-const sendInvestor = require("./controllers/sendInvestor");
-const sendMeeting = require("./controllers/sendMeeting");
-const getMeetings = require("./controllers/getMeetings");
-const sendReminderEmails = require("./controllers/sendReminder");
+const emailRoutes = require("./routes/email");
+const applyRoutes = require("./routes/apply");
+const investorRoutes = require("./routes/investor");
 const meetingRoutes = require("./routes/meeting");
+const meetingsRoutes = require("./routes/meetings");
+const sendReminderEmails = require("./controllers/sendReminder");
 
 dotenv.config();
 const app = express();
-app.use(cors());
+ 
+app.use(
+  cors({
+    origin: [
+      "https://quantumhash.me",
+      "https://www.quantumhash.me",
+      "https://quantum-hash.vercel.app",
+      "http://localhost:5173"
+    ],
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true,
+  })
+);
+
+ 
+
+
 app.use(express.json({ limit: '10mb' })); // or more depending on expected file size
 app.use(express.urlencoded({ limit: '10mb', extended: true }));
+app.use("/api/email", emailRoutes);
+app.use("/api/apply", applyRoutes);
+app.use("/api/investor", investorRoutes);
 app.use("/api/meeting", meetingRoutes);
+app.use("/api/meetings", meetingsRoutes);
 
 
 const pool = mysql.createPool({
@@ -33,20 +53,15 @@ app.set('dbPool', pool);
 
 const PORT = process.env.PORT || 5000;
 
-// ✅ Default route to check server is running
+// âœ… Default route to check server is running
 app.get("/", (req, res) => {
   res.send({
     status: "success",
-    message: "🚀 Server is up and running!",
+    message: "ðŸš€ Server is up and running!",
     time: new Date().toISOString()
   });
 });
 
-app.post("/api/send-email", sendEmail);
-app.post("/api/apply", sendApplyData);
-app.post("/api/investor", sendInvestor);
-app.post("/api/meeting", sendMeeting);
-app.get("/api/meetings", getMeetings);
 sendReminderEmails(app);
 
 app.listen(PORT, () => console.log(`Server running on PORT ${PORT}`));

@@ -219,7 +219,7 @@ const Opening = () => {
       <div className="relative z-10 w-full px-4 md:px-6 flex flex-col items-center">
         {/* Header Section */}
         <div className="mb-16 md:mb-20 text-center max-w-4xl">
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-white via-purple-200 to-cyan-200">
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 pb-6 bg-clip-text text-transparent bg-gradient-to-r from-white via-purple-200 to-cyan-200">
             Opening Positions
           </h1>
           <p className="text-white/60 text-base md:text-lg max-w-3xl mx-auto leading-relaxed">
