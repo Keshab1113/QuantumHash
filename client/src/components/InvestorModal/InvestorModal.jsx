@@ -135,16 +135,22 @@ const InvestorModal = () => {
 
   return (
     <section className="pb-10 flex items-center justify-center">
-      <button
-        onClick={() => handleOpen("bottom")}
-        className="relative cursor-pointer overflow-hidden border border-white/20 rounded-full py-4 px-10 shadow-lg text-white w-[350px] h-[56px] group font-medium transition-all duration-300 hover:border-white/40 hover:shadow-xl hover:shadow-purple-500/10">
-        <span className="absolute w-full left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transition-transform duration-500 group-hover:translate-x-full">
-          Join our Investor Circle
-        </span>
-        <span className="absolute left-1/2 top-1/2 -translate-x-[400%] -translate-y-1/2 transition-transform duration-500 group-hover:translate-x-[-50%]">
-          Let's Connect
-        </span>
-      </button>
+    <div className="w-full flex justify-center px-4">
+  <button
+    onClick={() => handleOpen("bottom")}
+    className="relative cursor-pointer overflow-hidden border border-white/20 rounded-full py-4 px-6 sm:px-10 shadow-lg text-white w-full sm:w-[350px] max-w-[400px] h-[70px] group font-medium transition-all duration-300 hover:border-white/40 hover:shadow-xl hover:shadow-purple-500/10 text-center"
+  >
+    <span className="block text-sm sm:text-base font-medium transition-transform duration-500 group-hover:translate-x-full">
+      Join our Investor Circle
+    </span>
+    <span className="block absolute left-0 top-0 w-full h-full flex items-center justify-center transition-transform duration-500 translate-x-[-100%] group-hover:translate-x-0">
+      Let's Connect
+    </span>
+  </button>
+</div>
+
+
+
 
       <Drawer isOpen={isOpen} placement={placement} onOpenChange={setIsOpen}>
         <DrawerContent>

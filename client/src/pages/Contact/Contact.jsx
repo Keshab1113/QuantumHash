@@ -38,7 +38,7 @@ const Contact = () => {
 
     try {
       await axios.post(
-        `${import.meta.env.VITE_BACKEND_URL}/api/send-email`,
+        `${import.meta.env.VITE_BACKEND_URL}/api/email`,
         data
       );
       addToast("success", "We Will Contact You soon.");
