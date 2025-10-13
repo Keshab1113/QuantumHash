@@ -265,7 +265,7 @@ const FeatureCard = ({ feature, highlight }) => (
       </div>
       <div className="flex-1 min-w-0">
         <h3
-          className={`text-lg font-bold text-white mb-2 group-hover:text-${highlight}-400 transition-colors duration-300`}
+          className={`text-lg font-bold text-white mb-2 mt-5 group-hover:text-${highlight}-400 transition-colors duration-300`}
         >
           {feature.title}
         </h3>
