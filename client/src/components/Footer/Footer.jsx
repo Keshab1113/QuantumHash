@@ -129,7 +129,7 @@ const Footer = () => {
                       aria-hidden="true"></i>
                   </div>
                   <div>
-                    <p className="text-gray-400 text-sm leading-relaxed group-hover:text-white transition-colors duration-300">
+                    <p className="text-gray-300 text-sm leading-relaxed group-hover:text-white transition-colors duration-300">
                       800 N King Street, Suite 304,
                       <br />
                       Wilmington, DE 19801, USA
