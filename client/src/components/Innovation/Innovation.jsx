@@ -194,7 +194,7 @@ const Innovation = () => {
                     <div className="text-white p-6 h-full w-full card-hover bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10">
                       <div className="h-[200px] w-full rounded-xl bg-gradient-to-br from-purple-600/20 to-pink-600/20 mb-6 overflow-hidden border border-white/10">
                         <img
-                          src="/Projects/image.webp"
+                          src="/Projects/image.PNG"
                           alt="QuantumAI"
                           className="w-full h-full object-cover"
                           loading="lazy"

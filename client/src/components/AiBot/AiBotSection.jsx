@@ -4,7 +4,7 @@ import React from "react";
 
 const AiBotSection = ({ headText }) => {
   return (
-    <section className="h-[55vh] md:h-[40vh] w-full bg-slate-900 relative overflow-hidden flex items-center">
+    <section className="pt-[5rem] h-[45vh]  md:h-[40vh] w-full bg-slate-900 relative overflow-hidden flex items-center">
       
       {/* Highly animated flowing gradient background */}
       <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-purple-900/30 to-violet-900/20 animate-gradient-shift" 
