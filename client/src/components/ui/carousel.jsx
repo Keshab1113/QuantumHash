@@ -49,45 +49,49 @@ const Carousel2 = ({ slides }) => {
     }));
   };
 
-  const handleSubmit = async (e, onClose) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    const form = e.currentTarget;
-    const formData = new FormData(form);
+const handleSubmit = async (e, onClose) => {
+  e.preventDefault();
+  setIsSubmitting(true);
 
-    try {
-      const response = await axios.post(
-        `${import.meta.env.VITE_BACKEND_URL}/api/apply`,
-        {
-          name: formValues.name,
-          email: formValues.email,
-          phone: formValues.phone,
-          country: formValues.country,
-          city: formValues.city,
-          jobTitle: slide.title,
-          resumeLink: formValues.resume
-            ? formValues.resume.name
-            : "No resume attached",
-        }
-      );
-      formRef.current?.reset();
-      setFormValues({
-        name: "",
-        email: "",
-        phone: "",
-        country: "",
-        city: "",
-        resume: null,
-      });
-      onClose();
-      addToast("success", "Application submitted successfully!");
-    } catch (error) {
-      console.error("Error:", error);
-      addToast("error", "Failed to submit application. Please try again.");
-    } finally {
-      setIsSubmitting(false);
+  try {
+    const formData = new FormData();
+    formData.append("name", formValues.name);
+    formData.append("email", formValues.email);
+    formData.append("phone", formValues.phone);
+    formData.append("country", formValues.country);
+    formData.append("city", formValues.city);
+    formData.append("jobTitle", slide.title);
+    if (formValues.resume) {
+      formData.append("resume", formValues.resume); // 📎 attach file directly
     }
-  };
+
+    const response = await axios.post(
+      `${import.meta.env.VITE_BACKEND_URL}/api/apply`,
+      formData,
+      {
+        headers: { "Content-Type": "multipart/form-data" },
+      }
+    );
+
+    formRef.current?.reset();
+    setFormValues({
+      name: "",
+      email: "",
+      phone: "",
+      country: "",
+      city: "",
+      resume: null,
+    });
+    onClose();
+    addToast("success", "Application submitted successfully!");
+  } catch (error) {
+    console.error("Error:", error);
+    addToast("error", "Failed to submit application. Please try again.");
+  } finally {
+    setIsSubmitting(false);
+  }
+};
+
 
   useEffect(() => {
     const { name, email, phone, country, city, resume } = formValues;

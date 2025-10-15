@@ -1,7 +1,9 @@
 const nodemailer = require("nodemailer");
 
 const sendApplyData = async (req, res) => {
-    const { name, email, phone, country, city, resumeLink, jobTitle } = req.body;
+    const { name, email, phone, country, city, jobTitle } = req.body;
+const file = req.file; // 📎 this will have resume if attached
+
     const pool = req.app.get('dbPool'); // Get the shared connection pool
 
     try {
@@ -9,7 +11,8 @@ const sendApplyData = async (req, res) => {
         const connection = await pool.getConnection();
         const [result] = await connection.query(
             'INSERT INTO job_applications (name, email, phone, country, city, resume_link, job_title) VALUES (?, ?, ?, ?, ?, ?, ?)',
-            [name, email, phone, country, city, resumeLink, jobTitle]
+            [ name, email, phone, country, city, file ? file.originalname : '', jobTitle ]
+
         );
         connection.release();
 
@@ -63,7 +66,8 @@ const sendApplyData = async (req, res) => {
                 <p><span class="label">Email:</span> <a href="mailto:${email}">${email}</a></p>
                 <p><span class="label">Phone:</span> ${phone}</p>
                 <p><span class="label">Location:</span> ${city}, ${country}</p>
-                ${resumeLink ? `<p><span class="label">Resume:</span> <a href="${resumeLink}" target="_blank">View Resume</a></p>` : ''}
+                ${file ? `<p><span class="label">Resume:</span> Attached file (${file.originalname})</p>` : ''}
+
             </div>
             <p>Please review this application and follow up with the candidate as appropriate.</p>
             <p>Best regards,<br><strong>QuantumHash Corporation Team</strong></p>
@@ -75,7 +79,14 @@ const sendApplyData = async (req, res) => {
     </div>
 </body>
 </html>
-            `,
+            `, attachments: file
+        ? [
+            {
+                filename: file.originalname,
+                content: file.buffer
+            }
+        ]
+        : []
         };
 
         // Auto-reply to Applicant

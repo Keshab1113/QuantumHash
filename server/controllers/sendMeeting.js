@@ -17,6 +17,9 @@ const sendMeeting = async (req, res) => {
       throw new Error(`Invalid datetime: ${userDateTime.invalidExplanation}`);
     }
     const kuwaitDateTime = userDateTime.setZone("Asia/Kuwait");
+    const kuwaitFormattedDate = kuwaitDateTime.toFormat("yyyy-MM-dd");
+const kuwaitFormattedTime = kuwaitDateTime.toFormat("hh:mm a");
+
     const meetingDateForDB = kuwaitDateTime.toFormat("yyyy-MM-dd");
     const meetingTimeForDB = kuwaitDateTime.toFormat("hh:mm a");
     const kuwaitTimezone = "Asia/Kuwait";
@@ -73,9 +76,11 @@ const sendMeeting = async (req, res) => {
       <p><strong>Scheduled Meeting Details:</strong></p>
       <p><strong>Name:</strong> ${fullName}</p>
       <p><strong>Email:</strong> <a href="mailto:${email}" style="color: #5c2d91;">${email}</a></p>
-      <p><strong>Preferred Date:</strong> ${date}</p>
-      <p><strong>Preferred Time:</strong> ${time}</p>
-      <p><strong>Timezone:</strong> ${timezone}</p>
+      <p><strong>Preferred Date (User):</strong> ${date} (${timezone})</p>
+<p><strong>Preferred Time (User):</strong> ${time}</p>
+<p><strong>Kuwait Date (Admin):</strong> ${kuwaitFormattedDate} (Asia/Kuwait)</p>
+<p><strong>Kuwait Time (Admin):</strong> ${kuwaitFormattedTime}</p>
+
       <p><strong>Duration:</strong> ${duration}</p>
       <p><strong>Message:</strong> ${query}</p>
     </div>

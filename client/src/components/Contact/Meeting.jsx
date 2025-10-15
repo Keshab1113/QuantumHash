@@ -377,12 +377,7 @@ const Meeting = () => {
                 />
               </div>
 
-              <button
-                onClick={() => setSelectedTime(null)}
-                className="bg-white mr-3 cursor-pointer text-black px-4 py-2 rounded hover:bg-gray-200"
-              >
-                Back
-              </button>
+             <div className="flex gap-5">
               <button
                 type="submit"
                 className="bg-white disabled:opacity-50 cursor-pointer text-black px-4 py-2 rounded hover:bg-gray-200"
@@ -390,6 +385,13 @@ const Meeting = () => {
               >
                 {isSubmitting ? "Submitting..." : "Submit"}
               </button>
+               <button
+                onClick={() => setSelectedTime(null)}
+                className="bg-white mr-3 cursor-pointer text-black px-4 py-2 rounded hover:bg-gray-200"
+              >
+                Back
+              </button>
+              </div>
             </form>
           ) : (
             <div className="border border-white border-solid rounded-2xl lg:w-[55%] w-full p-6 py-10 text-white">

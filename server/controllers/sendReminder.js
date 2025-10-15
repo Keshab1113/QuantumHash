@@ -17,14 +17,17 @@ const sendReminderEmails = (app) => {
     connection.release();
 
     const transporter = nodemailer.createTransport({
-      host: "smtp.hostinger.com",
-      port: 465,
-      secure: true,
-      auth: {
-        user: process.env.MAIL_USER,
-        pass: "S9867867878$#@4delta"
-      }
-    });
+         host: process.env.MAIL_HOST,
+         port: process.env.MAIL_PORT,
+         secure: true,
+         auth: {
+           user: process.env.MAIL_USER,
+           pass: process.env.MAIL_PASSWORD,
+         },
+         tls: {
+           rejectUnauthorized: false
+         }
+       });
 
     for (const meeting of meetings) {
       const {

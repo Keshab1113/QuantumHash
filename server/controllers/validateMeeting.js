@@ -31,10 +31,11 @@
         const diffInMinutes = meetingTimeUTC.diff(nowUTC, "minutes").toObject().minutes;
 
         if (diffInMinutes <= 5 && diffInMinutes >= -120) {
-        return res.json({ allowed: true });
-        } else {
-        return res.json({ allowed: false });
-        }
+  return res.json({ allowed: true });
+} else {
+  return res.json({ allowed: false, diffInMinutes });
+}
+
     } catch (error) {
         console.error("Validation error:", error);
         return res.status(500).json({ allowed: false, message: "Server error" });
