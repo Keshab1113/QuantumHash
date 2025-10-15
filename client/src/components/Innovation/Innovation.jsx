@@ -195,7 +195,7 @@ const Innovation = () => {
                       <div className="h-[200px] w-full rounded-xl bg-gradient-to-br from-purple-600/20 to-pink-600/20 mb-6 overflow-hidden border border-white/10">
                         <img
                           src="/Projects/image.PNG"
-                          alt="QuantumAI"
+                          alt="QhashAI"
                           className="w-full h-full object-cover"
                           loading="lazy"
                         />
@@ -209,7 +209,7 @@ const Innovation = () => {
                         intelligence core behind all our platforms.
                       </p>
                       <div className="text-purple-400 text-lg font-bold">
-                        QuantumAI
+                        QhashAI
                       </div>
                     </div>
                   </Card>
@@ -263,7 +263,7 @@ const Innovation = () => {
                     <div className="text-white p-6 h-full w-full card-hover bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10">
                       <div className="h-[200px] w-full rounded-xl bg-gradient-to-br from-orange-600/20 to-red-600/20 mb-6 overflow-hidden border border-white/10">
                         <img
-                          src="/Projects/assesment.PNG"
+                          src="/Projects/officemom.PNG"
                           alt="Office MOM"
                           className="w-full h-full object-cover"
                           loading="lazy"
@@ -279,6 +279,27 @@ const Innovation = () => {
                       </p>
                       <div className="text-orange-400 text-lg font-bold">
                         Office MOM
+                      </div>
+                    </div>
+                  </Card>
+                  <Card>
+                    <div className="text-white p-6 h-full w-full card-hover bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10">
+                      <div className="h-[200px] w-full rounded-xl bg-gradient-to-br from-orange-600/20 to-red-600/20 mb-6 overflow-hidden border border-white/10">
+                        <img
+                          src="/Projects/assesment.PNG"
+                          alt="Assessment System"
+                          className="w-full h-full object-cover"
+                          loading="lazy"
+                        />
+                      </div>
+                      <h2 className="text-xl font-bold mb-4">
+                        Assessment System
+                      </h2>
+                      <p className="text-gray-300 leading-relaxed mb-4">
+                        The Assessment System helps organizations enhance workforce capability, optimize training efforts, and ensure skill readiness for the future.
+                      </p>
+                      <div className="text-orange-400 text-lg font-bold">
+                        Assessment System
                       </div>
                     </div>
                   </Card>
