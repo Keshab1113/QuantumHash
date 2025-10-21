@@ -494,7 +494,7 @@ if (res.data.allowed) {
                   src={`${import.meta.env.VITE_MEETING_URL}/${id}`}
                   className="w-full h-[80vh] rounded-lg border border-white"
                   title="Embedded Conference"
-                  allow="camera; microphone; fullscreen"
+                  allow="camera; microphone; fullscreen; display-capture"
                   allowFullScreen
                 />
               )}
