@@ -31,10 +31,18 @@
         const diffInMinutes = meetingTimeUTC.diff(nowUTC, "minutes").toObject().minutes;
 
         if (diffInMinutes <= 5 && diffInMinutes >= -120) {
-  return res.json({ allowed: true });
+  return res.json({
+    allowed: true,
+    meetingTimeUTC: meetingTimeUTC.toISO(), // send UTC for frontend conversion
+  });
 } else {
-  return res.json({ allowed: false, diffInMinutes });
+  return res.json({
+    allowed: false,
+    diffInMinutes,
+    meetingTimeUTC: meetingTimeUTC.toISO(),
+  });
 }
+
 
     } catch (error) {
         console.error("Validation error:", error);

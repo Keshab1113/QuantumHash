@@ -18,7 +18,8 @@ app.use(
       "https://quantumhash.me",
       "https://www.quantumhash.me",
       "https://quantum-hash.vercel.app",
-      "http://localhost:5173"
+      "http://localhost:5173",
+      "http://localhost:5174"
     ],
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],

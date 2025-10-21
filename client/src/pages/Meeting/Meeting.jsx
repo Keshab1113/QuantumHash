@@ -62,7 +62,7 @@
 //       const res = await axios.get(
 //         `${import.meta.env.VITE_BACKEND_URL}/api/meeting/validate/${id}`
 //       );
-      
+
 //       if (res.data.allowed) {
 //         setIsAllowed(true);
 //         setTimeLeft(null);
@@ -107,9 +107,6 @@
 //   const secs = seconds % 60;
 //   return `${mins}:${secs.toString().padStart(2, "0")}`;
 // };
-
-
-
 
 // //   return (
 // //     <>
@@ -162,7 +159,7 @@
 // //           //         allowFullScreen
 // //           //       />
 // //           //     )}
-               
+
 // //           //     {error && (
 // //           //       <p className="text-red-500 text-center mt-4">{error}</p>
 // //           //     )}
@@ -312,13 +309,12 @@
 //     </>
 //   );
 
-
 // };
 
 // export default Meeting;
 
-
 import { Helmet } from "react-helmet";
+import { DateTime } from "luxon";
 import AiBotSection from "../../components/AiBot/AiBotSection";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
@@ -334,6 +330,7 @@ const Meeting = () => {
   const [isAllowed, setIsAllowed] = useState(null);
   const [timeLeft, setTimeLeft] = useState(null);
   const [intervalId, setIntervalId] = useState(null);
+  const [meetingTimeLocal, setMeetingTimeLocal] = useState(null);
 
   // ✅ Request Camera + Mic
   useEffect(() => {
@@ -360,21 +357,29 @@ const Meeting = () => {
   useEffect(() => {
     const validateAccess = async () => {
       try {
-        const res = await axios.get(
-          `${import.meta.env.VITE_BACKEND_URL}/api/meeting/validate/${id}`
-        );
+       const res = await axios.get(
+  `${import.meta.env.VITE_BACKEND_URL}/api/meeting/validate/${id}`
+);
 
-        if (res.data.allowed) {
-          setIsAllowed(true);
-          setTimeLeft(null);
-          if (intervalId) clearInterval(intervalId);
-        } else if (typeof res.data.diffInMinutes === "number") {
-          setIsAllowed(false);
-          // 🕒 store in seconds for live countdown
-          setTimeLeft(Math.max(Math.ceil(res.data.diffInMinutes * 60), 0));
-        } else {
-          setError("Meeting not found or invalid.");
-        }
+// ✅ Convert meeting UTC → local time if provided
+if (res.data.meetingTimeUTC) {
+  const localTime = DateTime.fromISO(res.data.meetingTimeUTC, { zone: "utc" })
+    .setZone(DateTime.local().zoneName)
+    .toFormat("yyyy-MM-dd hh:mm a");
+  setMeetingTimeLocal(localTime);
+}
+
+if (res.data.allowed) {
+  setIsAllowed(true);
+  setTimeLeft(null);
+  if (intervalId) clearInterval(intervalId);
+} else if (typeof res.data.diffInMinutes === "number") {
+  setIsAllowed(false);
+  setTimeLeft(Math.max(Math.ceil(res.data.diffInMinutes * 60), 0));
+} else {
+  setError("Meeting not found or invalid.");
+}
+
       } catch (err) {
         console.error("Validation error:", err);
         setError("Could not validate meeting.");
@@ -450,6 +455,12 @@ const Meeting = () => {
             <p className="text-white text-lg text-center mt-2">
               Access will open when the timer reaches zero.
             </p>
+            {meetingTimeLocal && (
+  <p className="text-white text-md text-center mt-2">
+    🕒 Scheduled for: <span className="font-semibold">{meetingTimeLocal}</span>
+  </p>
+)}
+
             <div className="mt-6 flex justify-center">
               <div className="text-5xl text-blue-400 font-bold tracking-wide">
                 ⏳ {formatTime(timeLeft)}
@@ -467,8 +478,7 @@ const Meeting = () => {
             </h1>
             <Link
               to={"/connect#meeting"}
-              className="text-sm mt-10 text-blue-500 text-center capitalize w-fit mx-auto"
-            >
+              className="text-sm mt-10 text-blue-500 text-center capitalize w-fit mx-auto">
               go to schedule a meeting
             </Link>
 

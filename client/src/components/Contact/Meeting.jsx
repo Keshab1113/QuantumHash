@@ -117,91 +117,88 @@ const Meeting = () => {
     label: tz,
   }));
 
-  const fetchBookedSlots = async (selectedDate, updatedTimezone = timezone) => {
-    setIsLoadingSlots(true);
-    const formattedDate = DateTime.fromJSDate(selectedDate)
-      .setZone(updatedTimezone)
-      .toFormat("yyyy-MM-dd");
+const fetchBookedSlots = async (selectedDate, updatedTimezone = timezone) => {
+  setIsLoadingSlots(true);
 
-    try {
-      const response = await axios.get(
-        `${import.meta.env.VITE_BACKEND_URL}/api/meetings?date=${formattedDate}`
-      );
-      const slots = response.data;
-      setBookedSlots(slots);
-      generateTimeSlots(selectedDate, slots, updatedTimezone);
-    } catch (error) {
-      console.error("Error fetching booked slots:", error);
-      addToast("error", "Failed to load available time slots");
-      setBookedSlots([]);
-      generateTimeSlots(selectedDate, [], updatedTimezone);
-    } finally {
-      setIsLoadingSlots(false);
-    }
-  };
+  // Convert selectedDate to UTC ISO date string (start of day)
+  const utcSelectedDate = DateTime.fromJSDate(selectedDate)
+    .toUTC()
+    .toFormat("yyyy-MM-dd");
 
-  const generateTimeSlots = (
-    selectedDate,
-    customBookedSlots = bookedSlots,
-    activeTimezone = timezone
-  ) => {
-    console.log("selectedDate: ",selectedDate);
-    console.log("customBookedSlots: ",customBookedSlots);
-    console.log("activeTimezone: ",activeTimezone);
-    
-    const slots = [];
-    const now = DateTime.local().setZone(activeTimezone);
-    const selectedDateTime =
-      DateTime.fromJSDate(selectedDate).setZone(activeTimezone);
-    const isToday = now.hasSame(selectedDateTime, "day");
+  try {
+    const response = await axios.get(
+      `${import.meta.env.VITE_BACKEND_URL}/api/meetings?date=${utcSelectedDate}`
+    );
+    const slots = response.data; // each slot has meeting_time (UTC) and meeting_date (UTC)
+    setBookedSlots(slots);
+    generateTimeSlots(selectedDate, slots, updatedTimezone);
+  } catch (error) {
+    console.error("Error fetching booked slots:", error);
+    addToast("error", "Failed to load available time slots");
+    setBookedSlots([]);
+    generateTimeSlots(selectedDate, [], updatedTimezone);
+  } finally {
+    setIsLoadingSlots(false);
+  }
+};
 
-    const kuwaitStart = DateTime.fromJSDate(selectedDate)
-      .setZone("Asia/Kuwait")
-      .set({ hour: 10, minute: 0, second: 0, millisecond: 0 });
 
-    const kuwaitEnd = kuwaitStart.set({ hour: 22, minute: 0 });
-    const userStart = kuwaitStart.setZone(activeTimezone);
-    const userEnd = kuwaitEnd.setZone(activeTimezone);
 
-    let current = userStart;
+const generateTimeSlots = (
+  selectedDate,
+  customBookedSlots = bookedSlots,
+  activeTimezone = timezone
+) => {
+  const slots = [];
+  const now = DateTime.local().setZone(activeTimezone);
+  const selectedDateTime = DateTime.fromJSDate(selectedDate).setZone(activeTimezone);
+  const isToday = now.hasSame(selectedDateTime, "day");
 
-    while (current < userEnd) {
-      const label = current.toFormat("hh:mm a");
-      const timeValue = current.toFormat("HH:mm");
-      const isPast = isToday && current < now;
+  const userStart = selectedDateTime.set({ hour: 10, minute: 0, second: 0, millisecond: 0 });
+  const userEnd = selectedDateTime.set({ hour: 22, minute: 0 });
 
-      const isBooked = customBookedSlots.some((slot) => {
-        const time24 = DateTime.fromFormat(slot.meeting_time, "hh:mm a", {
-          zone: "Asia/Kuwait",
-        }).toFormat("HH:mm");
+  let current = userStart;
 
-        const date = DateTime.fromISO(slot.meeting_date).toFormat("yyyy-MM-dd");
+  while (current < userEnd) {
+    const label = current.setZone(activeTimezone).toFormat("hh:mm a");
 
-        const converted = convertFromKuwaitTime(time24, date, activeTimezone);
+    const isPast = isToday && current < now;
 
-        if (!converted || !converted.convertedISO) return false;
+    // Check if this slot is booked
+   const isBooked = customBookedSlots.some((slot) => {
+  // Always parse the meeting as UTC
+  const bookedUTC = DateTime.fromISO(
+    slot.meeting_date.includes("T")
+      ? slot.meeting_date
+      : `${slot.meeting_date}T${slot.meeting_time}`,
+    { zone: "utc" }
+  );
 
-        const convertedDateTime = DateTime.fromISO(converted.convertedISO);
+  // Convert to user's selected timezone
+  const bookedLocal = bookedUTC.setZone(activeTimezone);
 
-        return (
-          convertedDateTime.toFormat("yyyy-MM-dd") ===
-            selectedDateTime.toFormat("yyyy-MM-dd") &&
-          convertedDateTime.toFormat("HH:mm") === timeValue
-        );
-      });
+  // Compare the **exact day AND hour:minute**
+  return (
+    bookedLocal.hasSame(current, "day") &&
+    bookedLocal.hasSame(current, "minute")
+  );
+});
 
-      slots.push({
-        label,
-        isPast,
-        isBooked,
-        disabled: isPast || isBooked,
-      });
 
-      current = current.plus({ minutes: 30 });
-    }
+    slots.push({
+      label,
+      isPast,
+      isBooked,
+      disabled: isPast || isBooked,
+    });
 
-    setTimeSlots(slots);
-  };
+    current = current.plus({ minutes: 30 });
+  }
+
+  setTimeSlots(slots);
+};
+
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -286,8 +283,7 @@ const Meeting = () => {
             </p>
             <button
               onClick={() => setIsConfirmed(false)}
-              className="mt-6 bg-[#00c3ff] cursor-pointer text-white px-6 py-2 rounded hover:bg-[#00aacc]"
-            >
+              className="mt-6 bg-[#00c3ff] cursor-pointer text-white px-6 py-2 rounded hover:bg-[#00aacc]">
               Okay
             </button>
           </div>
@@ -297,8 +293,7 @@ const Meeting = () => {
           <div
             className={` md:px-10 border border-solid border-white bg-slate-200 px-4 md:py-10 py-8 rounded-2xl w-full lg:w-[40%] flex flex-col justify-start items-center mx-auto ${
               selectedTime && "hidden"
-            }`}
-          >
+            }`}>
             {/* <h1 className="h1head1 capitalize text-2xl mb-6 font-bold text-center">
               Choose the date from here
             </h1> */}
@@ -330,8 +325,7 @@ const Meeting = () => {
             <form
               ref={form}
               onSubmit={handleSubmit}
-              className=" lg:w-[85%] md:w-[100%] mx-auto w-full space-y-4 border border-white border-solid p-6 rounded-2xl text-white"
-            >
+              className=" lg:w-[85%] md:w-[100%] mx-auto w-full space-y-4 border border-white border-solid p-6 rounded-2xl text-white">
               <div>
                 <h3 className="text-lg font-bold capitalize">
                   Your information
@@ -377,20 +371,18 @@ const Meeting = () => {
                 />
               </div>
 
-             <div className="flex gap-5">
-              <button
-                type="submit"
-                className="bg-white disabled:opacity-50 cursor-pointer text-black px-4 py-2 rounded hover:bg-gray-200"
-                disabled={!isFormValid || isSubmitting}
-              >
-                {isSubmitting ? "Submitting..." : "Submit"}
-              </button>
-               <button
-                onClick={() => setSelectedTime(null)}
-                className="bg-white mr-3 cursor-pointer text-black px-4 py-2 rounded hover:bg-gray-200"
-              >
-                Back
-              </button>
+              <div className="flex gap-5">
+                <button
+                  type="submit"
+                  className="bg-white disabled:opacity-50 cursor-pointer text-black px-4 py-2 rounded hover:bg-gray-200"
+                  disabled={!isFormValid || isSubmitting}>
+                  {isSubmitting ? "Submitting..." : "Submit"}
+                </button>
+                <button
+                  onClick={() => setSelectedTime(null)}
+                  className="bg-white mr-3 cursor-pointer text-black px-4 py-2 rounded hover:bg-gray-200">
+                  Back
+                </button>
               </div>
             </form>
           ) : (
@@ -456,8 +448,7 @@ const Meeting = () => {
                                                 `}
                         title={
                           slot.isBooked ? "This slot is already booked" : ""
-                        }
-                      >
+                        }>
                         {slot.label}
                       </button>
                     ))}
