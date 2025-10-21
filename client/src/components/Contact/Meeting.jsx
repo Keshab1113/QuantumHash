@@ -120,16 +120,16 @@ const Meeting = () => {
 const fetchBookedSlots = async (selectedDate, updatedTimezone = timezone) => {
   setIsLoadingSlots(true);
 
-  // Convert selectedDate to UTC ISO date string (start of day)
-  const utcSelectedDate = DateTime.fromJSDate(selectedDate)
-    .toUTC()
+  // Use the selected date in the user's timezone format
+  const localSelectedDate = DateTime.fromJSDate(selectedDate)
+    .setZone(updatedTimezone)
     .toFormat("yyyy-MM-dd");
 
   try {
     const response = await axios.get(
-      `${import.meta.env.VITE_BACKEND_URL}/api/meetings?date=${utcSelectedDate}`
+      `${import.meta.env.VITE_BACKEND_URL}/api/meetings?date=${localSelectedDate}`
     );
-    const slots = response.data; // each slot has meeting_time (UTC) and meeting_date (UTC)
+    const slots = response.data;
     setBookedSlots(slots);
     generateTimeSlots(selectedDate, slots, updatedTimezone);
   } catch (error) {
@@ -161,29 +161,48 @@ const generateTimeSlots = (
 
   while (current < userEnd) {
     const label = current.setZone(activeTimezone).toFormat("hh:mm a");
-
     const isPast = isToday && current < now;
 
-    // Check if this slot is booked
-   const isBooked = customBookedSlots.some((slot) => {
-  // Always parse the meeting as UTC
-  const bookedUTC = DateTime.fromISO(
-    slot.meeting_date.includes("T")
-      ? slot.meeting_date
-      : `${slot.meeting_date}T${slot.meeting_time}`,
-    { zone: "utc" }
-  );
+    // Check if this slot is booked by comparing with original timezone
+    const isBooked = customBookedSlots.some((slot) => {
+      try {
+        // Extract date from the UTC timestamp
+        const originalDate = DateTime.fromISO(slot.original_meeting_date, { zone: 'utc' })
+          .setZone(slot.original_timezone)
+          .toFormat("yyyy-MM-dd");
+        
+        const timeStr = slot.original_meeting_time;
+        
+        // Determine the format based on whether it contains AM/PM
+        const format = timeStr.includes("AM") || timeStr.includes("PM")
+          ? "yyyy-MM-dd hh:mm a"
+          : "yyyy-MM-dd HH:mm:ss";
+        
+        // Create datetime in the original timezone
+        const bookedOriginal = DateTime.fromFormat(
+          `${originalDate} ${timeStr}`,
+          format,
+          { zone: slot.original_timezone }
+        );
 
-  // Convert to user's selected timezone
-  const bookedLocal = bookedUTC.setZone(activeTimezone);
+        if (!bookedOriginal.isValid) {
+          console.error("Invalid datetime:", `${originalDate} ${timeStr}`, slot.original_timezone);
+          return false;
+        }
 
-  // Compare the **exact day AND hour:minute**
-  return (
-    bookedLocal.hasSame(current, "day") &&
-    bookedLocal.hasSame(current, "minute")
-  );
-});
+        // Convert to user's timezone for comparison
+        const bookedInUserTz = bookedOriginal.setZone(activeTimezone);
 
+        // Compare exact day and minute
+        return (
+          bookedInUserTz.hasSame(current, "day") &&
+          bookedInUserTz.hasSame(current, "minute")
+        );
+      } catch (error) {
+        console.error("Error parsing slot:", error, slot);
+        return false;
+      }
+    });
 
     slots.push({
       label,
