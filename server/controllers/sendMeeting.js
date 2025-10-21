@@ -7,42 +7,48 @@ const sendMeeting = async (req, res) => {
   const pool = req.app.get("dbPool");
 
   try {
-    const userDateTime = DateTime.fromFormat(
-      `${date} ${time}`,
-      "yyyy-MM-dd hh:mm a",
-      { zone: timezone }
-    );
+   const userDateTime = DateTime.fromFormat(
+  `${date} ${time}`,
+  "yyyy-MM-dd hh:mm a",
+  { zone: timezone } // user's timezone
+);
 
-    if (!userDateTime.isValid) {
-      throw new Error(`Invalid datetime: ${userDateTime.invalidExplanation}`);
-    }
-    const kuwaitDateTime = userDateTime.setZone("Asia/Kuwait");
-    const kuwaitFormattedDate = kuwaitDateTime.toFormat("yyyy-MM-dd");
+if (!userDateTime.isValid) {
+  throw new Error(`Invalid datetime: ${userDateTime.invalidExplanation}`);
+}
+
+// --- Convert to UTC for DB storage ---
+const utcDateTime = userDateTime.toUTC();
+const meetingDateForDB = utcDateTime.toFormat("yyyy-MM-dd");
+const meetingTimeForDB = utcDateTime.toFormat("HH:mm:ss"); // 24h format
+const dbTimezone = "UTC";
+
+// --- Convert UTC to Kuwait time for admin email ---
+const kuwaitDateTime = utcDateTime.setZone("Asia/Kuwait");
+const kuwaitFormattedDate = kuwaitDateTime.toFormat("yyyy-MM-dd");
 const kuwaitFormattedTime = kuwaitDateTime.toFormat("hh:mm a");
 
-    const meetingDateForDB = kuwaitDateTime.toFormat("yyyy-MM-dd");
-    const meetingTimeForDB = kuwaitDateTime.toFormat("hh:mm a");
-    const kuwaitTimezone = "Asia/Kuwait";
     const meetingID = nanoid(6);
     const meetingLink = `https://quantumhash.me/conference/${meetingID}`;
 
     const connection = await pool.getConnection();
     const [result] = await connection.query(
-      "INSERT INTO meeting_requests (full_name, email, meeting_time, meeting_date, duration, timezone, query, original_timezone, original_meeting_time, original_meeting_date, meeting_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-      [
-        fullName,
-        email,
-        meetingTimeForDB, // Stored in Kuwait time
-        meetingDateForDB, // Stored in Kuwait time
-        duration,
-        kuwaitTimezone, // Stored as Asia/Kuwait
-        query,
-        timezone, // Original user timezone
-        time, // Original user time
-        date, // Original user date
-        meetingID,
-      ]
-    );
+  "INSERT INTO meeting_requests (full_name, email, meeting_time, meeting_date, duration, timezone, query, original_timezone, original_meeting_time, original_meeting_date, meeting_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+  [
+    fullName,
+    email,
+    meetingTimeForDB, // UTC
+    meetingDateForDB, // UTC
+    duration,
+    dbTimezone,       // "UTC"
+    query,
+    timezone,         // Original user timezone
+    time,             // Original user time
+    date,             // Original user date
+    meetingID,
+  ]
+);
+
     connection.release();
 
     // 2. Then send emails
